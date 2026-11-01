@@ -5,9 +5,9 @@ description: Shape a complex science topic into one story before the voice-over 
 
 # Story
 
-A helper before `explain` (or before `script`, for a long video). It decides *what* we tell and in what order. It writes no voice-over and no scenes.
+A helper before `animate` (or before `script`, for a long video). It decides *what* we tell and in what order. It writes no voice-over and no scenes.
 
-Skip it for a short explainer with one mechanism: `explain` step 1 covers that.
+Skip it for a short explainer with one mechanism: `animate` covers that.
 
 ## Steps
 
@@ -26,7 +26,7 @@ Skip it for a short explainer with one mechanism: `explain` step 1 covers that.
    - One line at a time; one example for each idea.
    - Expectation first, the turn second; the title does not give the turn away.
    - Each strong claim follows from a source. Mark a hypothesis as a hypothesis.
-6. **Hand over** the story card in `videos/<slug>/story.md` and show it to the person: "Accept the story? yes / changes". Then suggest `script` (long video) or `explain` (short).
+6. **Hand over** the story card in `videos/<slug>/story.md` and show it to the person: "Accept the story? yes / changes". Then suggest `script` (long video) or `animate` (short).
 
 ## Story card
 
