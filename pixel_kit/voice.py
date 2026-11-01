@@ -243,3 +243,53 @@ def animatic(timeline, times, audio, out, audio_start=0.0, dur=None):
     p.stdin.close()
     p.wait()
     return out
+
+
+# ---------------------------------------------------------------- words and transcription
+
+def words(path, start=0.0, end=None):
+    """All words of a transcript as [(word, start, end)]. Cues without word times get them from the
+    share of characters in the cue."""
+    out = []
+    for c in load(path, start, end):
+        if c.words:
+            out += [(w, a, b) for w, a, b in c.words if w.strip()]
+            continue
+        toks = c.text.split()
+        total = sum(len(w) + 1 for w in toks) or 1
+        t = c.start
+        for w in toks:
+            d = c.dur * (len(w) + 1) / total
+            out.append((w, t, t + d))
+            t += d
+    return out
+
+
+MODEL = "small.en"
+
+
+def ensure_whisper():
+    """Imports faster-whisper; installs it into this Python on first use."""
+    try:
+        import faster_whisper  # noqa: F401
+    except ImportError:
+        import sys
+        print("installing faster-whisper (first use) ...", flush=True)
+        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "faster-whisper"], check=True)
+    import faster_whisper
+    return faster_whisper
+
+
+def transcribe(audio, out, model=MODEL):
+    """Local transcript with word times (faster-whisper, CPU, int8). The model (about 460 MB for small.en)
+    downloads on first use. Writes Whisper JSON: segments[].words[] with start and end."""
+    fw = ensure_whisper()
+    m = fw.WhisperModel(model, device="cpu", compute_type="int8")
+    segs, info = m.transcribe(audio, language="en", word_timestamps=True, vad_filter=True)
+    data = {"model": model, "language": "en", "segments": []}
+    for s in segs:
+        data["segments"].append({"start": round(s.start, 3), "end": round(s.end, 3), "text": s.text.strip(),
+                                 "words": [{"word": w.word.strip(), "start": round(w.start, 3),
+                                            "end": round(w.end, 3)} for w in (s.words or [])]})
+    json.dump(data, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    return out

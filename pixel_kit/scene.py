@@ -7,7 +7,7 @@
 #   tl.export_frames("dir", [1.0, 5.5])    single frames as PNG (x4)
 #   tl.storyboard("board.png", [..])       storyboard grid
 # Between scenes: a Bayer dissolve to PAPER (FADE s), except at the very start.
-# Scanlines are off in the light theme (they make grey stripes on a light background).
+# The active style adds its frame filter (gameboy: four shades) and scanlines (arcade).
 
 import os, subprocess
 import numpy as np
@@ -18,12 +18,13 @@ from .palette import PAPER, C
 from . import frame
 SCALE, FPS = frame.SCALE, 30
 FADE = 0.25
-SCANLINES = False
 
 
 def upscale(arr, scale=SCALE, scan=None):
-    """x4 nearest. scan=True darkens each 4th row by 20 % (CRT scanlines, dark theme only)."""
-    scan = SCANLINES if scan is None else scan
+    """x4 nearest. scan=True darkens each 4th row by 20 % (CRT scanlines; default: the style's)."""
+    if scan is None:
+        from . import style
+        scan = style.current().scanlines
     big = np.repeat(np.repeat(arr, scale, axis=0), scale, axis=1)
     if scan and scale == SCALE:
         mask = np.ones((big.shape[0], 1, 1), np.float32)
@@ -59,8 +60,12 @@ class Timeline:
                     fade = 1 - (T - a) / self.fade
                 if b - T < self.fade and b != last_end and fade_out:
                     fade = max(fade, 1 - (b - T) / self.fade)
-                return dither_to(arr, fade, self.fade_col)
-        return np.full((frame.H, frame.W, 3), C(self.fade_col), np.uint8)
+                return self._finish(dither_to(arr, fade, self.fade_col))
+        return self._finish(np.full((frame.H, frame.W, 3), C(self.fade_col), np.uint8))
+
+    def _finish(self, arr):
+        from . import style
+        return style.current().filter_frame(arr)
 
     def render(self, out, dur=None, progress=True):
         dur = dur or self.duration

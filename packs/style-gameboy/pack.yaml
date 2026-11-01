@@ -1,0 +1,16 @@
+name: style-gameboy
+kind: style
+version: 0.1.0
+description: Four greens of an old handheld screen. Every frame is cut to four shades by brightness.
+license: CC0-1.0
+style:
+  name: gameboy
+  description: Four greens, shades by brightness (dark outline, light bodies), no scanlines.
+  redraw: true
+  sprite:
+    shading: true
+    outline: BLACK
+  frame:
+    filter: quantize
+    colors: [[8, 24, 32], [52, 104, 86], [136, 192, 112], [224, 248, 208]]   # lospec "Nintendo Gameboy (BGB)"
+    cuts: [70, 150, 210]

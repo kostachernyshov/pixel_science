@@ -1,0 +1,2561 @@
+{
+ "version": 1,
+ "packs": [
+  {
+   "name": "biology",
+   "kind": "content",
+   "version": "0.1.0",
+   "description": "Cells and immunity (immune, tumor and body cells, molecule badges), lab props, people.",
+   "license": "CC0-1.0 for sprites, MIT for code",
+   "path": "packs/biology",
+   "bible": null
+  },
+  {
+   "name": "style-arcade",
+   "kind": "style",
+   "version": "0.1.0",
+   "description": "Dark arcade screen. Flat neon colors, a dim glow ring around sprites, CRT scanlines.",
+   "license": "CC0-1.0",
+   "path": "packs/style-arcade",
+   "bible": null
+  },
+  {
+   "name": "style-gameboy",
+   "kind": "style",
+   "version": "0.1.0",
+   "description": "Four greens of an old handheld screen. Every frame is cut to four shades by brightness.",
+   "license": "CC0-1.0",
+   "path": "packs/style-gameboy",
+   "bible": null
+  },
+  {
+   "name": "style-paper",
+   "kind": "style",
+   "version": "0.1.0",
+   "description": "The base style. Light paper, PICO-8 colors, 1 px black outline, soft shading.",
+   "license": "CC0-1.0",
+   "path": "packs/style-paper",
+   "bible": null
+  }
+ ],
+ "sprites": [
+  {
+   "name": "agent",
+   "pack": "biology",
+   "group": "people",
+   "tags": [
+    "agent",
+    "people",
+    "worker"
+   ],
+   "description": "Agent at work",
+   "anims": [
+    "idle",
+    "blink",
+    "work",
+    "alert"
+   ],
+   "size": [
+    30,
+    30
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/agent.png",
+    "box": [
+     0,
+     0,
+     30,
+     30
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "antibody",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "antibody",
+    "drug",
+    "immunoglobulin",
+    "molecule",
+    "y"
+   ],
+   "description": "Antibody (Y shape)",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    21,
+    17
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/antibody.png",
+    "box": [
+     0,
+     0,
+     21,
+     17
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "b_cell",
+   "pack": "biology",
+   "group": "hero",
+   "tags": [
+    "adaptive",
+    "antibody",
+    "b",
+    "cell",
+    "immune",
+    "lymphocyte"
+   ],
+   "description": "B cell, dark green rim, small antibodies on the surface",
+   "anims": [
+    "idle",
+    "blink",
+    "move",
+    "alert",
+    "attack",
+    "hit",
+    "death"
+   ],
+   "size": [
+    40,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/b_cell.png",
+    "box": [
+     0,
+     0,
+     40,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "badge_ctla4",
+   "pack": "biology",
+   "group": "badge",
+   "tags": [
+    "badge",
+    "checkpoint",
+    "ctla4",
+    "molecule"
+   ],
+   "description": "CTLA-4 badge",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/badge_ctla4.png",
+    "box": [
+     0,
+     0,
+     17,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "badge_mhc",
+   "pack": "biology",
+   "group": "badge",
+   "tags": [
+    "antigen",
+    "badge",
+    "mhc",
+    "molecule",
+    "receptor"
+   ],
+   "description": "MHC class I badge",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/badge_mhc.png",
+    "box": [
+     0,
+     0,
+     17,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "badge_mhc_neo",
+   "pack": "biology",
+   "group": "badge",
+   "tags": [
+    "badge",
+    "mhc",
+    "molecule",
+    "neoantigen",
+    "peptide"
+   ],
+   "description": "MHC-I with a neoantigen",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/badge_mhc_neo.png",
+    "box": [
+     0,
+     0,
+     17,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "badge_mhc_self",
+   "pack": "biology",
+   "group": "badge",
+   "tags": [
+    "badge",
+    "mhc",
+    "molecule",
+    "peptide",
+    "self"
+   ],
+   "description": "MHC-I with a self peptide",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/badge_mhc_self.png",
+    "box": [
+     0,
+     0,
+     17,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "badge_pd1",
+   "pack": "biology",
+   "group": "badge",
+   "tags": [
+    "badge",
+    "checkpoint",
+    "molecule",
+    "pd1",
+    "receptor"
+   ],
+   "description": "PD-1 receptor badge",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/badge_pd1.png",
+    "box": [
+     0,
+     0,
+     17,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "badge_pdl1",
+   "pack": "biology",
+   "group": "badge",
+   "tags": [
+    "badge",
+    "checkpoint",
+    "ligand",
+    "molecule",
+    "pdl1"
+   ],
+   "description": "PD-L1 ligand badge",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/badge_pdl1.png",
+    "box": [
+     0,
+     0,
+     17,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "badge_stress",
+   "pack": "biology",
+   "group": "badge",
+   "tags": [
+    "badge",
+    "ligand",
+    "molecule",
+    "nkg2d",
+    "stress"
+   ],
+   "description": "Stress ligand badge",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/badge_stress.png",
+    "box": [
+     0,
+     0,
+     17,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "badge_tcr",
+   "pack": "biology",
+   "group": "badge",
+   "tags": [
+    "badge",
+    "molecule",
+    "receptor",
+    "t",
+    "tcr"
+   ],
+   "description": "T-cell receptor badge",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/badge_tcr.png",
+    "box": [
+     0,
+     0,
+     17,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "blast",
+   "pack": "biology",
+   "group": "villain",
+   "tags": [
+    "blast",
+    "blood",
+    "cancer",
+    "leukemia",
+    "tumor",
+    "villain"
+   ],
+   "description": "Leukemia blast (can mature)",
+   "anims": [
+    "idle",
+    "hit",
+    "death",
+    "mature"
+   ],
+   "size": [
+    32,
+    28
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/blast.png",
+    "box": [
+     0,
+     0,
+     32,
+     28
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "bulb",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "bulb",
+    "idea",
+    "light"
+   ],
+   "description": "Light bulb (an idea)",
+   "anims": [
+    "idle",
+    "off",
+    "glow"
+   ],
+   "size": [
+    21,
+    21
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/bulb.png",
+    "box": [
+     0,
+     0,
+     21,
+     21
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "car_t",
+   "pack": "biology",
+   "group": "hero",
+   "tags": [
+    "car",
+    "cell",
+    "engineered",
+    "immune",
+    "lymphocyte",
+    "t",
+    "therapy"
+   ],
+   "description": "CAR-T cell: engineered T cell with a claw receptor",
+   "anims": [
+    "idle",
+    "blink",
+    "move",
+    "alert",
+    "attack",
+    "hit",
+    "death",
+    "blocked"
+   ],
+   "size": [
+    40,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/car_t.png",
+    "box": [
+     0,
+     0,
+     40,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "check_card",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "card",
+    "check",
+    "office"
+   ],
+   "description": "Check card",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    23,
+    19
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/check_card.png",
+    "box": [
+     0,
+     0,
+     23,
+     19
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "chromosome",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "chromosome",
+    "dna",
+    "genome"
+   ],
+   "description": "Chromosome",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    15,
+    17
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/chromosome.png",
+    "box": [
+     0,
+     0,
+     15,
+     17
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "chromosome_ph",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "chromosome",
+    "leukemia",
+    "philadelphia",
+    "translocation"
+   ],
+   "description": "Philadelphia chromosome",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    15,
+    12
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/chromosome_ph.png",
+    "box": [
+     0,
+     0,
+     15,
+     12
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "clinician",
+   "pack": "biology",
+   "group": "people",
+   "tags": [
+    "clinician",
+    "doctor",
+    "people"
+   ],
+   "description": "Clinician who points",
+   "anims": [
+    "idle",
+    "blink",
+    "point"
+   ],
+   "size": [
+    28,
+    34
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/clinician.png",
+    "box": [
+     0,
+     0,
+     28,
+     34
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "clone_a",
+   "pack": "biology",
+   "group": "civilian",
+   "tags": [
+    "clone",
+    "evolution",
+    "subclone",
+    "tumor"
+   ],
+   "description": "Clone A of a tumor (clonal evolution)",
+   "anims": [
+    "idle",
+    "death",
+    "hit",
+    "blink",
+    "divide"
+   ],
+   "size": [
+    45,
+    32
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/clone_a.png",
+    "box": [
+     0,
+     0,
+     45,
+     32
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "clone_b",
+   "pack": "biology",
+   "group": "civilian",
+   "tags": [
+    "clone",
+    "evolution",
+    "subclone",
+    "tumor"
+   ],
+   "description": "Clone B of a tumor",
+   "anims": [
+    "idle",
+    "death",
+    "hit",
+    "blink",
+    "divide"
+   ],
+   "size": [
+    45,
+    32
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/clone_b.png",
+    "box": [
+     0,
+     0,
+     45,
+     32
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "clone_c",
+   "pack": "biology",
+   "group": "civilian",
+   "tags": [
+    "clone",
+    "evolution",
+    "subclone",
+    "tumor"
+   ],
+   "description": "Clone C of a tumor",
+   "anims": [
+    "idle",
+    "death",
+    "hit",
+    "blink",
+    "divide"
+   ],
+   "size": [
+    45,
+    32
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/clone_c.png",
+    "box": [
+     0,
+     0,
+     45,
+     32
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "clone_d",
+   "pack": "biology",
+   "group": "civilian",
+   "tags": [
+    "clone",
+    "evolution",
+    "subclone",
+    "tumor"
+   ],
+   "description": "Clone D of a tumor",
+   "anims": [
+    "idle",
+    "death",
+    "hit",
+    "blink",
+    "divide"
+   ],
+   "size": [
+    45,
+    34
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/clone_d.png",
+    "box": [
+     0,
+     0,
+     45,
+     34
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "computer",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "computer",
+    "office",
+    "screen"
+   ],
+   "description": "Computer",
+   "anims": [
+    "idle",
+    "off"
+   ],
+   "size": [
+    25,
+    20
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/computer.png",
+    "box": [
+     0,
+     0,
+     25,
+     20
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "datasheet",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "data",
+    "sheet",
+    "table"
+   ],
+   "description": "Data sheet",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    27,
+    19
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/datasheet.png",
+    "box": [
+     0,
+     0,
+     27,
+     19
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "deck",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "deck",
+    "office",
+    "presentation",
+    "slides"
+   ],
+   "description": "Slide deck",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    27,
+    18
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/deck.png",
+    "box": [
+     0,
+     0,
+     27,
+     18
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "dendritic",
+   "pack": "biology",
+   "group": "hero",
+   "tags": [
+    "antigen",
+    "cell",
+    "dendritic",
+    "immune",
+    "presenting"
+   ],
+   "description": "Dendritic cell: branched arms, presents fragments",
+   "anims": [
+    "idle",
+    "blink",
+    "move",
+    "alert",
+    "attack",
+    "hit",
+    "death",
+    "present"
+   ],
+   "size": [
+    46,
+    42
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/dendritic.png",
+    "box": [
+     0,
+     0,
+     46,
+     42
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "dish",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "culture",
+    "dish",
+    "grow",
+    "lab",
+    "petri"
+   ],
+   "description": "Petri dish (colonies can grow)",
+   "anims": [
+    "idle",
+    "grow"
+   ],
+   "size": [
+    34,
+    30
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/dish.png",
+    "box": [
+     0,
+     0,
+     34,
+     30
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "dna",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "dna",
+    "gene",
+    "genome",
+    "helix",
+    "mutation"
+   ],
+   "description": "DNA double helix (can mutate)",
+   "anims": [
+    "idle",
+    "mutate"
+   ],
+   "size": [
+    19,
+    22
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/dna.png",
+    "box": [
+     0,
+     0,
+     19,
+     22
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "dna_mut",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "dna",
+    "gene",
+    "mutation"
+   ],
+   "description": "Mutated DNA",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    19,
+    22
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/dna_mut.png",
+    "box": [
+     0,
+     0,
+     19,
+     22
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "epithelial",
+   "pack": "biology",
+   "group": "civilian",
+   "tags": [
+    "body",
+    "cell",
+    "epithelial",
+    "healthy",
+    "normal"
+   ],
+   "description": "Healthy epithelial cell (can mutate)",
+   "anims": [
+    "idle",
+    "death",
+    "hit",
+    "blink",
+    "divide",
+    "mutate"
+   ],
+   "size": [
+    45,
+    34
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/epithelial.png",
+    "box": [
+     0,
+     0,
+     45,
+     34
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "file_doc",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "document",
+    "file",
+    "office",
+    "paper"
+   ],
+   "description": "Document",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    19,
+    17
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/file_doc.png",
+    "box": [
+     0,
+     0,
+     19,
+     17
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "folder",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "folder",
+    "office"
+   ],
+   "description": "Folder",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    23,
+    16
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/folder.png",
+    "box": [
+     0,
+     0,
+     23,
+     16
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "glucose",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "glucose",
+    "metabolism",
+    "molecule",
+    "sugar"
+   ],
+   "description": "Glucose molecule",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/glucose.png",
+    "box": [
+     0,
+     0,
+     17,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "granule_blue",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "granule",
+    "granzyme",
+    "perforin",
+    "projectile"
+   ],
+   "description": "Blue granule (perforin, granzymes)",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    15,
+    11
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/granule_blue.png",
+    "box": [
+     0,
+     0,
+     15,
+     11
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "granule_green",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "granule",
+    "projectile"
+   ],
+   "description": "Green granule",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    15,
+    11
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/granule_green.png",
+    "box": [
+     0,
+     0,
+     15,
+     11
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "granulocyte",
+   "pack": "biology",
+   "group": "civilian",
+   "tags": [
+    "blood",
+    "cell",
+    "granulocyte",
+    "immune",
+    "neutrophil"
+   ],
+   "description": "Granulocyte (neutrophil)",
+   "anims": [
+    "idle",
+    "death",
+    "hit",
+    "blink"
+   ],
+   "size": [
+    38,
+    34
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/granulocyte.png",
+    "box": [
+     0,
+     0,
+     38,
+     34
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "helper_t",
+   "pack": "biology",
+   "group": "hero",
+   "tags": [
+    "adaptive",
+    "cd4",
+    "cell",
+    "helper",
+    "immune",
+    "lymphocyte",
+    "t"
+   ],
+   "description": "CD4 helper T cell, orange rim, signal antenna",
+   "anims": [
+    "idle",
+    "blink",
+    "move",
+    "alert",
+    "attack",
+    "hit",
+    "death",
+    "blocked"
+   ],
+   "size": [
+    40,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/helper_t.png",
+    "box": [
+     0,
+     0,
+     40,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "kidney",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "kidney",
+    "organ"
+   ],
+   "description": "Kidney (can reveal and glow)",
+   "anims": [
+    "idle",
+    "reveal",
+    "glow"
+   ],
+   "size": [
+    22,
+    22
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/kidney.png",
+    "box": [
+     0,
+     0,
+     22,
+     22
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "killer_t",
+   "pack": "biology",
+   "group": "hero",
+   "tags": [
+    "adaptive",
+    "cd8",
+    "cell",
+    "cytotoxic",
+    "immune",
+    "killer",
+    "lymphocyte",
+    "t"
+   ],
+   "description": "CD8 killer T cell, green rim, receptor forks",
+   "anims": [
+    "idle",
+    "blink",
+    "move",
+    "alert",
+    "attack",
+    "hit",
+    "death",
+    "blocked"
+   ],
+   "size": [
+    40,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/killer_t.png",
+    "box": [
+     0,
+     0,
+     40,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "lock",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "lock",
+    "open",
+    "security"
+   ],
+   "description": "Lock (can open)",
+   "anims": [
+    "idle",
+    "open"
+   ],
+   "size": [
+    21,
+    20
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/lock.png",
+    "box": [
+     0,
+     0,
+     21,
+     20
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "macrophage",
+   "pack": "biology",
+   "group": "hero",
+   "tags": [
+    "cell",
+    "eat",
+    "immune",
+    "macrophage",
+    "phagocyte"
+   ],
+   "description": "Macrophage: eats debris and cells, also repairs",
+   "anims": [
+    "idle",
+    "blink",
+    "move",
+    "alert",
+    "attack",
+    "hit",
+    "death",
+    "eat",
+    "repair",
+    "repair_blink"
+   ],
+   "size": [
+    46,
+    42
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/macrophage.png",
+    "box": [
+     0,
+     0,
+     46,
+     42
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "manager",
+   "pack": "biology",
+   "group": "people",
+   "tags": [
+    "manager",
+    "office",
+    "people",
+    "worker"
+   ],
+   "description": "Office worker with a laptop",
+   "anims": [
+    "idle",
+    "blink",
+    "panic",
+    "laptop"
+   ],
+   "size": [
+    28,
+    34
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/manager.png",
+    "box": [
+     0,
+     0,
+     28,
+     34
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "mouse_side",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "animal",
+    "lab",
+    "model",
+    "mouse"
+   ],
+   "description": "Lab mouse from the side",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    40,
+    22
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/mouse_side.png",
+    "box": [
+     0,
+     0,
+     40,
+     22
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "mouse_top",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "animal",
+    "lab",
+    "model",
+    "mouse"
+   ],
+   "description": "Lab mouse from above",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    28,
+    40
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/mouse_top.png",
+    "box": [
+     0,
+     0,
+     28,
+     40
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "mutant",
+   "pack": "biology",
+   "group": "civilian",
+   "tags": [
+    "body",
+    "cell",
+    "mutant",
+    "mutation"
+   ],
+   "description": "Mutant cell, first step to cancer",
+   "anims": [
+    "idle",
+    "death",
+    "hit",
+    "blink",
+    "divide"
+   ],
+   "size": [
+    45,
+    34
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/mutant.png",
+    "box": [
+     0,
+     0,
+     45,
+     34
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "nk",
+   "pack": "biology",
+   "group": "hero",
+   "tags": [
+    "cell",
+    "immune",
+    "innate",
+    "killer",
+    "lymphocyte",
+    "nk"
+   ],
+   "description": "NK cell: innate killer, round, blue rim, granules",
+   "anims": [
+    "idle",
+    "blink",
+    "move",
+    "alert",
+    "attack",
+    "hit",
+    "death",
+    "blocked"
+   ],
+   "size": [
+    40,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/nk.png",
+    "box": [
+     0,
+     0,
+     40,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "patient_a",
+   "pack": "biology",
+   "group": "people",
+   "tags": [
+    "patient",
+    "people",
+    "person"
+   ],
+   "description": "Patient with long hair (no name)",
+   "anims": [
+    "idle",
+    "blink",
+    "sick",
+    "gown",
+    "gown_sick",
+    "ghost"
+   ],
+   "size": [
+    28,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/patient_a.png",
+    "box": [
+     0,
+     0,
+     28,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "patient_b",
+   "pack": "biology",
+   "group": "people",
+   "tags": [
+    "patient",
+    "people",
+    "person"
+   ],
+   "description": "Patient with a bob (no name)",
+   "anims": [
+    "idle",
+    "blink",
+    "sick",
+    "gown",
+    "gown_sick",
+    "ghost"
+   ],
+   "size": [
+    28,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/patient_b.png",
+    "box": [
+     0,
+     0,
+     28,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "patient_c",
+   "pack": "biology",
+   "group": "people",
+   "tags": [
+    "patient",
+    "people",
+    "person"
+   ],
+   "description": "Patient with short hair (no name)",
+   "anims": [
+    "idle",
+    "blink",
+    "sick",
+    "gown",
+    "gown_sick",
+    "ghost"
+   ],
+   "size": [
+    28,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/patient_c.png",
+    "box": [
+     0,
+     0,
+     28,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "person",
+   "pack": "biology",
+   "group": "people",
+   "tags": [
+    "people",
+    "person",
+    "viewer"
+   ],
+   "description": "Person (can cheer and point)",
+   "anims": [
+    "idle",
+    "blink",
+    "cheer",
+    "point"
+   ],
+   "size": [
+    28,
+    34
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/person.png",
+    "box": [
+     0,
+     0,
+     28,
+     34
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "pill",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "drug",
+    "medicine",
+    "pill",
+    "therapy"
+   ],
+   "description": "Pill",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    18,
+    9
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/pill.png",
+    "box": [
+     0,
+     0,
+     18,
+     9
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "plaster",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "awareness",
+    "plaster",
+    "ribbon"
+   ],
+   "description": "Ribbon / plaster",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    17,
+    10
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/plaster.png",
+    "box": [
+     0,
+     0,
+     17,
+     10
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "plate",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "assay",
+    "lab",
+    "plate",
+    "wells"
+   ],
+   "description": "Well plate (can fill)",
+   "anims": [
+    "idle",
+    "fill"
+   ],
+   "size": [
+    47,
+    33
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/plate.png",
+    "box": [
+     0,
+     0,
+     47,
+     33
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "scientist",
+   "pack": "biology",
+   "group": "people",
+   "tags": [
+    "lab",
+    "people",
+    "researcher",
+    "scientist"
+   ],
+   "description": "Scientist in a lab coat",
+   "anims": [
+    "idle",
+    "blink",
+    "panic"
+   ],
+   "size": [
+    28,
+    34
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/scientist.png",
+    "box": [
+     0,
+     0,
+     28,
+     34
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "senescent",
+   "pack": "biology",
+   "group": "civilian",
+   "tags": [
+    "aging",
+    "body",
+    "cell",
+    "old",
+    "senescent"
+   ],
+   "description": "Senescent cell (old, with a beard)",
+   "anims": [
+    "idle",
+    "death",
+    "hit"
+   ],
+   "size": [
+    40,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/senescent.png",
+    "box": [
+     0,
+     0,
+     40,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "sequencer",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "data",
+    "dna",
+    "lab",
+    "machine",
+    "sequencer"
+   ],
+   "description": "Sequencer",
+   "anims": [
+    "idle",
+    "off"
+   ],
+   "size": [
+    34,
+    24
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/sequencer.png",
+    "box": [
+     0,
+     0,
+     34,
+     24
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "stem",
+   "pack": "biology",
+   "group": "civilian",
+   "tags": [
+    "body",
+    "cell",
+    "healthy",
+    "stem"
+   ],
+   "description": "Stem cell",
+   "anims": [
+    "idle",
+    "death",
+    "hit",
+    "blink",
+    "divide"
+   ],
+   "size": [
+    49,
+    34
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/stem.png",
+    "box": [
+     0,
+     0,
+     49,
+     34
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "supervisor",
+   "pack": "biology",
+   "group": "people",
+   "tags": [
+    "people",
+    "supervisor"
+   ],
+   "description": "Supervisor",
+   "anims": [
+    "idle",
+    "blink",
+    "alert"
+   ],
+   "size": [
+    35,
+    30
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/supervisor.png",
+    "box": [
+     0,
+     0,
+     35,
+     30
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "syringe",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "drug",
+    "injection",
+    "lab",
+    "syringe",
+    "vaccine"
+   ],
+   "description": "Syringe (blue)",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    36,
+    11
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/syringe.png",
+    "box": [
+     0,
+     0,
+     36,
+     11
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "syringe_drug",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "drug",
+    "injection",
+    "lab",
+    "syringe",
+    "therapy"
+   ],
+   "description": "Syringe (orange, a drug)",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    36,
+    11
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/syringe_drug.png",
+    "box": [
+     0,
+     0,
+     36,
+     11
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "treg",
+   "pack": "biology",
+   "group": "hero",
+   "tags": [
+    "cell",
+    "immune",
+    "lymphocyte",
+    "regulatory",
+    "suppressor",
+    "t",
+    "treg"
+   ],
+   "description": "Regulatory T cell, lavender rim, CTLA-4 cups, calm look",
+   "anims": [
+    "idle",
+    "blink",
+    "move",
+    "alert",
+    "attack",
+    "hit",
+    "death",
+    "blocked"
+   ],
+   "size": [
+    40,
+    36
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/treg.png",
+    "box": [
+     0,
+     0,
+     40,
+     36
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "tube",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "lab",
+    "sample",
+    "tube"
+   ],
+   "description": "Test tube (blue)",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    15,
+    20
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/tube.png",
+    "box": [
+     0,
+     0,
+     15,
+     20
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "tube_orange",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "lab",
+    "sample",
+    "tube"
+   ],
+   "description": "Test tube (orange)",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    15,
+    20
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/tube_orange.png",
+    "box": [
+     0,
+     0,
+     15,
+     20
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "tumor",
+   "pack": "biology",
+   "group": "villain",
+   "tags": [
+    "cancer",
+    "cell",
+    "mhc",
+    "tumor",
+    "villain"
+   ],
+   "description": "Tumor cell with MHC-I badges (can lose them)",
+   "anims": [
+    "idle",
+    "blink",
+    "hit",
+    "death",
+    "divide",
+    "lose_mhc"
+   ],
+   "size": [
+    48,
+    28
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/tumor.png",
+    "box": [
+     0,
+     0,
+     48,
+     28
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "tumor_mhc_low",
+   "pack": "biology",
+   "group": "villain",
+   "tags": [
+    "cancer",
+    "cell",
+    "low",
+    "mhc",
+    "tumor",
+    "villain"
+   ],
+   "description": "Tumor cell with one MHC-I left",
+   "anims": [
+    "idle",
+    "blink",
+    "hit",
+    "death",
+    "divide"
+   ],
+   "size": [
+    48,
+    28
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/tumor_mhc_low.png",
+    "box": [
+     0,
+     0,
+     48,
+     28
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "tumor_no_mhc",
+   "pack": "biology",
+   "group": "villain",
+   "tags": [
+    "cancer",
+    "cell",
+    "mhc",
+    "missing",
+    "tumor",
+    "villain"
+   ],
+   "description": "Tumor cell without MHC-I",
+   "anims": [
+    "idle",
+    "blink",
+    "hit",
+    "death",
+    "divide"
+   ],
+   "size": [
+    48,
+    28
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/tumor_no_mhc.png",
+    "box": [
+     0,
+     0,
+     48,
+     28
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "tumor_pdl1",
+   "pack": "biology",
+   "group": "villain",
+   "tags": [
+    "cancer",
+    "cell",
+    "checkpoint",
+    "pdl1",
+    "tumor",
+    "villain"
+   ],
+   "description": "Tumor cell with PD-L1 on the surface (can raise it)",
+   "anims": [
+    "idle",
+    "blink",
+    "hit",
+    "death",
+    "divide",
+    "pdl1_up"
+   ],
+   "size": [
+    48,
+    28
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/tumor_pdl1.png",
+    "box": [
+     0,
+     0,
+     48,
+     28
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "tumor_stress",
+   "pack": "biology",
+   "group": "villain",
+   "tags": [
+    "cancer",
+    "cell",
+    "ligand",
+    "stress",
+    "tumor",
+    "villain"
+   ],
+   "description": "Tumor cell with stress flags (NKG2D ligands)",
+   "anims": [
+    "idle",
+    "blink",
+    "hit",
+    "death",
+    "divide"
+   ],
+   "size": [
+    48,
+    28
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/tumor_stress.png",
+    "box": [
+     0,
+     0,
+     48,
+     28
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "vial_antiserum",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "antibody",
+    "antiserum",
+    "lab",
+    "vial"
+   ],
+   "description": "Vial of antiserum",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    18,
+    16
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/vial_antiserum.png",
+    "box": [
+     0,
+     0,
+     18,
+     16
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "vial_drug",
+   "pack": "biology",
+   "group": "prop",
+   "tags": [
+    "drug",
+    "lab",
+    "therapy",
+    "vial"
+   ],
+   "description": "Vial of a drug",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    18,
+    16
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/biology/sprites/vial_drug.png",
+    "box": [
+     0,
+     0,
+     18,
+     16
+    ]
+   },
+   "for_style": null
+  }
+ ],
+ "backgrounds": [
+  {
+   "name": "bloodstream",
+   "pack": "biology",
+   "tags": [
+    "blood",
+    "vessel",
+    "flow"
+   ],
+   "animated": true
+  },
+  {
+   "name": "dishes",
+   "pack": "biology",
+   "tags": [
+    "lab",
+    "culture",
+    "petri"
+   ],
+   "animated": false
+  },
+  {
+   "name": "epithelium",
+   "pack": "biology",
+   "tags": [
+    "epithelium",
+    "skin",
+    "gut",
+    "lining"
+   ],
+   "animated": false
+  },
+  {
+   "name": "lymph_node",
+   "pack": "biology",
+   "tags": [
+    "lymph",
+    "node",
+    "immune"
+   ],
+   "animated": false
+  },
+  {
+   "name": "tissue",
+   "pack": "biology",
+   "tags": [
+    "tissue",
+    "connective"
+   ],
+   "animated": false
+  },
+  {
+   "name": "tme",
+   "pack": "biology",
+   "tags": [
+    "tumor",
+    "microenvironment",
+    "cancer"
+   ],
+   "animated": false
+  },
+  {
+   "name": "paper",
+   "pack": null,
+   "tags": [
+    "core",
+    "plain"
+   ],
+   "animated": false
+  },
+  {
+   "name": "plain",
+   "pack": null,
+   "tags": [
+    "core",
+    "plain"
+   ],
+   "animated": false
+  }
+ ],
+ "styles": [
+  {
+   "name": "arcade",
+   "pack": "style-arcade",
+   "description": "Near-black screen, flat neon bodies, glow ring, CRT scanlines; captions in yellow on a black bar.",
+   "dark": true
+  },
+  {
+   "name": "gameboy",
+   "pack": "style-gameboy",
+   "description": "Four greens, shades by brightness (dark outline, light bodies), no scanlines.",
+   "dark": false
+  },
+  {
+   "name": "paper",
+   "pack": "style-paper",
+   "description": "Light paper background, PICO-8 colors (lospec.com/palette-list/pico-8). The base PNGs are drawn in it.",
+   "dark": false
+  }
+ ]
+}

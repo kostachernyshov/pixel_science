@@ -9,6 +9,10 @@ from .palette import P, BLACK
 
 T = -1
 
+# Sprite parameters of the active style (style.use sets them). Code sprites read them when drawn:
+# shading=False draws flat bodies (no shade ring, no highlight).
+PARAMS = {"shading": True, "outline": BLACK}
+
 
 class Spr:
     def __init__(self, w, h):
@@ -115,6 +119,8 @@ def paint_body(s, m, cx, cy, body, rim, shade=None, hi=None, rim_hi=None, rim_hi
     ys, xs = np.mgrid[0:s.h, 0:s.w]
     dsum = (xs + 0.5 - cx) + (ys + 0.5 - cy)
     s.a[inner] = body
+    if not PARAMS["shading"]:
+        shade = hi = None
     if shade is not None:
         s.a[ring2 & (dsum > shade_k)] = shade
     if hi is not None:

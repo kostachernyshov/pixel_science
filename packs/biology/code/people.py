@@ -3,8 +3,8 @@
 # black outline.
 
 import numpy as np
-from .palette import *
-from .pixdraw import Spr, mask_circle, mask_superellipse, paint_body, outline
+from pixel_kit.palette import *
+from pixel_kit.pixdraw import Spr, mask_circle, mask_superellipse, paint_body, outline
 
 W, H = 18, 30
 

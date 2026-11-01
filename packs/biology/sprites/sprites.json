@@ -60,7 +60,16 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "cell",
+   "immune",
+   "innate",
+   "killer",
+   "lymphocyte",
+   "nk"
+  ],
+  "description": "NK cell: innate killer, round, blue rim, granules"
  },
  "killer_t": {
   "file": "killer_t.png",
@@ -123,7 +132,18 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "adaptive",
+   "cd8",
+   "cell",
+   "cytotoxic",
+   "immune",
+   "killer",
+   "lymphocyte",
+   "t"
+  ],
+  "description": "CD8 killer T cell, green rim, receptor forks"
  },
  "helper_t": {
   "file": "helper_t.png",
@@ -186,7 +206,17 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "adaptive",
+   "cd4",
+   "cell",
+   "helper",
+   "immune",
+   "lymphocyte",
+   "t"
+  ],
+  "description": "CD4 helper T cell, orange rim, signal antenna"
  },
  "treg": {
   "file": "treg.png",
@@ -249,7 +279,17 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "cell",
+   "immune",
+   "lymphocyte",
+   "regulatory",
+   "suppressor",
+   "t",
+   "treg"
+  ],
+  "description": "Regulatory T cell, lavender rim, CTLA-4 cups, calm look"
  },
  "car_t": {
   "file": "car_t.png",
@@ -312,7 +352,17 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "car",
+   "cell",
+   "engineered",
+   "immune",
+   "lymphocyte",
+   "t",
+   "therapy"
+  ],
+  "description": "CAR-T cell: engineered T cell with a claw receptor"
  },
  "b_cell": {
   "file": "b_cell.png",
@@ -369,7 +419,16 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "adaptive",
+   "antibody",
+   "b",
+   "cell",
+   "immune",
+   "lymphocyte"
+  ],
+  "description": "B cell, dark green rim, small antibodies on the surface"
  },
  "dendritic": {
   "file": "dendritic.png",
@@ -432,7 +491,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "antigen",
+   "cell",
+   "dendritic",
+   "immune",
+   "presenting"
+  ],
+  "description": "Dendritic cell: branched arms, presents fragments"
  },
  "macrophage": {
   "file": "macrophage.png",
@@ -507,7 +574,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "cell",
+   "eat",
+   "immune",
+   "macrophage",
+   "phagocyte"
+  ],
+  "description": "Macrophage: eats debris and cells, also repairs"
  },
  "tumor": {
   "file": "tumor.png",
@@ -558,7 +633,15 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "cancer",
+   "cell",
+   "mhc",
+   "tumor",
+   "villain"
+  ],
+  "description": "Tumor cell with MHC-I badges (can lose them)"
  },
  "tumor_mhc_low": {
   "file": "tumor_mhc_low.png",
@@ -603,7 +686,16 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "cancer",
+   "cell",
+   "low",
+   "mhc",
+   "tumor",
+   "villain"
+  ],
+  "description": "Tumor cell with one MHC-I left"
  },
  "tumor_no_mhc": {
   "file": "tumor_no_mhc.png",
@@ -648,7 +740,16 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "cancer",
+   "cell",
+   "mhc",
+   "missing",
+   "tumor",
+   "villain"
+  ],
+  "description": "Tumor cell without MHC-I"
  },
  "tumor_pdl1": {
   "file": "tumor_pdl1.png",
@@ -699,7 +800,16 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "cancer",
+   "cell",
+   "checkpoint",
+   "pdl1",
+   "tumor",
+   "villain"
+  ],
+  "description": "Tumor cell with PD-L1 on the surface (can raise it)"
  },
  "tumor_stress": {
   "file": "tumor_stress.png",
@@ -744,7 +854,16 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "cancer",
+   "cell",
+   "ligand",
+   "stress",
+   "tumor",
+   "villain"
+  ],
+  "description": "Tumor cell with stress flags (NKG2D ligands)"
  },
  "blast": {
   "file": "blast.png",
@@ -783,7 +902,16 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "blast",
+   "blood",
+   "cancer",
+   "leukemia",
+   "tumor",
+   "villain"
+  ],
+  "description": "Leukemia blast (can mature)"
  },
  "epithelial": {
   "file": "epithelial.png",
@@ -834,7 +962,15 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "body",
+   "cell",
+   "epithelial",
+   "healthy",
+   "normal"
+  ],
+  "description": "Healthy epithelial cell (can mutate)"
  },
  "stem": {
   "file": "stem.png",
@@ -879,7 +1015,14 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "body",
+   "cell",
+   "healthy",
+   "stem"
+  ],
+  "description": "Stem cell"
  },
  "mutant": {
   "file": "mutant.png",
@@ -924,7 +1067,14 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "body",
+   "cell",
+   "mutant",
+   "mutation"
+  ],
+  "description": "Mutant cell, first step to cancer"
  },
  "clone_a": {
   "file": "clone_a.png",
@@ -969,7 +1119,14 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "clone",
+   "evolution",
+   "subclone",
+   "tumor"
+  ],
+  "description": "Clone A of a tumor (clonal evolution)"
  },
  "clone_b": {
   "file": "clone_b.png",
@@ -1014,7 +1171,14 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "clone",
+   "evolution",
+   "subclone",
+   "tumor"
+  ],
+  "description": "Clone B of a tumor"
  },
  "clone_c": {
   "file": "clone_c.png",
@@ -1059,7 +1223,14 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "clone",
+   "evolution",
+   "subclone",
+   "tumor"
+  ],
+  "description": "Clone C of a tumor"
  },
  "clone_d": {
   "file": "clone_d.png",
@@ -1104,7 +1275,14 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "clone",
+   "evolution",
+   "subclone",
+   "tumor"
+  ],
+  "description": "Clone D of a tumor"
  },
  "senescent": {
   "file": "senescent.png",
@@ -1137,7 +1315,15 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "aging",
+   "body",
+   "cell",
+   "old",
+   "senescent"
+  ],
+  "description": "Senescent cell (old, with a beard)"
  },
  "granulocyte": {
   "file": "granulocyte.png",
@@ -1176,7 +1362,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "blood",
+   "cell",
+   "granulocyte",
+   "immune",
+   "neutrophil"
+  ],
+  "description": "Granulocyte (neutrophil)"
  },
  "badge_mhc": {
   "file": "badge_mhc.png",
@@ -1197,7 +1391,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "antigen",
+   "badge",
+   "mhc",
+   "molecule",
+   "receptor"
+  ],
+  "description": "MHC class I badge"
  },
  "badge_mhc_self": {
   "file": "badge_mhc_self.png",
@@ -1218,7 +1420,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "badge",
+   "mhc",
+   "molecule",
+   "peptide",
+   "self"
+  ],
+  "description": "MHC-I with a self peptide"
  },
  "badge_mhc_neo": {
   "file": "badge_mhc_neo.png",
@@ -1239,7 +1449,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "badge",
+   "mhc",
+   "molecule",
+   "neoantigen",
+   "peptide"
+  ],
+  "description": "MHC-I with a neoantigen"
  },
  "badge_tcr": {
   "file": "badge_tcr.png",
@@ -1260,7 +1478,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "badge",
+   "molecule",
+   "receptor",
+   "t",
+   "tcr"
+  ],
+  "description": "T-cell receptor badge"
  },
  "badge_pd1": {
   "file": "badge_pd1.png",
@@ -1281,7 +1507,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "badge",
+   "checkpoint",
+   "molecule",
+   "pd1",
+   "receptor"
+  ],
+  "description": "PD-1 receptor badge"
  },
  "badge_ctla4": {
   "file": "badge_ctla4.png",
@@ -1302,7 +1536,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "badge",
+   "checkpoint",
+   "ctla4",
+   "molecule"
+  ],
+  "description": "CTLA-4 badge"
  },
  "badge_pdl1": {
   "file": "badge_pdl1.png",
@@ -1323,7 +1564,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "badge",
+   "checkpoint",
+   "ligand",
+   "molecule",
+   "pdl1"
+  ],
+  "description": "PD-L1 ligand badge"
  },
  "badge_stress": {
   "file": "badge_stress.png",
@@ -1344,7 +1593,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "badge",
+   "ligand",
+   "molecule",
+   "nkg2d",
+   "stress"
+  ],
+  "description": "Stress ligand badge"
  },
  "syringe": {
   "file": "syringe.png",
@@ -1365,7 +1622,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "drug",
+   "injection",
+   "lab",
+   "syringe",
+   "vaccine"
+  ],
+  "description": "Syringe (blue)"
  },
  "syringe_drug": {
   "file": "syringe_drug.png",
@@ -1386,7 +1651,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "drug",
+   "injection",
+   "lab",
+   "syringe",
+   "therapy"
+  ],
+  "description": "Syringe (orange, a drug)"
  },
  "vial_antiserum": {
   "file": "vial_antiserum.png",
@@ -1407,7 +1680,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "antibody",
+   "antiserum",
+   "lab",
+   "vial"
+  ],
+  "description": "Vial of antiserum"
  },
  "vial_drug": {
   "file": "vial_drug.png",
@@ -1428,7 +1708,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "drug",
+   "lab",
+   "therapy",
+   "vial"
+  ],
+  "description": "Vial of a drug"
  },
  "dish": {
   "file": "dish.png",
@@ -1455,7 +1742,15 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "culture",
+   "dish",
+   "grow",
+   "lab",
+   "petri"
+  ],
+  "description": "Petri dish (colonies can grow)"
  },
  "mouse_top": {
   "file": "mouse_top.png",
@@ -1476,7 +1771,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "animal",
+   "lab",
+   "model",
+   "mouse"
+  ],
+  "description": "Lab mouse from above"
  },
  "mouse_side": {
   "file": "mouse_side.png",
@@ -1497,7 +1799,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "animal",
+   "lab",
+   "model",
+   "mouse"
+  ],
+  "description": "Lab mouse from the side"
  },
  "dna": {
   "file": "dna.png",
@@ -1524,7 +1833,15 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "dna",
+   "gene",
+   "genome",
+   "helix",
+   "mutation"
+  ],
+  "description": "DNA double helix (can mutate)"
  },
  "dna_mut": {
   "file": "dna_mut.png",
@@ -1545,7 +1862,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "dna",
+   "gene",
+   "mutation"
+  ],
+  "description": "Mutated DNA"
  },
  "glucose": {
   "file": "glucose.png",
@@ -1566,7 +1889,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "glucose",
+   "metabolism",
+   "molecule",
+   "sugar"
+  ],
+  "description": "Glucose molecule"
  },
  "pill": {
   "file": "pill.png",
@@ -1587,7 +1917,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "drug",
+   "medicine",
+   "pill",
+   "therapy"
+  ],
+  "description": "Pill"
  },
  "granule_blue": {
   "file": "granule_blue.png",
@@ -1608,7 +1945,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "granule",
+   "granzyme",
+   "perforin",
+   "projectile"
+  ],
+  "description": "Blue granule (perforin, granzymes)"
  },
  "granule_green": {
   "file": "granule_green.png",
@@ -1629,7 +1973,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "granule",
+   "projectile"
+  ],
+  "description": "Green granule"
  },
  "antibody": {
   "file": "antibody.png",
@@ -1650,7 +1999,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "antibody",
+   "drug",
+   "immunoglobulin",
+   "molecule",
+   "y"
+  ],
+  "description": "Antibody (Y shape)"
  },
  "chromosome": {
   "file": "chromosome.png",
@@ -1671,7 +2028,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "chromosome",
+   "dna",
+   "genome"
+  ],
+  "description": "Chromosome"
  },
  "chromosome_ph": {
   "file": "chromosome_ph.png",
@@ -1692,7 +2055,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "chromosome",
+   "leukemia",
+   "philadelphia",
+   "translocation"
+  ],
+  "description": "Philadelphia chromosome"
  },
  "patient_a": {
   "file": "patient_a.png",
@@ -1743,7 +2113,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "patient",
+   "people",
+   "person"
+  ],
+  "description": "Patient with long hair (no name)"
  },
  "patient_b": {
   "file": "patient_b.png",
@@ -1794,7 +2170,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "patient",
+   "people",
+   "person"
+  ],
+  "description": "Patient with a bob (no name)"
  },
  "patient_c": {
   "file": "patient_c.png",
@@ -1845,7 +2227,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "patient",
+   "people",
+   "person"
+  ],
+  "description": "Patient with short hair (no name)"
  },
  "kidney": {
   "file": "kidney.png",
@@ -1878,7 +2266,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "kidney",
+   "organ"
+  ],
+  "description": "Kidney (can reveal and glow)"
  },
  "plaster": {
   "file": "plaster.png",
@@ -1899,7 +2292,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "awareness",
+   "plaster",
+   "ribbon"
+  ],
+  "description": "Ribbon / plaster"
  },
  "manager": {
   "file": "manager.png",
@@ -1938,7 +2337,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "manager",
+   "office",
+   "people",
+   "worker"
+  ],
+  "description": "Office worker with a laptop"
  },
  "scientist": {
   "file": "scientist.png",
@@ -1971,7 +2377,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "lab",
+   "people",
+   "researcher",
+   "scientist"
+  ],
+  "description": "Scientist in a lab coat"
  },
  "clinician": {
   "file": "clinician.png",
@@ -2004,7 +2417,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "clinician",
+   "doctor",
+   "people"
+  ],
+  "description": "Clinician who points"
  },
  "file_doc": {
   "file": "file_doc.png",
@@ -2025,7 +2444,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "document",
+   "file",
+   "office",
+   "paper"
+  ],
+  "description": "Document"
  },
  "folder": {
   "file": "folder.png",
@@ -2046,7 +2472,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "folder",
+   "office"
+  ],
+  "description": "Folder"
  },
  "computer": {
   "file": "computer.png",
@@ -2073,7 +2504,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "computer",
+   "office",
+   "screen"
+  ],
+  "description": "Computer"
  },
  "check_card": {
   "file": "check_card.png",
@@ -2094,7 +2531,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "card",
+   "check",
+   "office"
+  ],
+  "description": "Check card"
  },
  "bulb": {
   "file": "bulb.png",
@@ -2127,7 +2570,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "bulb",
+   "idea",
+   "light"
+  ],
+  "description": "Light bulb (an idea)"
  },
  "tube": {
   "file": "tube.png",
@@ -2148,7 +2597,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "lab",
+   "sample",
+   "tube"
+  ],
+  "description": "Test tube (blue)"
  },
  "tube_orange": {
   "file": "tube_orange.png",
@@ -2169,7 +2624,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "lab",
+   "sample",
+   "tube"
+  ],
+  "description": "Test tube (orange)"
  },
  "plate": {
   "file": "plate.png",
@@ -2196,7 +2657,14 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "assay",
+   "lab",
+   "plate",
+   "wells"
+  ],
+  "description": "Well plate (can fill)"
  },
  "sequencer": {
   "file": "sequencer.png",
@@ -2223,7 +2691,15 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "data",
+   "dna",
+   "lab",
+   "machine",
+   "sequencer"
+  ],
+  "description": "Sequencer"
  },
  "datasheet": {
   "file": "datasheet.png",
@@ -2244,7 +2720,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "data",
+   "sheet",
+   "table"
+  ],
+  "description": "Data sheet"
  },
  "agent": {
   "file": "agent.png",
@@ -2283,7 +2765,13 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "agent",
+   "people",
+   "worker"
+  ],
+  "description": "Agent at work"
  },
  "supervisor": {
   "file": "supervisor.png",
@@ -2316,7 +2804,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "people",
+   "supervisor"
+  ],
+  "description": "Supervisor"
  },
  "lock": {
   "file": "lock.png",
@@ -2343,7 +2836,13 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "lock",
+   "open",
+   "security"
+  ],
+  "description": "Lock (can open)"
  },
  "deck": {
   "file": "deck.png",
@@ -2364,7 +2863,14 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "deck",
+   "office",
+   "presentation",
+   "slides"
+  ],
+  "description": "Slide deck"
  },
  "person": {
   "file": "person.png",
@@ -2403,6 +2909,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "code",
+  "tags": [
+   "people",
+   "person",
+   "viewer"
+  ],
+  "description": "Person (can cheer and point)"
  }
 }

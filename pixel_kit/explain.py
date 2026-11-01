@@ -1,33 +1,33 @@
-# explainer.yaml -> Timeline, for each video format. The agent writes the plan; this module draws it.
-# The plan format is in skills/explain/PLAN.md. Paths in the plan are relative to the plan file.
+# explainer.yaml -> Timeline, for each video format and style. The agent writes the plan; this module draws it.
+# The plan format is in .agents/skills/animate/PLAN.md. Paths in the plan are relative to the plan file.
 #
 #   from pixel_kit import explain, frame
 #   plan = explain.load("my-video/explainer.yaml")
-#   problems = explain.check(plan)        # rules: captions, sources, sprites, timing, text fits
+#   explain.prepare(plan, style="arcade")     # packs and style of the plan (or another style)
+#   problems, warnings = explain.check(plan)  # rules: sources, sprites, words, captions, pace
 #   frame.use("vertical")
-#   tl, marks = explain.timeline(plan)    # marks: key times for the storyboard
+#   tl, marks = explain.timeline(plan)        # marks: key times for the storyboard
 #
 # Scene types: title, cast, action, fact, flow, summary, custom.
 # Layout is relative to the frame, so one plan renders in every format of frame.FORMATS.
+# Timing comes from words (words.py): the voice-over text at 2.7 words/s, or a recording.
 
 import importlib.util, os, re
 from PIL import ImageDraw
 from .palette import *
 from .font import text, text_w, title_text, TITLE_GLYPHS, LINE
 from .timing import clamp, seg, ease, lerp
-from . import sprites as S, fx, ui, bg, voice, frame
+from . import sprites as S, fx, ui, bg, voice, frame, words, gen, camera, style, packs
 from .scene import Timeline
 
-WORDS_PER_S = 2.5        # voice-over pace
-MIN_SCENE = 2.5          # a caption must stay >= 2 s; the scene is a bit longer
-SUMMARY_HOLD = 8.0       # s: the last frame stays so that the viewer can read it
 TYPES = ("title", "cast", "action", "fact", "flow", "summary", "custom")
 COLOR_NAMES = {
     "favorable": FAVORABLE[0], "favorable2": FAVORABLE[1], "favorable3": FAVORABLE[2],
     "unfavorable": UNFAVORABLE[0], "unfavorable2": UNFAVORABLE[1], "unfavorable3": UNFAVORABLE[2],
     "neutral": NEUTRAL[0], "neutral2": NEUTRAL[1], "neutral3": NEUTRAL[2],
-    "ink": (INK, INK), "navy": (NAVY, NAVY),
+    "ink": (INK, INK), "navy": (ACCENT, ACCENT), "accent": (ACCENT, ACCENT),
 }
+TIMED = ("beats", "swarm", "grow", "field", "camera")     # lists whose items take t or on
 
 
 # ---------------------------------------------------------------- plan, voice-over, timing
@@ -36,10 +36,18 @@ def load(path):
     import yaml
     plan = yaml.safe_load(open(path, encoding="utf-8"))
     plan["_dir"] = os.path.dirname(os.path.abspath(path))
+    plan["_path"] = os.path.abspath(path)
     plan.setdefault("scenes", [])
     plan.setdefault("lang", "en")
     plan.setdefault("formats", list(frame.FORMATS))
+    plan.setdefault("style", style.BASE_NAME)
     return plan
+
+
+def prepare(plan, style_name=None):
+    """Sets the plan's packs (bottom -> top) and its style (or style_name)."""
+    S.use(plan.get("packs") or [p.name for p in sorted(packs.content(), key=lambda p: p.name)])
+    style.use(style_name or plan.get("style") or style.BASE_NAME)
 
 
 def path(plan, p):
@@ -62,45 +70,57 @@ def voiceover(plan):
     return {k: v.strip() for k, v in out.items()}
 
 
-def cues(plan):
+def audio_path(plan):
+    p = path(plan, (plan.get("voice") or {}).get("audio"))
+    return p if p and os.path.exists(p) else None
+
+
+def transcript_path(plan):
     v = plan.get("voice") or {}
-    tr = path(plan, v.get("transcript"))
+    p = path(plan, v.get("transcript"))
+    if p:
+        return p
+    a = path(plan, v.get("audio"))
+    return os.path.splitext(a)[0] + ".words.json" if a else None
+
+
+def spoken_words(plan):
+    """Words of the recording [(word, start, end)], or None without a transcript."""
+    tr = transcript_path(plan)
     if tr and os.path.exists(tr):
-        return voice.load(tr, float(v.get("start", 0.0)), v.get("end"))
-    return []
+        v = plan.get("voice") or {}
+        return voice.words(tr, float(v.get("start", 0.0)), v.get("end"))
+    return None
+
+
+def timing(plan):
+    """Per scene: start, end, words [(word, t)], drift. Cached in the plan."""
+    if "_timing" not in plan:
+        plan["_timing"] = words.timing(plan["scenes"], voiceover(plan), spoken_words(plan))
+        _resolve(plan)
+    return plan["_timing"]
 
 
 def durations(plan):
-    """Start and end of each scene. With a transcript: from the cues of each scene ("cues: [C01, C02]").
-    Without: from the words of the voice-over (2.5 words/s), or "dur" in the scene."""
-    scenes = plan["scenes"]
-    cs = cues(plan)
-    vo = voiceover(plan)
-    times = []
-    if cs:
-        by_id = {c.id: c for c in cs}
-        starts = [by_id[sc["cues"][0]].start if sc.get("cues") else None for sc in scenes]
-        starts[0] = 0.0
-        for i in range(len(scenes)):
-            if starts[i] is None:
-                starts[i] = starts[i - 1] + float(scenes[i - 1].get("dur", MIN_SCENE))
-        last_ids = scenes[-1].get("cues") or []
-        end = (by_id[last_ids[-1]].end if last_ids else cs[-1].end) + 0.8
-        for i in range(len(scenes)):
-            times.append((starts[i], starts[i + 1] if i + 1 < len(scenes) else end))
-        if scenes[-1].get("type") == "summary":
-            a, b = times[-1]
-            times[-1] = (a, max(b, a + float(scenes[-1].get("dur", SUMMARY_HOLD))))
-        return times
-    t = 0.0
-    for sc in scenes:
-        words = len(vo.get(sc.get("id"), "").split())
-        d = float(sc.get("dur", max(MIN_SCENE, words / WORDS_PER_S + 0.8)))
-        if sc.get("type") == "summary" and "dur" not in sc:
-            d = max(d, SUMMARY_HOLD)
-        times.append((t, t + d))
-        t += d
-    return times
+    return [(s["start"], s["end"]) for s in timing(plan)]
+
+
+def _resolve(plan):
+    """Gives each timed item (beat, generator, camera move) "_t": seconds from the scene start.
+    "on: attacks" is the time of that word, plus "offset"."""
+    probs = plan["_resolve_problems"] = []
+    for sc, tm in zip(plan["scenes"], plan["_timing"]):
+        for key in TIMED:
+            for it in sc.get(key) or []:
+                if "on" in it:
+                    w = words.at(tm, str(it["on"]))
+                    if w is None:
+                        probs.append(f"{sc.get('id')}: {key} 'on: {it['on']}' is not a word of its voice-over")
+                        it["_t"] = 0.0
+                    else:
+                        it["_t"] = max(0.0, w - tm["start"] + float(it.get("offset", 0.0)))
+                else:
+                    it["_t"] = float(it.get("t", 0.0))
 
 
 def color(name):
@@ -172,7 +192,7 @@ def grid(n, box, tall):
 
 def best_scale(name, cw, ch, room=20, top=4):
     """The largest integer scale at which the sprite cell fits in a cw x ch cell, with room for a label."""
-    sw, sh = S.meta()[name]["cell"]
+    sw, sh = S.cell(name)
     for k in range(top, 0, -1):
         if sw * k <= cw - 6 and sh * k <= ch - room:
             return k
@@ -212,11 +232,23 @@ def _sprites(sc):
             yield b["badge"], "idle"
     if sc.get("sprite"):
         yield sc["sprite"], sc.get("anim", "idle")
+    for g in sc.get("swarm") or []:
+        yield g.get("sprite"), g.get("anim", "idle")
+        if g.get("arrive_sprite"):
+            yield g["arrive_sprite"], g.get("arrive_anim", "idle")
+        elif g.get("arrive_anim"):
+            yield g.get("sprite"), g["arrive_anim"]
+    for g in sc.get("grow") or []:
+        for n in g.get("sprites") or [g.get("sprite")]:
+            yield n, "idle"
+    for g in sc.get("field") or []:
+        if g.get("sprite"):
+            yield g["sprite"], "idle"
 
 
 def check(plan):
-    """Rules of the skill. Returns a list of problems (empty: all pass)."""
-    out = []
+    """Rules of the skill. Returns (problems, warnings). Problems stop a render; warnings go to the person."""
+    out, warn = [], []
     if not plan.get("sources"):
         out.append("sources: list at least one source for the science in the video")
     vo = voiceover(plan)
@@ -225,7 +257,13 @@ def check(plan):
     for f in plan.get("formats") or []:
         if f not in frame.FORMATS:
             out.append(f"formats: unknown format {f!r}; use {', '.join(frame.FORMATS)}")
-    times = durations(plan)
+    try:
+        prepare(plan, style.current().name)
+    except (packs.PackError, KeyError, ValueError) as e:
+        return [str(e)], warn
+    tm = timing(plan)
+    out += plan.get("_resolve_problems", [])
+    times = [(s["start"], s["end"]) for s in tm]
     seen = set()
     meta = S.meta()
     for sc, (a, b) in zip(plan["scenes"], times):
@@ -240,15 +278,24 @@ def check(plan):
             out.append(f"{sid}: unknown type {typ!r}; use {', '.join(TYPES)}")
         for name, anim in _sprites(sc):
             if name not in meta:
-                out.append(f"{sid}: unknown sprite {name!r} (see the cast sheet: pixsci.py sheet)")
+                out.append(f"{sid}: unknown sprite {name!r} (find one: pixsci find <word>)")
             elif anim not in meta[name]["anims"]:
                 out.append(f"{sid}: sprite {name} has no animation {anim!r}; it has {', '.join(meta[name]['anims'])}")
+        if sc.get("bg", "paper") not in bg.names():
+            out.append(f"{sid}: unknown background {sc.get('bg')!r}; backgrounds: {', '.join(bg.names())}")
         for key in ("items", "steps"):
             if len(sc.get(key) or []) > 4:
                 out.append(f"{sid}: {key} has more than 4 entries (they do not fit a vertical frame)")
+        actors = sc.get("actors") or {}
         for beat in sc.get("beats") or []:
-            if beat.get("actor") not in (sc.get("actors") or {}):
-                out.append(f"{sid}: beat at {beat.get('t')} s names an unknown actor {beat.get('actor')!r}")
+            if beat.get("actor") not in actors:
+                out.append(f"{sid}: beat {beat.get('on', beat.get('t'))} names an unknown actor {beat.get('actor')!r}")
+        for key in ("swarm", "field", "camera", "grow"):
+            for it in sc.get(key) or []:
+                for f in ("target", "drag", "at", "pan_to"):
+                    v = it.get(f)
+                    if isinstance(v, str) and v not in actors:
+                        out.append(f"{sid}: {key} {f}: {v!r} is not an actor of the scene")
         cap = sc.get("caption")
         if cap and len(cap.split()) > 3:
             out.append(f"{sid}: caption has {len(cap.split())} words (max 3): {cap!r}")
@@ -257,6 +304,14 @@ def check(plan):
         for f, s in _texts(sc):
             if plan.get("lang") == "en" and not s.isascii():
                 out.append(f"{sid}: {f} is not plain English text (lang: en): {s!r}")
+            for num in re.findall(r"\d[\d.,]*", s):
+                if not _sourced(plan, num):
+                    warn.append(f"{sid}: number {num!r} on screen ({f}): is it from a source? "
+                                f"If yes, list it under 'numbers:' with its source")
+        for key, field in (("swarm", "n"), ("grow", "max"), ("field", "n")):
+            for it in sc.get(key) or []:
+                if field in it:
+                    warn.append(f"{sid}: {key} {field}={it[field]} is a schematic count (invented, not on screen)")
         if typ == "title":
             for ch in (sc.get("title") or "").upper():
                 if ch not in TITLE_GLYPHS:
@@ -278,26 +333,32 @@ def check(plan):
     frame.use("landscape")
     if not plan["scenes"] or plan["scenes"][-1].get("type") != "summary":
         out.append("the last scene must be a summary")
-    story_end = times[-2][1] if len(times) > 1 and plan["scenes"][-1].get("type") == "summary" else (times[-1][1] if times else 0)
-    limit = float(plan.get("max_s", 60))
-    if story_end > limit:
-        out.append(f"length before the summary {story_end:.0f} s: keep it at 20-45 s ({limit:.0f} s at most, max_s)")
-    return out
+    from . import pace
+    p2, w2 = pace.check(plan)
+    out += p2
+    warn += w2
+    for line in words.drift_report(tm):
+        warn.append("voice: " + line)
+    return out, warn
+
+
+def _sourced(plan, num):
+    nums = plan.get("numbers") or {}
+    keys = nums.keys() if isinstance(nums, dict) else nums
+    return any(num.strip(".,") in str(k) for k in keys)
 
 
 # ---------------------------------------------------------------- shared drawing
 
 def _bg(sc, t):
-    name = sc.get("bg", "paper")
-    fn = bg.ALL.get(name, bg.paper)
-    return fn(t) if name == "bloodstream" else fn()
+    return bg.get(sc.get("bg", "paper"), t)
 
 
 def _heading(img, L, s):
     if s and not L["banner"]:
         k, lines = fit_text(s, L["W"] - 24, (1,), max_lines=1)
-        text(img, 12, 8, lines[0], NAVY)
-        ImageDraw.Draw(img).line([12, 26, 12 + text_w(lines[0]), 26], fill=C(NAVY))
+        text(img, 12, 8, lines[0], ACCENT)
+        ImageDraw.Draw(img).line([12, 26, 12 + text_w(lines[0]), 26], fill=C(ACCENT))
 
 
 def _caption(img, L, sc, t):
@@ -310,9 +371,9 @@ def _caption(img, L, sc, t):
     d = ImageDraw.Draw(img)
     w = max(text_w(s, k) for s in lines)
     cx = L["W"] // 2
-    d.rectangle([cx - w // 2 - 6, y - 3, cx + w // 2 + 6, y + lh * len(lines) - 1], fill=C(NAVY))
+    d.rectangle([cx - w // 2 - 6, y - 3, cx + w // 2 + 6, y + lh * len(lines) - 1], fill=C(PLATE))
     for i, s in enumerate(lines):
-        text(img, cx, y + lh * i, s, WHITE, scale=k, align="c")
+        text(img, cx, y + lh * i, s, PLATE_INK, scale=k, align="c")
 
 
 def _one_line(s, maxw, scales):
@@ -358,7 +419,7 @@ def _items(img, L, items, t, box, t0=0.3, step=0.35, labels=True, still=False):
         if t < ti and not still:
             continue
         k = int(it.get("scale") or common)
-        sh = S.meta()[it["sprite"]]["cell"][1] * k
+        sh = S.cell(it["sprite"])[1] * k
         cy = y - (9 if labels and it.get("label") else 0)
         _sprite(img, it["sprite"], it.get("anim", "idle"), 0.0 if still else t - ti, x, cy, k, seed=i)
         if labels and it.get("label"):
@@ -369,7 +430,7 @@ def _items(img, L, items, t, box, t0=0.3, step=0.35, labels=True, still=False):
 # ---------------------------------------------------------------- scene painters
 
 def p_title(plan, sc, t, dur, ctx):
-    img = bg.paper()
+    img = bg.get("paper")
     L = layout()
     W, H = L["W"], L["H"]
     s = (sc.get("title") or "").upper()
@@ -380,13 +441,13 @@ def p_title(plan, sc, t, dur, ctx):
     sub_k, sub = fit_text(sc.get("sub") or "", W - 24, (2, 1) if not L["banner"] else (1,), max_lines=2)
     block = th + (12 + len(sub) * LINE * sub_k if sub else 0)
     top = max(4, (H - block) // 2 - (10 if not L["banner"] else 0))
-    y = int(lerp(-th - 10, top, ease(seg(t, 0, 0.6))))
-    title_text(img, W // 2, y, s, k, XBLUE, NAVY, back=LGREY)
+    y = int(lerp(-th - 10, top, ease(seg(t, 0, 0.6)))) - (int(t * 2) % 2 if t > 0.6 else 0)
+    title_text(img, W // 2, y, s, k, XBLUE, ACCENT, back=LGREY)
     if sub and t > 0.5:
         for i, ln in enumerate(sub):
             text(img, W // 2, top + th + 12 + i * LINE * sub_k, ln, INK, scale=sub_k, align="c")
     if sc.get("credit") and t > 0.8 and not L["banner"]:
-        text(img, W // 2, H - 26, sc["credit"], DGREY, align="c")
+        text(img, W // 2, H - 26, sc["credit"], DIM, align="c")
     return img
 
 
@@ -423,17 +484,17 @@ def p_flow(plan, sc, t, dur, ctx):
             continue
         if L["tall"]:
             k = int(st.get("scale") or best_scale(st["sprite"], cw / 2, ch, room=4, top=3))
-            sw = S.meta()[st["sprite"]]["cell"][0] * k
+            sw = S.cell(st["sprite"])[0] * k
             _sprite(img, st["sprite"], st.get("anim", "idle"), t - ti, x - sw // 2 - 4, y, k, seed=i)
             k2, lines = fit_text(st.get("label", ""), L["W"] // 2 - 12, (1,), max_lines=2)
             for j, ln in enumerate(lines):
                 text(img, x + 6, y - LINE * len(lines) // 2 + LINE * j, ln, INK)
             if i + 1 < n and t > ti + step_t * 0.6:
-                _arrow(d, x, int(y + ch / 2 - 6), x, int(y + ch / 2 + 6), DGREY)
+                _arrow(d, x, int(y + ch / 2 - 6), x, int(y + ch / 2 + 6), DIM)
         else:
             k = int(st.get("scale") or best_scale(st["sprite"], cw - 24, ch, room=22, top=2 if L["banner"] else 3))
-            sh = S.meta()[st["sprite"]]["cell"][1] * k
-            sw = S.meta()[st["sprite"]]["cell"][0] * k
+            sh = S.cell(st["sprite"])[1] * k
+            sw = S.cell(st["sprite"])[0] * k
             cy = y - 9
             _sprite(img, st["sprite"], st.get("anim", "idle"), t - ti, x, cy, k, seed=i)
             _label(img, x, cy + sh // 2 + 3, st.get("label", ""), INK, cw - 8)
@@ -441,7 +502,7 @@ def p_flow(plan, sc, t, dur, ctx):
                 xa = int(x + max(sw // 2 + 4, cw * 0.32))
                 xb = int(pts[i + 1][0] - max(sw // 2 + 4, cw * 0.32))
                 if xb - xa >= 8:
-                    _arrow(d, xa, cy, xb, cy, DGREY)
+                    _arrow(d, xa, cy, xb, cy, DIM)
     _caption(img, L, sc, t)
     return img
 
@@ -461,7 +522,7 @@ def p_fact(plan, sc, t, dur, ctx):
         sy = y0 + int((y1 - y0) * share / 2)
         if name:
             _sprite(img, name, sc.get("anim", "idle"), t, W // 2, sy, k)
-        ty = sy + (S.meta()[name]["cell"][1] * k // 2 + 10 if name else 0)
+        ty = sy + (S.cell(name)[1] * k // 2 + 10 if name else 0)
         tx, align, maxw = W // 2, "c", W - 20
     else:
         k = best_scale(name, W * 0.3, y1 - y0, room=4) if name else 0
@@ -482,7 +543,7 @@ def p_fact(plan, sc, t, dur, ctx):
         for ln in ww:
             k_vis = int(clamp(n_chars - used, 0, len(ln)))
             used += len(ln)
-            text(img, tx, y, ln[:k_vis], NAVY if i == 0 else INK, scale=kk, align=align)
+            text(img, tx, y, ln[:k_vis], ACCENT if i == 0 else INK, scale=kk, align=align)
             y += LINE * kk
         y += 6
     _caption(img, L, sc, t)
@@ -494,8 +555,8 @@ def _actor_state(a, beats, name, t):
     x, y = a.get("at", [0.5, 0.5])
     anim, a_t0 = a.get("anim", "idle"), 0.0
     flip, badge, shown = bool(a.get("flip", False)), a.get("badge"), not a.get("hidden", False)
-    for b in sorted((b for b in beats if b.get("actor") == name), key=lambda b: float(b.get("t", 0))):
-        bt = float(b.get("t", 0))
+    for b in sorted((b for b in beats if b.get("actor") == name), key=lambda b: b["_t"]):
+        bt = b["_t"]
         if t < bt:
             break
         if "move_to" in b:
@@ -514,34 +575,62 @@ def _actor_state(a, beats, name, t):
     return x, y, anim, t - a_t0, flip, badge, shown
 
 
+def _stage_px(L, fx_, fy_):
+    x0, y0, x1, y1 = L["stage"]
+    return int(x0 + fx_ * (x1 - x0)), int(y0 + fy_ * (y1 - y0))
+
+
 def p_action(plan, sc, t, dur, ctx):
-    """Actors on a stage and timed beats: move, change animation, flip, add or remove a badge, effects.
+    """Actors on a stage, timed beats, generators (swarm, grow, field), effects, and a camera.
     Positions are fractions of the stage (0..1), so the scene fits every format."""
     img = _bg(sc, t)
     L = layout()
-    _heading(img, L, sc.get("title"))
-    x0, y0, x1, y1 = L["stage"]
     actors = sc.get("actors") or {}
     beats = sc.get("beats") or []
+    seed = int(sc.get("seed", plan.get("seed", 1)))
+
+    def actor_xy(name, tt):
+        fx_, fy_, *_ = _actor_state(actors[name], beats, name, tt)
+        return fx_, fy_
+
+    def target(v, tt):
+        """Stage fractions of an actor name or [x, y]."""
+        return actor_xy(v, tt) if isinstance(v, str) else (float(v[0]), float(v[1]))
+
+    def target_px(v):
+        return lambda tt: _stage_px(L, *target(v, tt))
+
+    for i, g in enumerate(sc.get("field") or []):
+        gen.draw_field(img, g, t, L["stage"], target_px(g.get("drag") or g.get("at") or [0.5, 0.5]), seed + i)
+    k_default = int(sc.get("scale", L["sprite_scale"]))
+    for g in sc.get("grow") or []:
+        g["_at"] = target(g.get("at", [0.5, 0.5]), t)
+        for (gx, gy, name, anim, at) in gen.grow_state(g, t):
+            px, py = _stage_px(L, gx, gy)
+            _sprite(img, name, anim, at, px, py, int(g.get("scale", k_default)), seed=int(gx * 97))
     for i, (name, a) in enumerate(actors.items()):
         fx_, fy_, anim, at, flip, badge, shown = _actor_state(a, beats, name, t)
         if not shown:
             continue
-        k = int(a.get("scale", L["sprite_scale"]))
-        px, py = int(x0 + fx_ * (x1 - x0)), int(y0 + fy_ * (y1 - y0))
+        k = int(a.get("scale", k_default))
+        px, py = _stage_px(L, fx_, fy_)
         _sprite(img, a["sprite"], anim, at, px, py, k, seed=i, flip=flip)
-        sh = S.meta()[a["sprite"]]["cell"][1] * k
+        sh = S.cell(a["sprite"])[1] * k
         if badge:
-            bh = S.meta()[badge]["cell"][1] * k
+            bh = S.cell(badge)[1] * k
             S.draw(img, badge, "idle", 0, px, max(bh // 2 + 1, py - sh // 2 - bh // 2 + 2), scale=k)
         if a.get("label") and not L["banner"]:
             text(img, px, py + sh // 2 + 2, a["label"], color(a.get("color", "ink"))[0], align="c")
+    for i, g in enumerate(sc.get("swarm") or []):
+        members = gen.swarm_state(g, t, lambda tt, v=g.get("target", [0.5, 0.5]): target(v, tt), seed + 100 + i)
+        for j, (gx, gy, name, anim, at, flip) in enumerate(members):
+            px, py = _stage_px(L, gx, gy)
+            _sprite(img, name, anim, at, px, py, int(g.get("scale", 1)), seed=j, flip=flip)
     for b in beats:
-        bt = float(b.get("t", 0))
+        bt = b["_t"]
         if not b.get("fx") or t < bt or b.get("actor") not in actors:
             continue
-        fx_, fy_, *_ = _actor_state(actors[b["actor"]], beats, b["actor"], t)
-        px, py = int(x0 + fx_ * (x1 - x0)), int(y0 + fy_ * (y1 - y0))
+        px, py = _stage_px(L, *actor_xy(b["actor"], t))
         if b["fx"] == "hit":
             fx.hit_flash(img, px, py, t - bt)
         elif b["fx"] == "alert" and t - bt < 1.2:
@@ -550,6 +639,15 @@ def p_action(plan, sc, t, dur, ctx):
             fx.sparkle(img, px, py - 20, t - bt)
         elif b["fx"] == "particles":
             fx.particles(img, px, py, t - bt, seed=int(bt * 10))
+        elif b["fx"] == "wave":
+            fx.wave(img, px, py, t - bt)
+        elif b["fx"] == "flash" and t - bt < 0.2:
+            fx.border_flash(img, top=0, col=ACCENT)
+    cams = sc.get("camera") or []
+    if cams:
+        z, cx, cy, dx, dy = camera.state(cams, t, lambda v, tt: _stage_px(L, *target(v, tt)))
+        img = camera.apply(img, z, cx, cy, dx, dy, fill=C(PAPER))
+    _heading(img, L, sc.get("title"))
     _caption(img, L, sc, t)
     return img
 
@@ -557,7 +655,7 @@ def p_action(plan, sc, t, dur, ctx):
 def p_summary(plan, sc, t, dur, ctx):
     """The last frame: a heading, up to 4 sprites with labels, and 1 or 2 lines of conclusion.
     It appears in about 1.5 s and then holds still."""
-    img = bg.plain()
+    img = bg.get("plain")
     L = layout()
     W, H = L["W"], L["H"]
     _heading(img, L, sc.get("title") or plan.get("title"))
@@ -573,7 +671,7 @@ def p_summary(plan, sc, t, dur, ctx):
         for kk, ww in (fit_text(s, W // 2 - 16, (1,), max_lines=2) for s in lines):
             if t >= 1.0:
                 for ln in ww:
-                    text(img, W * 3 // 4, y, ln, NAVY, scale=kk, align="c")
+                    text(img, W * 3 // 4, y, ln, ACCENT, scale=kk, align="c")
                     y += LINE * kk
         return img
     _items(img, L, sc.get("items") or [], t, (x0, y0, x1, y1), t0=0.2, step=0.2)
@@ -581,7 +679,7 @@ def p_summary(plan, sc, t, dur, ctx):
         y = y1 + 4
         for i, (kk, ww) in enumerate(fitted):
             for ln in ww:
-                text(img, W // 2, y, ln, NAVY if i == 0 else INK, scale=kk, align="c")
+                text(img, W // 2, y, ln, ACCENT if i == 0 else INK, scale=kk, align="c")
                 y += LINE * kk
             y += 4
     return img
@@ -609,7 +707,7 @@ PAINTERS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 # ---------------------------------------------------------------- timeline
 
 def timeline(plan):
-    """Builds the Timeline for the current format (frame.use). Returns (timeline, marks):
+    """Builds the Timeline for the current format (frame.use) and style. Returns (timeline, marks):
     marks are (time, label) for the storyboard."""
     times = durations(plan)
     scenes, marks = [], []

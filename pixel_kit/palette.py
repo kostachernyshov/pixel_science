@@ -21,10 +21,16 @@ NAMES = ["BLACK", "NAVY", "PLUM", "DGREEN", "BROWN", "DGREY", "LGREY", "WHITE",
          "XBROWN", "XNAVY", "XPLUM", "XTEAL", "XRUST", "XMAUVE", "XTAUPE", "XLEMON",
          "XCRIMSON", "XORANGE", "XLIME", "XGREEN", "XBLUE", "XPURPLE", "XSALMON", "XAPRICOT", "PAPER"]
 
-# Light theme. PAPER is the background, INK is text and axes.
-PAPER = 32                      # near white, a little cool. Sprite bodies stay WHITE (warm) with an outline.
-INK = BLACK
+# Roles: what a color is for, not which color. The active style (pixel_kit/style.py) sets them.
+# PAPER is the background, INK is text and axes, ACCENT is headings, PLATE and PLATE_INK are the
+# caption plate and its text, DIM is quiet text and arrows, GRID is the background grid.
+# Sprites never use roles; they use the 16 colors (and the style recolors them).
+PAPER = 32                      # base: near white, a little cool. Sprite bodies stay WHITE (warm) with an outline.
+INK, ACCENT, PLATE, PLATE_INK, DIM, GRID = range(33, 39)
 GRID_LINE = (236, 234, 230)     # faint dotted grid on PAPER (off-palette, like the muted backgrounds)
+BASE_ROLES = {INK: P[BLACK], ACCENT: P[NAVY], PLATE: P[NAVY], PLATE_INK: P[WHITE], DIM: P[DGREY], GRID: GRID_LINE}
+ROLE_NAMES = {"paper": PAPER, "ink": INK, "accent": ACCENT, "plate": PLATE, "plate_ink": PLATE_INK,
+              "dim": DIM, "grid": GRID}
 
 # Group colors for charts: (line or mark, fill). A line uses the first color: it has >= 3:1 on PAPER.
 # The sets pass colorcheck (Delta E >= 20 in normal, deutan, protan views) inside each set.
@@ -43,9 +49,24 @@ EXPRESSION = [XPLUM, NAVY, XTEAL, DGREEN, XLIME, YELLOW]
 SEQUENTIAL = [LGREY, BLUE, XBLUE, NAVY, XNAVY]
 
 
+BASE = list(P) + [BASE_ROLES[i] for i in range(33, 39)]   # base colors: indices 0-32 and the roles 33-38
+_active = list(BASE)            # set by style.use()
+
+
+def set_active(colors):
+    """The style calls this: a list of 39 RGB tuples (indices 0-32, then the roles)."""
+    _active[:] = colors
+
+
 def C(i):
-    return P[i]
+    """RGB of a palette index or a role in the active style."""
+    return _active[i]
 
 
 def CA(i):
-    return P[i] + (255,)
+    return _active[i] + (255,)
+
+
+def B(i):
+    """RGB in the base style (paper). Backgrounds draw in base colors; the style filters them."""
+    return BASE[i]

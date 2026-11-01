@@ -1,0 +1,8 @@
+name: style-paper
+kind: style
+version: 0.1.0
+description: The base style. Light paper, PICO-8 colors, 1 px black outline, soft shading.
+license: CC0-1.0
+style:
+  name: paper
+  description: Light paper background, PICO-8 colors (lospec.com/palette-list/pico-8). The base PNGs are drawn in it.

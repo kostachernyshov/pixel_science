@@ -1,0 +1,6 @@
+name: biology
+kind: content
+version: 0.1.0
+description: Cells and immunity (immune, tumor and body cells, molecule badges), lab props, people.
+license: CC0-1.0 for sprites, MIT for code
+provides: [sprites, backgrounds, bible]

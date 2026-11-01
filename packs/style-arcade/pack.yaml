@@ -1,0 +1,32 @@
+name: style-arcade
+kind: style
+version: 0.1.0
+description: Dark arcade screen. Flat neon colors, a dim glow ring around sprites, CRT scanlines.
+license: CC0-1.0
+style:
+  name: arcade
+  description: Near-black screen, flat neon bodies, glow ring, CRT scanlines; captions in yellow on a black bar.
+  dark: true
+  redraw: true
+  scanlines: true
+  roles:
+    paper: [10, 8, 24]
+    ink: [255, 241, 232]
+    accent: [41, 173, 255]
+    plate: [0, 0, 0]
+    plate_ink: [255, 236, 39]
+    dim: [131, 118, 156]
+    grid: [26, 24, 52]
+  colors:              # effects and UI drawn with these colors stay visible on the dark screen
+    BLACK: [255, 241, 232]
+    NAVY: [41, 173, 255]
+    DGREY: [131, 118, 156]
+    XNAVY: [41, 173, 255]
+    XBLUE: [41, 173, 255]
+  sprite:
+    shading: false
+    outline: BLACK
+    glow: [29, 43, 83]
+  background:
+    filter: dark
+    strength: 1.0
