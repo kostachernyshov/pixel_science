@@ -1,0 +1,23 @@
+name: check
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Sprite library (palette, metadata, credits, license)
+        run: python tools/validate_sprites.py
+      - name: Example plans
+        run: |
+          for p in examples/*/explainer.yaml; do python pixsci.py check "$p"; done
+      - name: Storyboards in all formats (smoke test, no ffmpeg needed)
+        run: |
+          for p in examples/*/explainer.yaml; do python pixsci.py board "$p" out/$(basename $(dirname "$p")); done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: storyboards
+          path: out/

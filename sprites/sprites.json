@@ -1,0 +1,2408 @@
+{
+ "nk": {
+  "file": "nk.png",
+  "group": "hero",
+  "cell": [
+   40,
+   36
+  ],
+  "anchor": [
+   20.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "move": {
+    "row": 2,
+    "frames": 3,
+    "fps": 8,
+    "loop": true
+   },
+   "alert": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "attack": {
+    "row": 4,
+    "frames": 4,
+    "fps": 10,
+    "loop": false
+   },
+   "hit": {
+    "row": 5,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 6,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "blocked": {
+    "row": 7,
+    "frames": 2,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "killer_t": {
+  "file": "killer_t.png",
+  "group": "hero",
+  "cell": [
+   40,
+   36
+  ],
+  "anchor": [
+   20.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "move": {
+    "row": 2,
+    "frames": 3,
+    "fps": 8,
+    "loop": true
+   },
+   "alert": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "attack": {
+    "row": 4,
+    "frames": 4,
+    "fps": 10,
+    "loop": false
+   },
+   "hit": {
+    "row": 5,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 6,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "blocked": {
+    "row": 7,
+    "frames": 2,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "helper_t": {
+  "file": "helper_t.png",
+  "group": "hero",
+  "cell": [
+   40,
+   36
+  ],
+  "anchor": [
+   20.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "move": {
+    "row": 2,
+    "frames": 3,
+    "fps": 8,
+    "loop": true
+   },
+   "alert": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "attack": {
+    "row": 4,
+    "frames": 4,
+    "fps": 10,
+    "loop": false
+   },
+   "hit": {
+    "row": 5,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 6,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "blocked": {
+    "row": 7,
+    "frames": 2,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "treg": {
+  "file": "treg.png",
+  "group": "hero",
+  "cell": [
+   40,
+   36
+  ],
+  "anchor": [
+   20.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "move": {
+    "row": 2,
+    "frames": 3,
+    "fps": 8,
+    "loop": true
+   },
+   "alert": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "attack": {
+    "row": 4,
+    "frames": 4,
+    "fps": 10,
+    "loop": false
+   },
+   "hit": {
+    "row": 5,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 6,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "blocked": {
+    "row": 7,
+    "frames": 2,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "car_t": {
+  "file": "car_t.png",
+  "group": "hero",
+  "cell": [
+   40,
+   36
+  ],
+  "anchor": [
+   20.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "move": {
+    "row": 2,
+    "frames": 3,
+    "fps": 8,
+    "loop": true
+   },
+   "alert": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "attack": {
+    "row": 4,
+    "frames": 4,
+    "fps": 10,
+    "loop": false
+   },
+   "hit": {
+    "row": 5,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 6,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "blocked": {
+    "row": 7,
+    "frames": 2,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "b_cell": {
+  "file": "b_cell.png",
+  "group": "hero",
+  "cell": [
+   40,
+   36
+  ],
+  "anchor": [
+   20.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "move": {
+    "row": 2,
+    "frames": 3,
+    "fps": 8,
+    "loop": true
+   },
+   "alert": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "attack": {
+    "row": 4,
+    "frames": 4,
+    "fps": 10,
+    "loop": false
+   },
+   "hit": {
+    "row": 5,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 6,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "dendritic": {
+  "file": "dendritic.png",
+  "group": "hero",
+  "cell": [
+   46,
+   42
+  ],
+  "anchor": [
+   23.0,
+   21.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "move": {
+    "row": 2,
+    "frames": 3,
+    "fps": 8,
+    "loop": true
+   },
+   "alert": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "attack": {
+    "row": 4,
+    "frames": 4,
+    "fps": 10,
+    "loop": false
+   },
+   "hit": {
+    "row": 5,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 6,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "present": {
+    "row": 7,
+    "frames": 2,
+    "fps": 4,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "macrophage": {
+  "file": "macrophage.png",
+  "group": "hero",
+  "cell": [
+   46,
+   42
+  ],
+  "anchor": [
+   23.0,
+   21.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "move": {
+    "row": 2,
+    "frames": 3,
+    "fps": 8,
+    "loop": true
+   },
+   "alert": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "attack": {
+    "row": 4,
+    "frames": 4,
+    "fps": 10,
+    "loop": false
+   },
+   "hit": {
+    "row": 5,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 6,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "eat": {
+    "row": 7,
+    "frames": 6,
+    "fps": 8,
+    "loop": false
+   },
+   "repair": {
+    "row": 8,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "repair_blink": {
+    "row": 9,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "tumor": {
+  "file": "tumor.png",
+  "group": "villain",
+  "cell": [
+   48,
+   28
+  ],
+  "anchor": [
+   24.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 3,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   },
+   "lose_mhc": {
+    "row": 5,
+    "frames": 9,
+    "fps": 4,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "tumor_mhc_low": {
+  "file": "tumor_mhc_low.png",
+  "group": "villain",
+  "cell": [
+   48,
+   28
+  ],
+  "anchor": [
+   24.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 3,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "tumor_no_mhc": {
+  "file": "tumor_no_mhc.png",
+  "group": "villain",
+  "cell": [
+   48,
+   28
+  ],
+  "anchor": [
+   24.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 3,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "tumor_pdl1": {
+  "file": "tumor_pdl1.png",
+  "group": "villain",
+  "cell": [
+   48,
+   28
+  ],
+  "anchor": [
+   24.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 3,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   },
+   "pdl1_up": {
+    "row": 5,
+    "frames": 5,
+    "fps": 4,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "tumor_stress": {
+  "file": "tumor_stress.png",
+  "group": "villain",
+  "cell": [
+   48,
+   28
+  ],
+  "anchor": [
+   24.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 3,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "blast": {
+  "file": "blast.png",
+  "group": "villain",
+  "cell": [
+   32,
+   28
+  ],
+  "anchor": [
+   16.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   },
+   "hit": {
+    "row": 1,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "death": {
+    "row": 2,
+    "frames": 3,
+    "fps": 6,
+    "loop": false
+   },
+   "mature": {
+    "row": 3,
+    "frames": 5,
+    "fps": 6,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "epithelial": {
+  "file": "epithelial.png",
+  "group": "civilian",
+  "cell": [
+   45,
+   34
+  ],
+  "anchor": [
+   22.5,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "death": {
+    "row": 1,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "blink": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   },
+   "mutate": {
+    "row": 5,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "stem": {
+  "file": "stem.png",
+  "group": "civilian",
+  "cell": [
+   49,
+   34
+  ],
+  "anchor": [
+   24.5,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "death": {
+    "row": 1,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "blink": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "mutant": {
+  "file": "mutant.png",
+  "group": "civilian",
+  "cell": [
+   45,
+   34
+  ],
+  "anchor": [
+   22.5,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "death": {
+    "row": 1,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "blink": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "clone_a": {
+  "file": "clone_a.png",
+  "group": "civilian",
+  "cell": [
+   45,
+   32
+  ],
+  "anchor": [
+   22.5,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "death": {
+    "row": 1,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "blink": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "clone_b": {
+  "file": "clone_b.png",
+  "group": "civilian",
+  "cell": [
+   45,
+   32
+  ],
+  "anchor": [
+   22.5,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "death": {
+    "row": 1,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "blink": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "clone_c": {
+  "file": "clone_c.png",
+  "group": "civilian",
+  "cell": [
+   45,
+   32
+  ],
+  "anchor": [
+   22.5,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "death": {
+    "row": 1,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "blink": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "clone_d": {
+  "file": "clone_d.png",
+  "group": "civilian",
+  "cell": [
+   45,
+   34
+  ],
+  "anchor": [
+   22.5,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "death": {
+    "row": 1,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "blink": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "divide": {
+    "row": 4,
+    "frames": 4,
+    "fps": 5,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "senescent": {
+  "file": "senescent.png",
+  "group": "civilian",
+  "cell": [
+   40,
+   36
+  ],
+  "anchor": [
+   20.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "death": {
+    "row": 1,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "granulocyte": {
+  "file": "granulocyte.png",
+  "group": "civilian",
+  "cell": [
+   38,
+   34
+  ],
+  "anchor": [
+   19.0,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "death": {
+    "row": 1,
+    "frames": 4,
+    "fps": 6,
+    "loop": false
+   },
+   "hit": {
+    "row": 2,
+    "frames": 2,
+    "fps": 15,
+    "loop": false
+   },
+   "blink": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "badge_mhc": {
+  "file": "badge_mhc.png",
+  "group": "badge",
+  "cell": [
+   17,
+   13
+  ],
+  "anchor": [
+   8.5,
+   6.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "badge_mhc_self": {
+  "file": "badge_mhc_self.png",
+  "group": "badge",
+  "cell": [
+   17,
+   13
+  ],
+  "anchor": [
+   8.5,
+   6.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "badge_mhc_neo": {
+  "file": "badge_mhc_neo.png",
+  "group": "badge",
+  "cell": [
+   17,
+   13
+  ],
+  "anchor": [
+   8.5,
+   6.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "badge_tcr": {
+  "file": "badge_tcr.png",
+  "group": "badge",
+  "cell": [
+   17,
+   13
+  ],
+  "anchor": [
+   8.5,
+   6.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "badge_pd1": {
+  "file": "badge_pd1.png",
+  "group": "badge",
+  "cell": [
+   17,
+   13
+  ],
+  "anchor": [
+   8.5,
+   6.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "badge_ctla4": {
+  "file": "badge_ctla4.png",
+  "group": "badge",
+  "cell": [
+   17,
+   13
+  ],
+  "anchor": [
+   8.5,
+   6.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "badge_pdl1": {
+  "file": "badge_pdl1.png",
+  "group": "badge",
+  "cell": [
+   17,
+   13
+  ],
+  "anchor": [
+   8.5,
+   6.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "badge_stress": {
+  "file": "badge_stress.png",
+  "group": "badge",
+  "cell": [
+   17,
+   13
+  ],
+  "anchor": [
+   8.5,
+   6.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "syringe": {
+  "file": "syringe.png",
+  "group": "prop",
+  "cell": [
+   36,
+   11
+  ],
+  "anchor": [
+   18.0,
+   5.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "syringe_drug": {
+  "file": "syringe_drug.png",
+  "group": "prop",
+  "cell": [
+   36,
+   11
+  ],
+  "anchor": [
+   18.0,
+   5.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "vial_antiserum": {
+  "file": "vial_antiserum.png",
+  "group": "prop",
+  "cell": [
+   18,
+   16
+  ],
+  "anchor": [
+   9.0,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "vial_drug": {
+  "file": "vial_drug.png",
+  "group": "prop",
+  "cell": [
+   18,
+   16
+  ],
+  "anchor": [
+   9.0,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "dish": {
+  "file": "dish.png",
+  "group": "prop",
+  "cell": [
+   34,
+   30
+  ],
+  "anchor": [
+   17.0,
+   15.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "grow": {
+    "row": 1,
+    "frames": 4,
+    "fps": 2,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "mouse_top": {
+  "file": "mouse_top.png",
+  "group": "prop",
+  "cell": [
+   28,
+   40
+  ],
+  "anchor": [
+   14.0,
+   20.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "mouse_side": {
+  "file": "mouse_side.png",
+  "group": "prop",
+  "cell": [
+   40,
+   22
+  ],
+  "anchor": [
+   20.0,
+   11.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "dna": {
+  "file": "dna.png",
+  "group": "prop",
+  "cell": [
+   19,
+   22
+  ],
+  "anchor": [
+   9.5,
+   11.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "mutate": {
+    "row": 1,
+    "frames": 2,
+    "fps": 3,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "dna_mut": {
+  "file": "dna_mut.png",
+  "group": "prop",
+  "cell": [
+   19,
+   22
+  ],
+  "anchor": [
+   9.5,
+   11.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "glucose": {
+  "file": "glucose.png",
+  "group": "prop",
+  "cell": [
+   17,
+   13
+  ],
+  "anchor": [
+   8.5,
+   6.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "pill": {
+  "file": "pill.png",
+  "group": "prop",
+  "cell": [
+   18,
+   9
+  ],
+  "anchor": [
+   9.0,
+   4.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "granule_blue": {
+  "file": "granule_blue.png",
+  "group": "prop",
+  "cell": [
+   15,
+   11
+  ],
+  "anchor": [
+   7.5,
+   5.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 3,
+    "fps": 10,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "granule_green": {
+  "file": "granule_green.png",
+  "group": "prop",
+  "cell": [
+   15,
+   11
+  ],
+  "anchor": [
+   7.5,
+   5.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 3,
+    "fps": 10,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "antibody": {
+  "file": "antibody.png",
+  "group": "prop",
+  "cell": [
+   21,
+   17
+  ],
+  "anchor": [
+   10.5,
+   8.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 4,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "chromosome": {
+  "file": "chromosome.png",
+  "group": "prop",
+  "cell": [
+   15,
+   17
+  ],
+  "anchor": [
+   7.5,
+   8.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "chromosome_ph": {
+  "file": "chromosome_ph.png",
+  "group": "prop",
+  "cell": [
+   15,
+   12
+  ],
+  "anchor": [
+   7.5,
+   6.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "patient_a": {
+  "file": "patient_a.png",
+  "group": "people",
+  "cell": [
+   28,
+   36
+  ],
+  "anchor": [
+   14.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "sick": {
+    "row": 2,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "gown": {
+    "row": 3,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "gown_sick": {
+    "row": 4,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "ghost": {
+    "row": 5,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "patient_b": {
+  "file": "patient_b.png",
+  "group": "people",
+  "cell": [
+   28,
+   36
+  ],
+  "anchor": [
+   14.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "sick": {
+    "row": 2,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "gown": {
+    "row": 3,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "gown_sick": {
+    "row": 4,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "ghost": {
+    "row": 5,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "patient_c": {
+  "file": "patient_c.png",
+  "group": "people",
+  "cell": [
+   28,
+   36
+  ],
+  "anchor": [
+   14.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "sick": {
+    "row": 2,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "gown": {
+    "row": 3,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "gown_sick": {
+    "row": 4,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "ghost": {
+    "row": 5,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "kidney": {
+  "file": "kidney.png",
+  "group": "prop",
+  "cell": [
+   22,
+   22
+  ],
+  "anchor": [
+   11.0,
+   11.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "reveal": {
+    "row": 1,
+    "frames": 6,
+    "fps": 3,
+    "loop": false
+   },
+   "glow": {
+    "row": 2,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "plaster": {
+  "file": "plaster.png",
+  "group": "prop",
+  "cell": [
+   17,
+   10
+  ],
+  "anchor": [
+   8.5,
+   5.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "manager": {
+  "file": "manager.png",
+  "group": "people",
+  "cell": [
+   28,
+   34
+  ],
+  "anchor": [
+   14.0,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "panic": {
+    "row": 2,
+    "frames": 2,
+    "fps": 6,
+    "loop": true
+   },
+   "laptop": {
+    "row": 3,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "scientist": {
+  "file": "scientist.png",
+  "group": "people",
+  "cell": [
+   28,
+   34
+  ],
+  "anchor": [
+   14.0,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "panic": {
+    "row": 2,
+    "frames": 2,
+    "fps": 6,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "clinician": {
+  "file": "clinician.png",
+  "group": "people",
+  "cell": [
+   28,
+   34
+  ],
+  "anchor": [
+   14.0,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "point": {
+    "row": 2,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "file_doc": {
+  "file": "file_doc.png",
+  "group": "prop",
+  "cell": [
+   19,
+   17
+  ],
+  "anchor": [
+   9.5,
+   8.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "folder": {
+  "file": "folder.png",
+  "group": "prop",
+  "cell": [
+   23,
+   16
+  ],
+  "anchor": [
+   11.5,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "computer": {
+  "file": "computer.png",
+  "group": "prop",
+  "cell": [
+   25,
+   20
+  ],
+  "anchor": [
+   12.5,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "off": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "check_card": {
+  "file": "check_card.png",
+  "group": "prop",
+  "cell": [
+   23,
+   19
+  ],
+  "anchor": [
+   11.5,
+   9.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "bulb": {
+  "file": "bulb.png",
+  "group": "prop",
+  "cell": [
+   21,
+   21
+  ],
+  "anchor": [
+   10.5,
+   10.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "off": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "glow": {
+    "row": 2,
+    "frames": 2,
+    "fps": 3,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "tube": {
+  "file": "tube.png",
+  "group": "prop",
+  "cell": [
+   15,
+   20
+  ],
+  "anchor": [
+   7.5,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "tube_orange": {
+  "file": "tube_orange.png",
+  "group": "prop",
+  "cell": [
+   15,
+   20
+  ],
+  "anchor": [
+   7.5,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "plate": {
+  "file": "plate.png",
+  "group": "prop",
+  "cell": [
+   47,
+   33
+  ],
+  "anchor": [
+   23.5,
+   16.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "fill": {
+    "row": 1,
+    "frames": 5,
+    "fps": 3,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "sequencer": {
+  "file": "sequencer.png",
+  "group": "prop",
+  "cell": [
+   34,
+   24
+  ],
+  "anchor": [
+   17.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "off": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "datasheet": {
+  "file": "datasheet.png",
+  "group": "prop",
+  "cell": [
+   27,
+   19
+  ],
+  "anchor": [
+   13.5,
+   9.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "agent": {
+  "file": "agent.png",
+  "group": "people",
+  "cell": [
+   30,
+   30
+  ],
+  "anchor": [
+   15.0,
+   15.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "work": {
+    "row": 2,
+    "frames": 3,
+    "fps": 6,
+    "loop": true
+   },
+   "alert": {
+    "row": 3,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "supervisor": {
+  "file": "supervisor.png",
+  "group": "people",
+  "cell": [
+   35,
+   30
+  ],
+  "anchor": [
+   17.5,
+   15.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "alert": {
+    "row": 2,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "lock": {
+  "file": "lock.png",
+  "group": "prop",
+  "cell": [
+   21,
+   20
+  ],
+  "anchor": [
+   10.5,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "open": {
+    "row": 1,
+    "frames": 2,
+    "fps": 4,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "deck": {
+  "file": "deck.png",
+  "group": "prop",
+  "cell": [
+   27,
+   18
+  ],
+  "anchor": [
+   13.5,
+   9.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "person": {
+  "file": "person.png",
+  "group": "people",
+  "cell": [
+   28,
+   34
+  ],
+  "anchor": [
+   14.0,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   },
+   "blink": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "cheer": {
+    "row": 2,
+    "frames": 2,
+    "fps": 6,
+    "loop": true
+   },
+   "point": {
+    "row": 3,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   }
+  },
+  "source": "code"
+ }
+}
