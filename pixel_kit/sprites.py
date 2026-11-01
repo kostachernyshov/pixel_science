@@ -117,6 +117,16 @@ def cell(name):
     return info(name)["cell"]
 
 
+def body_top(name):
+    """Pixels from the anchor up to the top of the opaque body in the first idle frame (at scale 1)."""
+    key = ("top", name)
+    if key not in _frames:
+        im = frame(name, "idle" if "idle" in anims(name) else next(iter(anims(name))), 0)
+        box = im.getchannel("A").getbbox()
+        _frames[key] = info(name)["anchor"][1] - (box[1] if box else 0)
+    return _frames[key]
+
+
 def frame(name, anim="idle", i=0, flip=False, scale=1):
     key = (name, anim, i, flip, scale)
     if key not in _frames:

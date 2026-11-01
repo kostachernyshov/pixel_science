@@ -1,0 +1,196 @@
+title: "The Higgs boson: why particles have mass"
+name: higgs-boson
+lang: en
+packs: [physics]
+style: paper
+voiceover: voiceover.md
+formats: [landscape, vertical, square, banner]
+seed: 12
+sources:
+  - "Higgs PW. Broken symmetries and the masses of gauge bosons. Phys Rev Lett 1964;13:508-509. doi:10.1103/PhysRevLett.13.508"
+  - "Englert F, Brout R. Broken symmetry and the mass of gauge vector mesons. Phys Rev Lett 1964;13:321-323. doi:10.1103/PhysRevLett.13.321"
+  - "ATLAS Collaboration. Observation of a new particle in the search for the Standard Model Higgs boson with the ATLAS detector at the LHC. Phys Lett B 2012;716:1-29. doi:10.1016/j.physletb.2012.08.020"
+  - "CMS Collaboration. Observation of a new boson at a mass of 125 GeV with the CMS experiment at the LHC. Phys Lett B 2012;716:30-61. doi:10.1016/j.physletb.2012.08.021"
+numbers:
+  "2012": "ATLAS and CMS, Phys Lett B 2012;716 (both observation papers)"
+  "125 GeV": "CMS Phys Lett B 2012;716:30-61 (125.3 GeV); ATLAS 126.0 GeV in the same volume"
+
+scenes:
+  - id: S01
+    type: title
+    title: "HIGGS BOSON"
+    sub: "Why particles have mass"
+
+  - id: S02
+    type: action
+    bg: vacuum
+    scale: 3
+    field:
+      - {kind: dots, spacing: 12, color: LAV, size: 2, appear: true, t: 0.2, dur: 2.0, wave: true}
+    actors:
+      e: {sprite: electron, at: [0.5, 0.5], anim: blink, hidden: true}
+    beats:
+      - {on: invisible, actor: e, fx: sparkle}
+      - {on: higgs, actor: e, fx: alert}
+    camera:
+      - {t: 0, zoom: 1}
+      - {on: invisible, zoom: 2, at: [0.5, 0.5]}
+    caption: "Higgs field"
+
+  - id: S03
+    type: action
+    bg: vacuum
+    scale: 3
+    field:
+      - {kind: dots, spacing: 12, color: LAV, size: 2, wave: true}
+    actors:
+      p: {sprite: photon, at: [-0.1, 0.5]}
+      p2: {sprite: photon, at: [-0.1, 0.3], hidden: true}
+    beats:
+      - {on: photon, actor: p, move_to: [1.1, 0.5], dur: 1.0}
+      - {on: interact, actor: p2, show: true}
+      - {on: interact, actor: p2, move_to: [1.1, 0.3], dur: 1.0}
+      - {on: so, actor: p, move_to: [-0.1, 0.7], dur: 0.01}
+      - {on: so, actor: p, move_to: [1.1, 0.7], dur: 1.0, offset: 0.05}
+      - {on: mass, actor: p2, move_to: [-0.1, 0.5], dur: 0.01}
+      - {on: mass, actor: p2, move_to: [1.1, 0.5], dur: 0.9, offset: 0.05}
+    camera:
+      - {on: interact, zoom: 2, at: [0.5, 0.3], offset: 0.3}
+      - {on: mass, zoom: 1}
+    caption: "No mass"
+
+  - id: S04
+    type: action
+    bg: vacuum
+    scale: 3
+    field:
+      - {kind: dots, spacing: 12, color: LAV, size: 2, drag: e, radius: 0.1, pull: 0.3, grip_color: BLUE, on: interacts}
+    actors:
+      e: {sprite: electron, at: [0.08, 0.5], anim: idle}
+    beats:
+      - {t: 0.2, actor: e, move_to: [0.35, 0.5], dur: 1.2}
+      - {on: interacts, actor: e, anim: wow}
+      - {on: little, actor: e, move_to: [0.65, 0.5], dur: 1.4}
+      - {on: small, actor: e, anim: idle}
+      - {on: mass, actor: e, move_to: [0.9, 0.5], dur: 1.0, offset: -0.3}
+    camera:
+      - {on: interacts, zoom: 2, at: e}
+      - {on: small, zoom: 1}
+    caption: "A little mass"
+
+  - id: S05
+    type: action
+    bg: vacuum
+    scale: 3
+    field:
+      - {kind: dots, spacing: 12, color: LAV, size: 2, drag: q, radius: 0.24, pull: 0.4, grip_color: PLUM, on: interacts}
+    actors:
+      q: {sprite: top_quark, at: [0.15, 0.5], anim: idle}
+    beats:
+      - {t: 0.2, actor: q, move_to: [0.3, 0.5], dur: 1.0}
+      - {on: interacts, actor: q, anim: wow}
+      - {on: strongly, actor: q, move_to: [0.45, 0.5], dur: 2.0}
+      - {on: very, actor: q, fx: sparkle}
+      - {on: heavy, actor: q, anim: idle}
+    camera:
+      - {on: strongly, zoom: 2, at: q}
+      - {on: heavy, shake: 0.3, amp: 2}
+    caption: "Very heavy"
+
+  - id: S06
+    type: action
+    bg: beamline
+    scale: 3
+    actors:
+      a: {sprite: proton, at: [0.05, 0.5], anim: idle}
+      b: {sprite: proton, at: [0.95, 0.5], anim: idle, flip: true}
+      boom: {sprite: flash, at: [0.5, 0.5], hidden: true}
+    beats:
+      - {t: 0.2, actor: a, move_to: [0.25, 0.5], dur: 1.0}
+      - {t: 0.2, actor: b, move_to: [0.75, 0.5], dur: 1.0}
+      - {on: physicists, actor: a, anim: wow}
+      - {on: physicists, actor: b, anim: wow}
+      - {on: smashed, actor: a, move_to: [0.47, 0.5], dur: 0.5}
+      - {on: smashed, actor: b, move_to: [0.53, 0.5], dur: 0.5}
+      - {on: together, actor: a, show: false}
+      - {on: together, actor: b, show: false}
+      - {on: together, actor: boom, show: true}
+      - {on: together, actor: boom, anim: idle}
+      - {on: together, actor: boom, fx: particles}
+      - {on: lhc, actor: boom, fx: hit}
+    camera:
+      - {on: smashed, zoom: 2, at: [0.5, 0.5]}
+      - {on: together, shake: 0.5, amp: 4}
+    caption: "Smash!"
+
+  - id: S07
+    type: action
+    bg: vacuum
+    scale: 3
+    field:
+      - {kind: dots, spacing: 12, color: LAV, size: 2, wave: true, drag: h, radius: 0.2, pull: 0.4, grip_color: ORANGE, on: ripple}
+    actors:
+      h: {sprite: higgs, at: [0.5, 0.5], hidden: true}
+    beats:
+      - {on: shake, actor: h, fx: hit}
+      - {on: field, actor: h, fx: particles}
+      - {on: ripple, actor: h, show: true}
+      - {on: ripple, actor: h, anim: appear}
+      - {on: higgs, actor: h, anim: glow}
+      - {on: boson, actor: h, fx: sparkle}
+    camera:
+      - {on: shake, shake: 0.6, amp: 2}
+      - {on: ripple, zoom: 2, at: h}
+    caption: "A ripple"
+
+  - id: S08
+    type: action
+    bg: detector_hall
+    actors:
+      det: {sprite: detector, at: [0.5, 0.5], scale: 3}
+      h: {sprite: higgs, at: [0.5, 0.5], anim: glow, scale: 1}
+      g1: {sprite: photon, at: [0.5, 0.5], hidden: true, scale: 2}
+      g2: {sprite: photon, at: [0.5, 0.5], hidden: true, scale: 2, flip: true}
+    beats:
+      - {on: lives, actor: h, fx: alert}
+      - {on: tiny, actor: h, fx: sparkle}
+      - {on: decays, actor: h, anim: decay}
+      - {on: example, actor: h, show: false}
+      - {on: example, actor: g1, show: true}
+      - {on: example, actor: g2, show: true}
+      - {on: example, actor: g1, move_to: [0.82, 0.5], dur: 0.7}
+      - {on: example, actor: g2, move_to: [0.18, 0.5], dur: 0.7}
+      - {on: photons, actor: det, anim: two_photons}
+      - {on: photons, actor: g1, show: false}
+      - {on: photons, actor: g2, show: false}
+    camera:
+      - {t: 0, zoom: 2, at: [0.5, 0.5]}
+      - {on: example, zoom: 1}
+    caption: "Two photons"
+
+  - id: S09
+    type: action
+    bg: detector_hall
+    title: "FOUND IN 2012"
+    actors:
+      det: {sprite: detector, at: [0.3, 0.55], scale: 3, anim: two_photons}
+      h: {sprite: higgs, at: [0.75, 0.55], anim: glow, scale: 3}
+    beats:
+      - {on: atlas, actor: det, fx: sparkle}
+      - {on: cms, actor: det, fx: hit}
+      - {on: saw, actor: h, anim: wow}
+      - {on: mass, actor: h, anim: glow}
+      - {on: "125", actor: h, fx: sparkle}
+    camera:
+      - {on: saw, pan_to: h, dur: 0.6}
+      - {on: mass, zoom: 2, at: h}
+    caption: "125 GeV"
+
+  - id: S10
+    type: summary
+    title: "WHERE MASS COMES FROM"
+    items:
+      - {sprite: photon, label: "No grip: no mass", color: neutral}
+      - {sprite: electron, label: "Weak grip: light", color: favorable}
+      - {sprite: top_quark, label: "Strong grip: heavy", color: unfavorable}
+    text: ["The Higgs field gives mass;", "the boson is its ripple"]

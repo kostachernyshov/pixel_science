@@ -29,7 +29,7 @@ def _events(sc):
         spans.append((g["_t"], gen.grow_end(g)))
     for g in sc.get("field") or []:
         pts.append(g["_t"])
-        if g.get("kind") == "gradient":
+        if g.get("kind") == "gradient" or g.get("appear"):
             spans.append((g["_t"], g["_t"] + float(g.get("dur", 1.5))))
     for c in sc.get("camera") or []:
         pts.append(c["_t"])

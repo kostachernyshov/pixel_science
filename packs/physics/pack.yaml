@@ -1,0 +1,6 @@
+name: physics
+kind: content
+version: 0.1.0
+description: Particles (proton, electron, quarks, photon, Higgs boson), the Higgs field, a collider and a detector.
+license: CC0-1.0 for sprites, MIT for code
+provides: [sprites, backgrounds, bible]

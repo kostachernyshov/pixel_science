@@ -32,9 +32,22 @@ TIMED = ("beats", "swarm", "grow", "field", "camera")     # lists whose items ta
 
 # ---------------------------------------------------------------- plan, voice-over, timing
 
+def _yaml_loader():
+    """YAML with only true/false as booleans: "on", "off", "yes", "no" stay words (on: attacks, on: off)."""
+    import re as _re, yaml
+
+    class Loader(yaml.SafeLoader):
+        pass
+    Loader.yaml_implicit_resolvers = {k: [(tag, rx) for tag, rx in v if tag != "tag:yaml.org,2002:bool"]
+                                      for k, v in yaml.SafeLoader.yaml_implicit_resolvers.items()}
+    Loader.add_implicit_resolver("tag:yaml.org,2002:bool", _re.compile(r"^(?:true|True|TRUE|false|False|FALSE)$"),
+                                 list("tTfF"))
+    return Loader
+
+
 def load(path):
     import yaml
-    plan = yaml.safe_load(open(path, encoding="utf-8"))
+    plan = yaml.load(open(path, encoding="utf-8"), Loader=_yaml_loader())
     plan["_dir"] = os.path.dirname(os.path.abspath(path))
     plan["_path"] = os.path.abspath(path)
     plan.setdefault("scenes", [])
@@ -230,6 +243,8 @@ def _sprites(sc):
             yield sc["actors"][b["actor"]].get("sprite"), b["anim"]
         if b.get("badge"):
             yield b["badge"], "idle"
+        if b.get("sprite"):
+            yield b["sprite"], b.get("anim", "idle")
     if sc.get("sprite"):
         yield sc["sprite"], sc.get("anim", "idle")
     for g in sc.get("swarm") or []:
@@ -304,7 +319,7 @@ def check(plan):
         for f, s in _texts(sc):
             if plan.get("lang") == "en" and not s.isascii():
                 out.append(f"{sid}: {f} is not plain English text (lang: en): {s!r}")
-            for num in re.findall(r"\d[\d.,]*", s):
+            for num in re.findall(r"(?<![A-Za-z0-9-])\d[\d.,]*", s):
                 if not _sourced(plan, num):
                     warn.append(f"{sid}: number {num!r} on screen ({f}): is it from a source? "
                                 f"If yes, list it under 'numbers:' with its source")
@@ -414,16 +429,19 @@ def _items(img, L, items, t, box, t0=0.3, step=0.35, labels=True, still=False):
     # one scale for all items, so that sizes compare
     common = min([best_scale(it["sprite"], cw, ch, room=22 if labels else 4, top=2 if L["banner"] else 4)
                   for it in items] or [1])
+    # labels of one row stand on one line, under the tallest sprite of the row
+    row_h = {}
+    for it, (x, y) in zip(items, pts):
+        row_h[y] = max(row_h.get(y, 0), S.cell(it["sprite"])[1] * int(it.get("scale") or common))
     for i, (it, (x, y)) in enumerate(zip(items, pts)):
         ti = t0 + step * i
         if t < ti and not still:
             continue
         k = int(it.get("scale") or common)
-        sh = S.cell(it["sprite"])[1] * k
         cy = y - (9 if labels and it.get("label") else 0)
         _sprite(img, it["sprite"], it.get("anim", "idle"), 0.0 if still else t - ti, x, cy, k, seed=i)
         if labels and it.get("label"):
-            _label(img, x, cy + sh // 2 + 3, it["label"], color(it.get("color", "ink"))[0], cw - 4)
+            _label(img, x, cy + row_h[y] // 2 + 3, it["label"], color(it.get("color", "ink"))[0], cw - 4)
     return pts
 
 
@@ -551,9 +569,10 @@ def p_fact(plan, sc, t, dur, ctx):
 
 
 def _actor_state(a, beats, name, t):
-    """Position (fractions of the stage), animation, the time in that animation, flip, badge, shown."""
+    """Position (fractions of the stage), sprite, animation, the time in that animation, flip, badge,
+    shown, hold (a fixed frame of the animation, or None)."""
     x, y = a.get("at", [0.5, 0.5])
-    anim, a_t0 = a.get("anim", "idle"), 0.0
+    sprite, anim, a_t0, hold = a["sprite"], a.get("anim", "idle"), 0.0, a.get("hold")
     flip, badge, shown = bool(a.get("flip", False)), a.get("badge"), not a.get("hidden", False)
     for b in sorted((b for b in beats if b.get("actor") == name), key=lambda b: b["_t"]):
         bt = b["_t"]
@@ -564,15 +583,17 @@ def _actor_state(a, beats, name, t):
             k = ease(seg(t, bt, bt + d))
             tx, ty = b["move_to"]
             x, y = lerp(x, tx, k), lerp(y, ty, k)
+        if "sprite" in b:
+            sprite = b["sprite"]
         if "anim" in b:
-            anim, a_t0 = b["anim"], bt
+            anim, a_t0, hold = b["anim"], bt, b.get("hold")
         if "flip" in b:
             flip = bool(b["flip"])
         if "badge" in b:
             badge = b["badge"]
         if "show" in b:
             shown = bool(b["show"])
-    return x, y, anim, t - a_t0, flip, badge, shown
+    return dict(x=x, y=y, sprite=sprite, anim=anim, at=t - a_t0, flip=flip, badge=badge, shown=shown, hold=hold)
 
 
 def _stage_px(L, fx_, fy_):
@@ -590,8 +611,8 @@ def p_action(plan, sc, t, dur, ctx):
     seed = int(sc.get("seed", plan.get("seed", 1)))
 
     def actor_xy(name, tt):
-        fx_, fy_, *_ = _actor_state(actors[name], beats, name, tt)
-        return fx_, fy_
+        st = _actor_state(actors[name], beats, name, tt)
+        return st["x"], st["y"]
 
     def target(v, tt):
         """Stage fractions of an actor name or [x, y]."""
@@ -609,16 +630,23 @@ def p_action(plan, sc, t, dur, ctx):
             px, py = _stage_px(L, gx, gy)
             _sprite(img, name, anim, at, px, py, int(g.get("scale", k_default)), seed=int(gx * 97))
     for i, (name, a) in enumerate(actors.items()):
-        fx_, fy_, anim, at, flip, badge, shown = _actor_state(a, beats, name, t)
-        if not shown:
+        st = _actor_state(a, beats, name, t)
+        if not st["shown"]:
             continue
         k = int(a.get("scale", k_default))
-        px, py = _stage_px(L, fx_, fy_)
-        _sprite(img, a["sprite"], anim, at, px, py, k, seed=i, flip=flip)
-        sh = S.cell(a["sprite"])[1] * k
+        px, py = _stage_px(L, st["x"], st["y"])
+        if st["hold"] is not None:
+            # a held frame still breathes: a 1 px bob, like an idle animation
+            bob = (int((t + i * 0.17) * 3) % 2) * k
+            S.draw(img, st["sprite"], st["anim"], 0, px, py - bob, flip=st["flip"], scale=k, i=int(st["hold"]))
+        else:
+            _sprite(img, st["sprite"], st["anim"], st["at"], px, py, k, seed=i, flip=st["flip"])
+        sh = S.cell(st["sprite"])[1] * k
+        badge = st["badge"]
         if badge:
-            bh = S.cell(badge)[1] * k
-            S.draw(img, badge, "idle", 0, px, max(bh // 2 + 1, py - sh // 2 - bh // 2 + 2), scale=k)
+            # the badge stands on the top of the body, a little into it
+            by = py - S.body_top(st["sprite"]) * k - (S.body_top(badge) - 1) * k + k
+            S.draw(img, badge, "idle", 0, px, max(S.body_top(badge) * k + 1, by), scale=k)
         if a.get("label") and not L["banner"]:
             text(img, px, py + sh // 2 + 2, a["label"], color(a.get("color", "ink"))[0], align="c")
     for i, g in enumerate(sc.get("swarm") or []):
@@ -631,6 +659,8 @@ def p_action(plan, sc, t, dur, ctx):
         if not b.get("fx") or t < bt or b.get("actor") not in actors:
             continue
         px, py = _stage_px(L, *actor_xy(b["actor"], t))
+        if b.get("dur") is not None and "move_to" not in b and t > bt + float(b["dur"]):
+            continue
         if b["fx"] == "hit":
             fx.hit_flash(img, px, py, t - bt)
         elif b["fx"] == "alert" and t - bt < 1.2:
@@ -641,6 +671,8 @@ def p_action(plan, sc, t, dur, ctx):
             fx.particles(img, px, py, t - bt, seed=int(bt * 10))
         elif b["fx"] == "wave":
             fx.wave(img, px, py, t - bt)
+        elif b["fx"] == "zzz":
+            fx.zzz(img, px, py, t - bt)
         elif b["fx"] == "flash" and t - bt < 0.2:
             fx.border_flash(img, top=0, col=ACCENT)
     cams = sc.get("camera") or []

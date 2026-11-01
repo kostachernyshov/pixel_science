@@ -1,7 +1,7 @@
 # Camera of an action scene: integer zoom (x1, x2, x3), pan, shake. Pixels stay square and sharp.
 #
 #   camera:                                        t (s from the scene start) or on: <word>
-#     - {t: 1.5, zoom: 2, at: nk}                  cut to x2, centered on an actor or on [x, y] (stage fractions)
+#     - {t: 1.5, zoom: 2, at: nk}                  cut to x2 on an actor (the camera follows it) or on [x, y]
 #     - {t: 3.0, pan_to: tumor, dur: 0.8}          move the center (eased)
 #     - {t: 3.4, shake: 0.4, amp: 3}               shake for 0.4 s, amp in frame pixels
 #     - {t: 4.5, zoom: 1}                          cut back to the full frame
@@ -26,10 +26,12 @@ def state(cams, t, where):
             z = int(c["zoom"])
             if z not in (1, 2, 3, 4):
                 raise ValueError(f"camera zoom {c['zoom']!r}: use an integer 1 to 4")
-            if c.get("at") is not None:
-                cx, cy = where(c["at"], ct)
-            elif z == 1:
+            follow = c.get("at")
+            if follow is None and z == 1:
                 cx = cy = None
+            elif follow is not None:
+                # an actor name: the camera follows the actor; [x, y]: a fixed point
+                cx, cy = where(follow, t if isinstance(follow, str) else ct)
         if "pan_to" in c:
             d = float(c.get("dur", 0.8))
             tx, ty = where(c["pan_to"], min(t, ct + d))

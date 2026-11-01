@@ -8,7 +8,16 @@
    "description": "Cells and immunity (immune, tumor and body cells, molecule badges), lab props, people.",
    "license": "CC0-1.0 for sprites, MIT for code",
    "path": "packs/biology",
-   "bible": null
+   "bible": "packs/biology/bible.md"
+  },
+  {
+   "name": "physics",
+   "kind": "content",
+   "version": "0.1.0",
+   "description": "Particles (proton, electron, quarks, photon, Higgs boson), the Higgs field, a collider and a detector.",
+   "license": "CC0-1.0 for sprites, MIT for code",
+   "path": "packs/physics",
+   "bible": "packs/physics/bible.md"
   },
   {
    "name": "style-arcade",
@@ -2456,6 +2465,254 @@
     ]
    },
    "for_style": null
+  },
+  {
+   "name": "detector",
+   "pack": "physics",
+   "group": "machine",
+   "tags": [
+    "calorimeter",
+    "collider",
+    "detector",
+    "experiment",
+    "machine",
+    "tracker"
+   ],
+   "description": "Detector cross-section: tracker, calorimeter, muon layer",
+   "anims": [
+    "idle",
+    "hit",
+    "two_photons"
+   ],
+   "size": [
+    74,
+    70
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/physics/sprites/detector.png",
+    "box": [
+     0,
+     0,
+     74,
+     70
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "electron",
+   "pack": "physics",
+   "group": "particle",
+   "tags": [
+    "charge",
+    "electron",
+    "lepton",
+    "particle"
+   ],
+   "description": "Electron: small, light",
+   "anims": [
+    "idle",
+    "blink",
+    "wow",
+    "hit"
+   ],
+   "size": [
+    24,
+    20
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/physics/sprites/electron.png",
+    "box": [
+     0,
+     0,
+     24,
+     20
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "flash",
+   "pack": "physics",
+   "group": "particle",
+   "tags": [
+    "burst",
+    "collision",
+    "effect",
+    "energy",
+    "flash"
+   ],
+   "description": "Collision flash",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    34,
+    30
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/physics/sprites/flash.png",
+    "box": [
+     0,
+     0,
+     34,
+     30
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "higgs",
+   "pack": "physics",
+   "group": "particle",
+   "tags": [
+    "boson",
+    "field",
+    "higgs",
+    "mass",
+    "particle"
+   ],
+   "description": "Higgs boson: a ripple of the Higgs field (appears, glows, decays)",
+   "anims": [
+    "idle",
+    "blink",
+    "wow",
+    "hit",
+    "appear",
+    "glow",
+    "decay"
+   ],
+   "size": [
+    34,
+    30
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/physics/sprites/higgs.png",
+    "box": [
+     0,
+     0,
+     34,
+     30
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "photon",
+   "pack": "physics",
+   "group": "particle",
+   "tags": [
+    "light",
+    "particle",
+    "photon",
+    "wave"
+   ],
+   "description": "Photon: a wave packet of light, no face",
+   "anims": [
+    "idle"
+   ],
+   "size": [
+    24,
+    13
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/physics/sprites/photon.png",
+    "box": [
+     0,
+     0,
+     24,
+     13
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "proton",
+   "pack": "physics",
+   "group": "particle",
+   "tags": [
+    "collider",
+    "hadron",
+    "nucleon",
+    "particle",
+    "proton",
+    "quark"
+   ],
+   "description": "Proton with three quarks inside (two up, one down)",
+   "anims": [
+    "idle",
+    "blink",
+    "wow",
+    "hit"
+   ],
+   "size": [
+    30,
+    26
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/physics/sprites/proton.png",
+    "box": [
+     0,
+     0,
+     30,
+     26
+    ]
+   },
+   "for_style": null
+  },
+  {
+   "name": "top_quark",
+   "pack": "physics",
+   "group": "particle",
+   "tags": [
+    "heavy",
+    "mass",
+    "particle",
+    "quark",
+    "top"
+   ],
+   "description": "Top quark: the heaviest known elementary particle",
+   "anims": [
+    "idle",
+    "blink",
+    "wow",
+    "hit"
+   ],
+   "size": [
+    36,
+    32
+   ],
+   "source": "code",
+   "license": "CC0-1.0",
+   "author": "Kosta Chernyshov",
+   "thumbnail": {
+    "file": "packs/physics/sprites/top_quark.png",
+    "box": [
+     0,
+     0,
+     36,
+     32
+    ]
+   },
+   "for_style": null
   }
  ],
  "backgrounds": [
@@ -2516,6 +2773,37 @@
     "tumor",
     "microenvironment",
     "cancer"
+   ],
+   "animated": false
+  },
+  {
+   "name": "beamline",
+   "pack": "physics",
+   "tags": [
+    "collider",
+    "beam",
+    "accelerator",
+    "lhc"
+   ],
+   "animated": false
+  },
+  {
+   "name": "detector_hall",
+   "pack": "physics",
+   "tags": [
+    "detector",
+    "rings",
+    "collision"
+   ],
+   "animated": false
+  },
+  {
+   "name": "vacuum",
+   "pack": "physics",
+   "tags": [
+    "space",
+    "empty",
+    "field"
    ],
    "animated": false
   },

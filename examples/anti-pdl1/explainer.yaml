@@ -1,0 +1,145 @@
+title: "Anti-PD-L1: releasing the brakes"
+name: anti-pdl1
+lang: en
+packs: [biology]
+style: paper
+voiceover: voiceover.md
+formats: [landscape, vertical, square, banner]
+seed: 7
+sources:
+  - "Pardoll DM. The blockade of immune checkpoints in cancer immunotherapy. Nat Rev Cancer 2012;12:252-264. doi:10.1038/nrc3239"
+  - "Dong H, Strome SE, Salomao DR, et al. Tumor-associated B7-H1 promotes T-cell apoptosis: a potential mechanism of immune evasion. Nat Med 2002;8:793-800. doi:10.1038/nm730"
+  - "Iwai Y, Ishida M, Tanaka Y, et al. Involvement of PD-L1 on tumor cells in the escape from host immune system and tumor immunotherapy by PD-L1 blockade. PNAS 2002;99:12293-12297. doi:10.1073/pnas.192461099"
+  - "Herbst RS, Soria JC, Kowanetz M, et al. Predictive correlates of response to the anti-PD-L1 antibody MPDL3280A in cancer patients. Nature 2014;515:563-567. doi:10.1038/nature14011"
+
+scenes:
+  - id: S01
+    type: title
+    title: "ANTI-PD-L1"
+    sub: "Releasing the brakes"
+
+  - id: S02
+    type: action
+    bg: tme
+    actors:
+      t:     {sprite: killer_t, at: [0.12, 0.55], anim: move, badge: badge_pd1}
+      tumor: {sprite: tumor_pdl1, at: [0.72, 0.55], anim: pdl1_up, hold: 0}
+    beats:
+      - {t: 0.2, actor: t, move_to: [0.32, 0.55], dur: 1.0}
+      - {on: finds, actor: t, move_to: [0.45, 0.55], dur: 1.0}
+      - {on: cancer, actor: tumor, fx: sparkle}
+      - {on: ready, actor: t, anim: alert}
+      - {on: ready, actor: t, fx: alert}
+    camera:
+      - {on: ready, zoom: 2, at: t, offset: -0.2}
+    caption: "Ready to kill"
+
+  - id: S03
+    type: action
+    scale: 3
+    bg: tme
+    actors:
+      t:     {sprite: killer_t, at: [0.25, 0.55], anim: alert, badge: badge_pd1}
+      tumor: {sprite: tumor_pdl1, at: [0.72, 0.55], anim: pdl1_up, hold: 0}
+    beats:
+      - {t: 0.3, actor: tumor, fx: sparkle}
+      - {on: shows, actor: tumor, anim: pdl1_up}
+      - {on: shows, actor: tumor, fx: alert}
+      - {on: shows, actor: tumor, anim: idle, offset: 1.3}
+      - {on: protein, actor: t, anim: idle}
+      - {on: pdl1, actor: tumor, fx: sparkle}
+    camera:
+      - {t: 0, zoom: 2, at: tumor}
+      - {on: protein, zoom: 3, at: tumor}
+    caption: "PD-L1"
+
+  - id: S04
+    type: action
+    scale: 3
+    bg: tme
+    actors:
+      t:     {sprite: killer_t, at: [0.25, 0.55], anim: alert, badge: badge_pd1}
+      tumor: {sprite: tumor_pdl1, at: [0.72, 0.55]}
+    beats:
+      - {on: binds, actor: t, move_to: [0.42, 0.55], dur: 0.6}
+      - {on: binds, actor: tumor, anim: pdl1_up, offset: 0.4}
+      - {on: pd1, actor: t, fx: hit}
+      - {on: cell, actor: t, anim: hit}
+      - {on: cell, actor: t, anim: idle, offset: 0.2}
+      - {on: cell, actor: t, fx: sparkle}
+      - {on: stops, actor: t, anim: blocked}
+      - {on: stops, actor: t, badge: null}
+      - {on: stops, actor: t, fx: zzz}
+    camera:
+      - {t: 0, zoom: 1}
+      - {on: pd1, zoom: 2, at: [0.55, 0.55]}
+      - {on: "cell#2", zoom: 3, at: t}
+    caption: "Brake on"
+
+  - id: S05
+    type: action
+    scale: 3
+    bg: tme
+    actors:
+      t:     {sprite: killer_t, at: [0.4, 0.55], anim: blocked}
+      tumor: {sprite: tumor_pdl1, at: [0.72, 0.55]}
+    swarm:
+      - {sprite: antibody, n: 8, scale: 2, area: [0.05, 0.1, 0.4, 0.4], rule: seek, target: tumor, on: antibody, dur: 1.4, stagger: 0.12, radius: 0.11}
+    beats:
+      - {t: 0, actor: t, fx: zzz}
+      - {on: drug, actor: tumor, fx: alert}
+      - {on: covers, actor: tumor, fx: sparkle}
+    camera:
+      - {t: 0, zoom: 1}
+      - {on: sticks, zoom: 2, at: tumor}
+    caption: "Anti-PD-L1"
+
+  - id: S06
+    type: action
+    scale: 3
+    bg: tme
+    actors:
+      t:     {sprite: killer_t, at: [0.4, 0.55], anim: blocked}
+      tumor: {sprite: tumor_pdl1, at: [0.72, 0.55]}
+    swarm:
+      - {sprite: antibody, n: 8, scale: 2, area: [0.05, 0.1, 0.4, 0.4], rule: seek, target: tumor, t: -5, dur: 1.4, stagger: 0.12, radius: 0.11}
+    beats:
+      - {t: 0, actor: t, fx: zzz, dur: 1.0}
+      - {on: nothing, actor: t, anim: idle}
+      - {on: nothing, actor: t, badge: badge_pd1}
+      - {on: brake, actor: t, fx: sparkle}
+      - {on: off, actor: t, anim: alert}
+      - {on: off, actor: t, fx: alert}
+    camera:
+      - {t: 0, zoom: 2, at: t}
+      - {on: brake, zoom: 1}
+    caption: "Brake off"
+
+  - id: S07
+    type: action
+    scale: 3
+    bg: tme
+    actors:
+      t:     {sprite: killer_t, at: [0.4, 0.55], anim: alert, badge: badge_pd1}
+      tumor: {sprite: tumor_pdl1, at: [0.72, 0.55]}
+    swarm:
+      - {sprite: antibody, n: 8, scale: 2, area: [0.05, 0.1, 0.4, 0.4], rule: seek, target: tumor, t: -5, dur: 1.4, stagger: 0.12, radius: 0.11}
+    beats:
+      - {t: 0.3, actor: t, move_to: [0.5, 0.55], dur: 0.4}
+      - {on: attacks, actor: t, anim: attack}
+      - {on: attacks, actor: tumor, anim: hit, offset: 0.3}
+      - {on: attacks, actor: tumor, fx: hit, offset: 0.3}
+      - {on: dies, actor: tumor, anim: death}
+      - {on: dies, actor: tumor, fx: particles}
+    camera:
+      - {on: attacks, shake: 0.4, amp: 3, offset: 0.3}
+      - {on: dies, zoom: 2, at: tumor}
+    caption: "Attack!"
+
+  - id: S08
+    type: summary
+    title: "HOW ANTI-PD-L1 WORKS"
+    items:
+      - {sprite: tumor_pdl1, label: "PD-L1 blocked", color: unfavorable}
+      - {sprite: killer_t, label: "T cell free", color: favorable}
+    text: ["Block the brake,", "the T cell kills"]

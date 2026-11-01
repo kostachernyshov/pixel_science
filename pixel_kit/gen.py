@@ -9,7 +9,8 @@
 #   grow: cells that divide (N doubles every "doubling" s, up to max), color by generation
 #     {sprite | sprites: [gen0, gen1, ...], at, n0, max, doubling, t, spread, scale}
 #   field: a field or a flow of small things
-#     {kind: dots, spacing, color, drag: target, radius, t, wave}   lattice; dots crowd around the target
+#     {kind: dots, spacing, color, drag: target, radius, pull, grip_color, t, wave, appear, dur}
+#                                     lattice; dots crowd around the target; appear: they fade in over dur
 #     {kind: flow, n, dir: [dx, dy], speed, color, sprite, area}      a stream that wraps around
 #     {kind: gradient, at: target, radius, color, t, dur}              dithered rings that spread
 #
@@ -139,19 +140,27 @@ def draw_field(img, g, t, stage, target_px, seed):
         rad = float(g.get("radius", 0.18)) * (x1 - x0)
         tx, ty = target_px(t) if g.get("drag") else (None, None)
         pull = float(g.get("pull", 0.6))
+        grip = C(color(g["grip_color"])) if g.get("grip_color") else None
         size = int(g.get("size", 1))
+        appear = g.get("appear")
+        show = clamp((t - t0) / float(g.get("dur", 1.5))) if appear else 1.0
         for j, y in enumerate(range(y0 + step // 2, y1, step)):
             for i, x in enumerate(range(x0 + step // 2 + (step // 2 if j % 2 else 0), x1, step)):
+                if appear and ((i * 7919 + j * 104729) % 97) / 97.0 >= show:
+                    continue
                 px, py = float(x), float(y)
                 if g.get("wave"):
                     px += 1.5 * math.sin(0.15 * y + 4 * t)
+                c = col
                 if tx is not None and t >= t0:
                     dx, dy = tx - px, ty - py
                     dist = math.hypot(dx, dy)
                     if dist < rad:
                         k = (1 - dist / rad) * pull * clamp((t - t0) / 0.4)
                         px, py = px + dx * k, py + dy * k
-                d.rectangle([int(px), int(py), int(px) + size - 1, int(py) + size - 1], fill=col)
+                        if grip is not None:
+                            c = grip
+                d.rectangle([int(px), int(py), int(px) + size - 1, int(py) + size - 1], fill=c)
     elif kind == "flow":
         n = int(g.get("n", 30))
         dx, dy = g.get("dir", [1, 0])
