@@ -12,6 +12,7 @@ import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
+import numpy as np
 from PIL import Image
 from pixel_kit import packs, sheet as SH
 
@@ -50,8 +51,8 @@ def check_pack(p, out):
         if "idle" not in m["anims"]:
             out.append(f"{where}: no 'idle' animation")
         idx = SH.indices(im)
-        alpha = im.getchannel("A")
-        soft = sum(1 for v in alpha.getdata() if 0 < v < 255)
+        alpha = np.asarray(im)[..., 3]
+        soft = int(((alpha > 0) & (alpha < 255)).sum())
         extra = int((idx == -2).sum())
         if extra:
             out.append(f"{where}: {extra} pixels in colors outside the palette")
