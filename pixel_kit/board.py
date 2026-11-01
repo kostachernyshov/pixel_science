@@ -63,7 +63,8 @@ def html_board(plan, path, formats, styles, warnings=()):
             "style": plan.get("style", "paper"), "scenes": scenes, "images": images,
             "sources": plan.get("sources") or [], "warnings": list(warnings),
             "length": round(tm[-1]["end"], 1) if tm else 0}
-    page = TEMPLATE.replace("__TITLE__", html.escape(plan.get("title") or "Storyboard")) \
+    short = (plan.get("title") or plan.get("name") or "Video").split(":")[0].strip()
+    page = TEMPLATE.replace("__NAME__", html.escape(short + " storyboard")) \
                    .replace("__DATA__", json.dumps(data).replace("</", "<\\/"))
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
@@ -71,52 +72,56 @@ def html_board(plan, path, formats, styles, warnings=()):
     return path
 
 
-TEMPLATE = """<!doctype html>
-<html lang="en">
-<head>
+TEMPLATE = """<title>__NAME__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>__TITLE__ storyboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500&family=IBM+Plex+Sans:wght@400;600&display=swap">
 <style>
+/* Layout: a contact sheet of key frames, one card per scene, the voice-over under each frame. */
 :root {
-  --bg: #f6f3ee; --card: #ffffff; --ink: #1d2b53; --muted: #5f574f; --line: #e2ddd5;
-  --accent: #29adff; --warn-bg: #fff4e0; --warn-ink: #7a4a00; --chip: #ece7df; --chip-on: #1d2b53; --chip-on-ink: #fff;
+  --bg: #f4f2ee; --card: #ffffff; --ink: #1d2b53; --muted: #5f574f; --line: #e1ddd6;
+  --warn-bg: #fff1dc; --warn-ink: #6e4300; --chip: #e9e5de; --chip-on: #1d2b53; --chip-on-ink: #ffffff;
+  --display: "Pixelify Sans", ui-monospace, "SF Mono", Menlo, monospace;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #12111a; --card: #1c1b26; --ink: #f2eee8; --muted: #a8a2b8; --line: #2e2c3c;
-    --accent: #29adff; --warn-bg: #3a2a10; --warn-ink: #ffd28a; --chip: #2a2838; --chip-on: #29adff; --chip-on-ink: #0a0814;
+    --warn-bg: #3a2a10; --warn-ink: #ffd28a; --chip: #2a2838; --chip-on: #29adff; --chip-on-ink: #0a0814;
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #12111a; --card: #1c1b26; --ink: #f2eee8; --muted: #a8a2b8; --line: #2e2c3c;
-  --accent: #29adff; --warn-bg: #3a2a10; --warn-ink: #ffd28a; --chip: #2a2838; --chip-on: #29adff; --chip-on-ink: #0a0814;
+  --warn-bg: #3a2a10; --warn-ink: #ffd28a; --chip: #2a2838; --chip-on: #29adff; --chip-on-ink: #0a0814;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
-main { max-width: 1180px; margin: 0 auto; padding: 24px 16px 48px; }
-h1 { font-size: 24px; margin: 0 0 4px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body); }
+main { max-width: 1180px; margin: 0 auto; padding-block: 24px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { font: 500 26px/1.2 var(--display); margin: 0 0 6px; text-wrap: balance; }
 .meta { color: var(--muted); margin: 0 0 16px; }
-.bar { display: flex; flex-wrap: wrap; gap: 16px; margin: 0 0 16px; align-items: center; }
+.bar { display: flex; flex-wrap: wrap; gap: 12px 20px; margin: 0 0 16px; align-items: center; }
 .group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.group span { color: var(--muted); font-size: 13px; margin-right: 2px; }
-button { border: 0; border-radius: 999px; padding: 6px 12px; background: var(--chip); color: var(--ink); font: inherit; font-size: 14px; cursor: pointer; }
+.group span { color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 2px; }
+button { border: 0; border-radius: 6px; padding: 6px 12px; background: var(--chip); color: var(--ink); font: inherit; font-size: 14px; cursor: pointer; }
+button:focus-visible { outline: 2px solid var(--chip-on); outline-offset: 2px; }
 button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-ink); }
-.warn { background: var(--warn-bg); color: var(--warn-ink); border-radius: 10px; padding: 10px 14px; margin: 0 0 16px; }
+.warn { background: var(--warn-bg); color: var(--warn-ink); border-radius: 8px; padding: 10px 14px; margin: 0 0 16px; }
 .warn ul { margin: 4px 0 0; padding-left: 18px; }
 .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--min)), 1fr)); }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
-.card img { width: 100%; display: block; image-rendering: pixelated; background: #000; }
-.body { padding: 10px 12px 12px; }
-.head { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 13px; }
-.head b { color: var(--ink); }
-.cap { font-weight: 600; margin: 4px 0 2px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.card img { width: 100%; max-width: 100%; display: block; image-rendering: pixelated; }
+.body { padding: 10px 12px 12px; display: grid; gap: 2px; }
+.head { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.head b { color: var(--ink); font-family: var(--display); font-weight: 500; }
+.cap { font-weight: 600; }
 .say { margin: 0; }
 footer { margin-top: 28px; color: var(--muted); font-size: 13px; }
 footer ol { padding-left: 18px; }
 </style>
-</head>
-<body>
 <main>
   <h1 id="title"></h1>
   <p class="meta" id="meta"></p>
@@ -172,6 +177,4 @@ function draw() {
 }
 draw();
 </script>
-</body>
-</html>
 """
