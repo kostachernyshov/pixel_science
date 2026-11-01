@@ -26,7 +26,7 @@ Work in `videos/<slug>/` (git ignores `out/`). The example to copy: `examples/nk
 
 ## Steps
 
-1. **Topic.** Get the idea in one sentence ("how NK cells find cancer cells"), the viewer (school, adult, student), and the formats. Default: adult viewer, all four formats. Cut the idea to one mechanism. A second mechanism is a second video.
+1. **Topic.** Get the idea in one sentence ("how NK cells find cancer cells"), the viewer (school, adult, student), and the formats. Default: adult viewer, all four formats. Cut the idea to one mechanism. A second mechanism is a second video. If the topic needs several mechanisms or more than 60 s, run the `story` and `script` skills first, then start here at step 4 with each chapter.
 2. **Sources.** Find 1 to 3 reliable sources: a review, a textbook, the original paper. Write them in `sources`. Each sentence of the voice-over must follow from them. Mark a hypothesis as a hypothesis in the voice-over.
 3. **Voice-over.** Write `voiceover.md`: one `## S01` heading for each scene, the text under it. One idea in each scene. 60 to 110 words in total (25 to 45 s at 2.5 words a second). Plain words; name a term once, then explain it with an image ("MHC class one ... works like an ID badge"). Show the text and the sources to the person and ask: "Accept the voice-over? yes / changes". Do not continue without "yes".
 4. **Plan.** Write `explainer.yaml` in the format of [PLAN.md](PLAN.md). Use the scene ids of the voice-over.

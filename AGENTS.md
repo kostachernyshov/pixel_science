@@ -4,6 +4,7 @@ Local tool, agent skill, and sprite library for pixel-art science explainer vide
 
 - Read `README.md` (layout, commands) and, for sprites or scene types, `CONTRIBUTING.md`.
 - Making a video: skill `.agents/skills/explain/SKILL.md`; plan format `.agents/skills/explain/PLAN.md`.
+- Complex topic or a video over 60 s: helper skills `story` (beats) and `script` (chapters, voice-over, scene notes) before `explain`.
 - Run commands with `.venv/bin/python` from the repo root. Before a commit: `tools/validate_sprites.py` prints `VALID`, `pixsci.py check examples/*/explainer.yaml` prints `CHECK PASSED`.
 - Layout code reads `frame.W` and `frame.H` at draw time; never use fixed 480x270 sizes.
 - Rendered videos (`out/`) are not committed.
