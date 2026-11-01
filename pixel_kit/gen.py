@@ -17,7 +17,7 @@
 # t: start (s from the scene start); a plan can give "on: <word>" instead (explain.py resolves it).
 
 import math, random, zlib
-from PIL import ImageDraw
+from PIL import Image, ImageDraw
 from .palette import C, NAMES
 from .timing import clamp, seg, ease, lerp
 from .fx import bayer
@@ -184,12 +184,12 @@ def draw_field(img, g, t, stage, target_px, seed):
         R = float(g.get("radius", 0.4)) * (x1 - x0) * ease(seg(t, t0, t0 + float(g.get("dur", 1.5))))
         if R < 2:
             return
-        bm = bayer(img.height, img.width)
-        px = img.load()
-        for yy in range(max(0, int(ty - R)), min(img.height, int(ty + R) + 1)):
-            for xx in range(max(0, int(tx - R)), min(img.width, int(tx + R) + 1)):
-                dist = math.hypot(xx - tx, yy - ty)
-                if dist < R and bm[yy, xx] < 8 * (1 - dist / R) ** 1.5:
-                    px[xx, yy] = col
+        import numpy as np
+        a = np.array(img)
+        ys, xs = np.mgrid[0:a.shape[0], 0:a.shape[1]]
+        dist = np.hypot(xs - tx, ys - ty)
+        m = (dist < R) & (bayer(a.shape[0], a.shape[1]) < 8 * np.clip(1 - dist / R, 0, 1) ** 1.5)
+        a[m] = col
+        img.paste(Image.fromarray(a))
     else:
         raise ValueError(f"field kind {kind!r}: use dots, flow, gradient")

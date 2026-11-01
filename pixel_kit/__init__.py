@@ -1,2 +1,4 @@
-# pixel_kit: pixel-art library for short explanatory animations (4 video formats, PICO-8, x4; see frame.py).
-# Modules: palette, font, sprites, fx, ui, bg, props, scene, timing, voice, frame, charts, explain, colorcheck.
+# pixel_kit: the core of pixel_science. It knows no pack: sprites, backgrounds, and styles come from packs/.
+# Modules: frame (formats), palette (colors and roles), style (style packs), packs, sprites (the cascade),
+# sheet, catalog, bg, font, fx, ui, timing, words (word timing), voice (transcripts), gen (swarm, grow, field),
+# camera, pace (pace rules), explain (plan -> timeline), scene (timeline -> video), board (storyboards), cli.

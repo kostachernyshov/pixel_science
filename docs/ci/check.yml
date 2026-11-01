@@ -1,3 +1,4 @@
+# Move this file to .github/workflows/check.yml (the agent's token could not write workflows).
 name: check
 on: [push, pull_request]
 jobs:
@@ -9,14 +10,16 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - name: Sprite library (palette, metadata, credits, license)
+      - name: Sprites of every pack (palette, metadata, tags, credits, license)
         run: python tools/validate_sprites.py
-      - name: Example plans
+      - name: Catalog is fresh
+        run: python pixsci.py catalog --check
+      - name: Example plans (rules, pace, motion)
         run: |
           for p in examples/*/explainer.yaml; do python pixsci.py check "$p"; done
-      - name: Storyboards in all formats (smoke test, no ffmpeg needed)
+      - name: Storyboards in all formats and styles (no ffmpeg needed)
         run: |
-          for p in examples/*/explainer.yaml; do python pixsci.py board "$p" out/$(basename $(dirname "$p")); done
+          for p in examples/*/explainer.yaml; do python pixsci.py board "$p" out/$(basename $(dirname "$p")) --html; done
       - uses: actions/upload-artifact@v4
         with:
           name: storyboards
