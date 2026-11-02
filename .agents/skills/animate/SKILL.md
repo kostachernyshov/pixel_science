@@ -37,6 +37,7 @@ If the person does not know what to show yet, or the topic is long or has 3 or m
    - Choose sprites from the cast sheet: `pixsci.py sheet out/sheet.png`. Look at it. Check the pack's sprites before you name one.
    - Keep the same character in the same color in all scenes.
    - Time the beats of an `action` scene to its voice-over: the attack happens on the word "attacks".
+   - A mechanism: copy `model:` from `storyboard.md` into the plan as it is. Show each relation with a verb between the actors or their parts (`parts:` on the actor), at the level the storyboard chose: what is drawn is true; what is below that level is left out, not invented.
    - Show actions with verbs (`pixsci.py verbs`): `secrete`, `block`, `hit`... A verb gives the effects, the light, and the hit. If no verb fits, add one to the pack with [add-verb](../add-verb/SKILL.md) and go on with the plan: do not stop the person for it.
    - If no scene type fits, write a `custom` scene and tell the person that it is a candidate for the library.
 5. **Check.** Run `pixsci.py check explainer.yaml`. Fix the plan until the output is `CHECK PASSED`.
