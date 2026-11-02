@@ -24,6 +24,21 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # also need
 
 A 46 s video in all four formats renders in about 25 s on a laptop. Plans and videos are not committed.
 
+### Voice
+
+`voiceover.md` can be spoken by [Kokoro](https://github.com/hexgrad/kokoro), a local English TTS model
+(82M parameters, Apache 2.0; no GPU and no voice sample needed):
+
+```bash
+brew install espeak-ng                                              # Linux: apt install espeak-ng
+.venv/bin/pip install -r requirements-voice.txt                     # needs Python 3.10 to 3.12 in .venv
+.venv/bin/python pixsci.py voice  videos/my-topic/explainer.yaml out           # listen: out/<name>-voice.wav
+.venv/bin/python pixsci.py render videos/my-topic/explainer.yaml out --voice   # scenes timed to the voice, sound in the mp4
+```
+
+The first run downloads the model (~330 MB) from Hugging Face. Each scene is spoken once and kept in
+`out/voice/`; a scene is spoken again only when its text changes. Voice and pace: `tts:` in the plan.
+
 ## With an agent
 
 The skill `/animate` (in `.agents/skills/animate/`, linked for Claude Code in `.claude/skills/`)
@@ -51,8 +66,8 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
 ## Layout
 
 ```
-pixsci.py              command line: formats, sheet, verbs, check, board, render, frames
-pixel_kit/             the core: frame, explain, packs, sprites, verbs, ui, bg, fx, font, palette, scene
+pixsci.py              command line: formats, sheet, verbs, check, board, render, frames, voice
+pixel_kit/             the core: frame, explain, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
 packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
 .agents/skills/animate the agent skill

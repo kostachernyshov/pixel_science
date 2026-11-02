@@ -10,8 +10,10 @@
 #   board     PLAN OUTDIR [-f a,b]            storyboard for each format: OUTDIR/board-<format>.png
 #   render    PLAN OUTDIR [-f a,b] [--gif]    video for each format: OUTDIR/<name>-<format>.mp4
 #   frames    PLAN OUTDIR [-f a,b] [t ...]    single frames as PNG (default: the key frames)
+#   voice     PLAN OUTDIR                     voice-over spoken by Kokoro: OUTDIR/<name>-voice.wav
 #
 # -f limits the formats (default: the plan's "formats", else all four).
+# --voice (board, render, frames): time scenes to the Kokoro voice in OUTDIR/voice/; render puts it in the mp4.
 
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -21,8 +23,8 @@ from pixel_kit import explain, frame
 
 
 def _args(a):
-    """Splits -f/--formats and --gif from the positional arguments."""
-    pos, fmts, gif = [], None, False
+    """Splits -f/--formats, --gif, and --voice from the positional arguments."""
+    pos, fmts, gif, vo = [], None, False, False
     i = 0
     while i < len(a):
         if a[i] in ("-f", "--formats"):
@@ -31,10 +33,18 @@ def _args(a):
             continue
         if a[i] == "--gif":
             gif = True
+        elif a[i] == "--voice":
+            vo = True
         else:
             pos.append(a[i])
         i += 1
-    return pos, fmts, gif
+    return pos, fmts, gif, vo
+
+
+def _voice(plan, outdir):
+    """Speaks the voice-over (only scenes that changed) and times the scenes to it. Returns {scene: wav}."""
+    from pixel_kit import voice
+    return voice.attach(plan, explain.voiceover(plan), outdir)
 
 
 def _plan(p):
@@ -125,10 +135,12 @@ def cmd_check(a):
 
 
 def cmd_board(a):
-    pos, fmts, _ = _args(a)
+    pos, fmts, _, vo = _args(a)
     plan = _plan(pos[0])
     _stop_on_problems(plan)
     os.makedirs(pos[1], exist_ok=True)
+    if vo:
+        _voice(plan, pos[1])
     for f in _formats(plan, fmts):
         frame.use(f)
         tl, marks = explain.timeline(plan)
@@ -139,17 +151,24 @@ def cmd_board(a):
 
 
 def cmd_render(a):
-    pos, fmts, gif = _args(a)
+    pos, fmts, gif, vo = _args(a)
     plan = _plan(pos[0])
     _stop_on_problems(plan)
     os.makedirs(pos[1], exist_ok=True)
     name = _name(plan, pos[0])
+    track = None
+    if vo:
+        from pixel_kit import voice
+        paths = _voice(plan, pos[1])
+        track = voice.mix(plan, paths, explain.durations(plan), os.path.join(pos[1], f"{name}-voice.wav"))
     for f in _formats(plan, fmts):
         frame.use(f)
         tl, _ = explain.timeline(plan)
         out = os.path.join(pos[1], f"{name}-{f}.mp4")
         print(f"[{f}] {frame.out_size()[0]}x{frame.out_size()[1]}")
         tl.render(out)
+        if track:
+            voice.mux(out, track)
         print("video ->", out)
         if gif:
             g = os.path.join(pos[1], f"{name}-{f}.gif")
@@ -158,14 +177,32 @@ def cmd_render(a):
 
 
 def cmd_frames(a):
-    pos, fmts, _ = _args(a)
+    pos, fmts, _, vo = _args(a)
     plan = _plan(pos[0])
+    if vo:
+        _voice(plan, pos[1])
     for f in _formats(plan, fmts):
         frame.use(f)
         tl, marks = explain.timeline(plan)
         times = [float(x) for x in pos[2:]] or [t for t, _ in marks]
         for p in tl.export_frames(os.path.join(pos[1], f), times):
             print(p)
+
+
+def cmd_voice(a):
+    from pixel_kit import voice
+    pos, _, _, _ = _args(a)
+    plan = _plan(pos[0])
+    os.makedirs(pos[1], exist_ok=True)
+    paths = _voice(plan, pos[1])
+    if not paths:
+        print("no voice-over text: check `voiceover:` in the plan")
+        sys.exit(1)
+    times = explain.durations(plan)
+    for sc, (s, e) in zip(plan["scenes"], times):
+        print(f"{sc.get('id', '?'):5} {s:6.1f}-{e:6.1f} s")
+    out = voice.mix(plan, paths, times, os.path.join(pos[1], f"{_name(plan, pos[0])}-voice.wav"))
+    print("voice ->", out)
 
 
 COMMANDS = {k[4:]: v for k, v in globals().items() if k.startswith("cmd_")}

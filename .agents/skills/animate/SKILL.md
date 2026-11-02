@@ -42,7 +42,7 @@ If the person does not know what to show yet, or the topic is long or has 3 or m
    - If no scene type fits, write a `custom` scene and tell the person that it is a candidate for the library.
 5. **Check.** Run `pixsci.py check explainer.yaml`. Fix the plan until the output is `CHECK PASSED`.
 6. **Storyboard.** Run `pixsci.py board explainer.yaml out`. Look at each `out/board-<format>.png` yourself: text does not overlap or get cut, actors stay inside the frame, the badge and the caption do not cover a face. Fix and run again. Then show the boards to the person and ask: "Accept the storyboard? yes / changes". Do not render without "yes".
-7. **Render.** `pixsci.py render explainer.yaml out` (add `--gif` for loops, `-f vertical` for one format).
+7. **Render.** `pixsci.py render explainer.yaml out` (add `--gif` for loops, `-f vertical` for one format). If the person wants a synthetic voice, run `pixsci.py voice explainer.yaml out` first and give them `out/<name>-voice.wav` to listen to; then render with `--voice` (scenes timed to the audio, sound in the mp4). Make the boards with `--voice` too, so that their times match.
 8. **Summary.** Give the person the paths of the videos and the boards. Name the decisions that you made without the person, one line each.
 
 ## Rules

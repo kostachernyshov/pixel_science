@@ -8,6 +8,7 @@ name: nk-missing-self                 # output file names: <name>-<format>.mp4
 lang: en                              # en: on-screen text must be plain ASCII
 packs: [biology]                      # sprite packs in packs/ (default: all)
 voiceover: voiceover.md               # '## S01' headings, the voice-over text under each
+tts: {voice: af_heart, speed: 1.0}    # optional: Kokoro voice for `pixsci voice` and `--voice` (a = American, b = British)
 formats: [landscape, vertical, square, banner]
 max_s: 60                             # optional: longest story before the summary (default 60 s)
 sources:                              # required: the papers or textbooks behind each claim
@@ -35,6 +36,7 @@ sits above the bottom 20 % (apps cover it with buttons). In `banner`, there is n
 ## Timing
 
 - A scene lasts (words of its voice-over) / 2.5 + 0.8 s, at least 2.5 s. `dur: 4` sets it by hand.
+- With `--voice`, a scene lasts as long as its spoken audio (0.25 s before the words, 0.6 s after); `dur` can make it longer, not shorter.
 - Story before the summary: 20 to 45 s. The summary holds 8 s (`dur` sets more).
 
 ## Fields of all scenes

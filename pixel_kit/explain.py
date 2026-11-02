@@ -65,14 +65,20 @@ def voiceover(plan):
 
 
 def durations(plan):
-    """Start and end of each scene: from the words of its voice-over (2.5 words/s), or "dur" in the scene."""
+    """Start and end of each scene: from the words of its voice-over (2.5 words/s), or "dur" in the scene.
+    With synthesized audio (voice.attach puts plan["_spoken"]), a scene lasts as long as its audio,
+    and a "dur" in the scene is never shorter than the audio."""
     scenes = plan["scenes"]
     vo = voiceover(plan)
+    spoken = plan.get("_spoken") or {}
     times = []
     t = 0.0
     for sc in scenes:
         words = len(vo.get(sc.get("id"), "").split())
-        d = float(sc.get("dur", max(MIN_SCENE, words / WORDS_PER_S + 0.8)))
+        s = spoken.get(sc.get("id"))
+        d = float(sc.get("dur", max(MIN_SCENE, words / WORDS_PER_S + 0.8 if s is None else s)))
+        if s is not None:
+            d = max(d, s)
         if sc.get("type") == "summary" and "dur" not in sc:
             d = max(d, SUMMARY_HOLD)
         times.append((t, t + d))
