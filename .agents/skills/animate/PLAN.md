@@ -69,7 +69,8 @@ actors:
 beats:                                                          # t: seconds from the scene start
   - {t: 0.3, actor: nk, move_to: [0.45, 0.5], dur: 1.6}         # move with easing
   - {t: 1.9, actor: nk, anim: alert}                            # change animation
-  - {t: 2.6, actor: cell, fx: sparkle}                          # effect: hit, alert, sparkle, particles
+  - {t: 2.2, actor: nk, verb: alert}                            # a verb: an action with effects
+  - {t: 2.6, actor: nk, verb: hit, target: cell}                # a verb with a target; hit: soft|normal|heavy|false
   - {t: 4.0, actor: nk, anim: move, flip: true}                 # face the other way
   - {t: 4.0, actor: cell, badge: null}                          # remove a badge (or set another)
   - {t: 5.0, actor: cell, show: false}                          # hide (show: true to bring back)
@@ -77,6 +78,14 @@ beats:                                                          # t: seconds fro
 
 Actor fields: `sprite`, `at`, `anim`, `scale` (default 2), `flip`, `badge` (a sprite of group `badge`
 drawn above), `label`, `color`, `hidden`. Keep x between 0.1 and 0.9: the vertical frame is narrow.
+
+**Verbs.** A beat with `verb:` plays an action: effects with color and light, and for some verbs a hit
+(the attacker pulls back, the picture stops on contact, the frame shakes, the target is pushed back).
+`pixsci.py verbs` lists the verbs of the core and the packs; `pixsci.py verbs out/verbs.png` draws them.
+Core verbs: `appear` (set `hidden: true` on the actor), `vanish`, `hit`, `highlight`, `alert`.
+Biology verbs: `secrete`, `block`, `apoptosis`, `bind`. Effects have no coordinates: they take place and size
+from the actor and the `target`. `hit: heavy` on a beat makes a hit stronger, `hit: false` removes it.
+A verb is missing? Add it to the pack, then go on with the scene: `.agents/skills/add-verb/SKILL.md`.
 
 ### fact
 `sprite`, `anim`, `text` (1 to 3 short lines). One idea, typed letter by letter.

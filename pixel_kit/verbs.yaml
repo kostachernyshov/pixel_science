@@ -1,0 +1,54 @@
+# Core verbs: actions with no topic, for every pack. A pack can replace one with its own verb of the same name.
+# How to add a verb: .agents/skills/add-verb/SKILL.md. Format of a verb:
+#
+#   name:
+#     desc: one line, what the viewer sees
+#     target: true          the beat must name a target actor
+#     hit: {at: 0.2, preset: soft, by: actor}   optional: contact at t=0.2 s (windup, freeze, shake, push)
+#     show: actor           optional: show this actor at the start
+#     hide: actor           optional: hide this actor (or target) at the end
+#     steps:                primitives (pixel_kit/fx.py), each with:
+#       - {prim: burst, at: target, color: impact, t: 0, dur: 0.6, ...options of the primitive}
+#         at: actor|target (the center, the radius of that actor), or from: actor, to: target (edge to edge)
+#
+# colors: roles -> palette names (pixel_kit/palette.py), dark to bright. A pack adds roles or replaces them.
+
+colors:
+  impact: [NAVY, XBLUE, BLUE, YELLOW]
+  spark: [XRUST, ORANGE, YELLOW, XLEMON]
+  attention: [XORANGE, ORANGE, YELLOW, XLEMON]
+  sign: [BLACK, ORANGE]          # outline, fill
+
+verbs:
+  appear:
+    desc: The actor appears with twinkles and a soft glow.
+    show: actor
+    steps:
+      - {prim: sparks, at: actor, color: spark, dur: 0.8, n: 7}
+      - {prim: glow, at: actor, color: spark, dur: 0.6}
+
+  vanish:
+    desc: The actor breaks up from the edge to the center and is gone.
+    hide: actor
+    steps:
+      - {prim: dissolve, at: actor, color: spark, dur: 0.9}
+      - {prim: sparks, at: actor, color: spark, t: 0.3, dur: 0.6, n: 5}
+
+  hit:
+    desc: The actor strikes the target; a flash, a wave, particles; the picture stops for a moment.
+    target: true
+    hit: {at: 0, preset: normal}
+    steps:
+      - {prim: ring, at: target, color: impact, dur: 0.4, size: 22}
+      - {prim: burst, at: target, color: impact, dur: 0.6, n: 14, speed: 80}
+
+  highlight:
+    desc: Draws the eye to the actor; a pulse of light and two slow waves.
+    steps:
+      - {prim: glow, at: actor, color: attention, dur: 1.2, size: 1.2}
+      - {prim: ring, at: actor, color: attention, dur: 1.2, size: 14, rings: 2}
+
+  alert:
+    desc: '"!" over the actor: it notices something.'
+    steps:
+      - {prim: sign, at: actor, color: sign, dur: 1.2, text: "!"}

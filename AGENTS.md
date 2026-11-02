@@ -8,6 +8,8 @@ Local tool, agent skill, and sprite library for pixel-art science explainer vide
 - Run commands with `.venv/bin/python` from the repo root. Before a commit: `tools/validate_sprites.py` prints `VALID`.
 - Layout code reads `frame.W` and `frame.H` at draw time; never use fixed 480x270 sizes.
 - Rendered videos (`out/`), plans of test videos, and generated code are not committed.
+- Effects: a beat names a verb (`pixsci.py verbs`). A verb is YAML in a pack; a primitive is Python in the core. Terms: `GLOSSARY.md`.
+- A verb is missing: add it to the pack with `.agents/skills/add-verb/SKILL.md` and go on. A new primitive in the core needs the maintainer's "yes" first.
 
 ## Ideas, bugs, and pull requests
 

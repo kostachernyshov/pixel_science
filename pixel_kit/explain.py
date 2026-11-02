@@ -10,12 +10,12 @@
 # Scene types: title, cast, action, fact, flow, summary, custom.
 # Layout is relative to the frame, so one plan renders in every format of frame.FORMATS.
 
-import importlib.util, os, re
+import importlib.util, math, os, re
 from PIL import ImageDraw
 from .palette import *
 from .font import text, text_w, title_text, TITLE_GLYPHS, LINE
 from .timing import clamp, seg, ease, lerp
-from . import sprites as S, fx, ui, bg, frame
+from . import sprites as S, fx, ui, bg, frame, verbs
 from .scene import Timeline
 
 WORDS_PER_S = 2.5        # voice-over pace
@@ -40,6 +40,7 @@ def load(path):
     plan.setdefault("lang", "en")
     plan.setdefault("formats", list(frame.FORMATS))
     S.use(plan.get("packs"))              # packs: [biology]; without it, every pack
+    verbs.use(plan.get("packs"))
     return plan
 
 
@@ -202,7 +203,7 @@ def check(plan):
         if f not in frame.FORMATS:
             out.append(f"formats: unknown format {f!r}; use {', '.join(frame.FORMATS)}")
     times = durations(plan)
-    seen = set()
+    seen, used = set(), set()
     meta = S.meta()
     for sc, (a, b) in zip(plan["scenes"], times):
         sid = sc.get("id", "?")
@@ -225,6 +226,9 @@ def check(plan):
         for beat in sc.get("beats") or []:
             if beat.get("actor") not in (sc.get("actors") or {}):
                 out.append(f"{sid}: beat at {beat.get('t')} s names an unknown actor {beat.get('actor')!r}")
+            out += [f"{sid}: {p}" for p in verbs.check_beat(beat, sc.get("actors") or {})]
+            if beat.get("verb"):
+                used.add(beat["verb"])
         cap = sc.get("caption")
         if cap and len(cap.split()) > 3:
             out.append(f"{sid}: caption has {len(cap.split())} words (max 3): {cap!r}")
@@ -252,6 +256,10 @@ def check(plan):
                 if len(lines) > (1 if L["banner"] else 2):
                     out.append(f"{sc.get('id')}: caption {cap!r} does not fit the {f} frame")
     frame.use("landscape")
+    for name in sorted(used & set(verbs.all())):
+        ms = verbs.bench(name)
+        if ms > verbs.MAX_MS:
+            out.append(f"warning: verb {name} takes {ms:.1f} ms a frame (limit {verbs.MAX_MS} ms); make its primitives faster")
     if not plan["scenes"] or plan["scenes"][-1].get("type") != "summary":
         out.append("the last scene must be a summary")
     story_end = times[-2][1] if len(times) > 1 and plan["scenes"][-1].get("type") == "summary" else (times[-1][1] if times else 0)
@@ -490,21 +498,67 @@ def _actor_state(a, beats, name, t):
     return x, y, anim, t - a_t0, flip, badge, shown
 
 
-def p_action(plan, sc, t, dur, ctx):
-    """Actors on a stage and timed beats: move, change animation, flip, add or remove a badge, effects.
-    Positions are fractions of the stage (0..1), so the scene fits every format."""
+def _expand(sc):
+    """The scene's beats plus show/hide beats that verbs add (show: at the start, hide: at the end)."""
+    out = list(sc.get("beats") or [])
+    for b in sc.get("beats") or []:
+        if not b.get("verb"):
+            continue
+        v = verbs.get(b["verb"])
+        bt = float(b.get("t", 0))
+        for key, when, val in (("show", bt, True), ("hide", bt + verbs.duration(b["verb"]), False)):
+            who = v.get(key)
+            if who:
+                out.append({"t": when, "actor": b.get(who) if who == "target" else b["actor"], "show": val})
+    return out
+
+
+def _hits(sc):
+    """[(contact time, params, attacker, target)] of the beats whose verb has hit mechanics."""
+    out = []
+    for b in sc.get("beats") or []:
+        if b.get("verb") and b.get("target"):
+            h = verbs.hit(b["verb"], b)
+            if h:
+                at, p, by = h
+                a, tg = (b["target"], b["actor"]) if by == "target" else (b["actor"], b["target"])
+                out.append((float(b.get("t", 0)) + at, p, a, tg))
+    return out
+
+
+def p_action(plan, sc, T, dur, ctx):
+    """Actors on a stage and timed beats: move, change animation, flip, add or remove a badge, verbs.
+    Positions are fractions of the stage (0..1), so the scene fits every format.
+    A verb with hit mechanics stops the picture for a moment on contact (the scene time T is warped)."""
+    if "beats" not in ctx:
+        ctx["beats"], ctx["hits"] = _expand(sc), _hits(sc)
+    beats, hits = ctx["beats"], ctx["hits"]
+    t, shake = fx.warp(T, [h[:2] for h in hits])
     img = _bg(sc, t)
+    base = img.copy()
     L = layout()
     _heading(img, L, sc.get("title"))
     x0, y0, x1, y1 = L["stage"]
     actors = sc.get("actors") or {}
-    beats = sc.get("beats") or []
-    for i, (name, a) in enumerate(actors.items()):
+    state = {}
+    for name, a in actors.items():
         fx_, fy_, anim, at, flip, badge, shown = _actor_state(a, beats, name, t)
+        k = int(a.get("scale", L["sprite_scale"]))
+        cw, ch = S.meta()[a["sprite"]]["cell"]
+        state[name] = [x0 + fx_ * (x1 - x0), y0 + fy_ * (y1 - y0), max(cw, ch) * k / 2, k, anim, at, flip, badge, shown]
+    for th, p, att, tg in hits:                        # windup of the attacker, push of the target
+        if att in state and tg in state:
+            dx, dy = state[tg][0] - state[att][0], state[tg][1] - state[att][1]
+            d = math.hypot(dx, dy) or 1.0
+            for who, role in ((att, "attacker"), (tg, "target")):
+                o = fx.offset(t, th, p, role)
+                state[who][0] += dx / d * o
+                state[who][1] += dy / d * o
+    for i, (name, a) in enumerate(actors.items()):
+        px, py, r, k, anim, at, flip, badge, shown = state[name]
         if not shown:
             continue
-        k = int(a.get("scale", L["sprite_scale"]))
-        px, py = int(x0 + fx_ * (x1 - x0)), int(y0 + fy_ * (y1 - y0))
+        px, py = int(px), int(py)
         _sprite(img, a["sprite"], anim, at, px, py, k, seed=i, flip=flip)
         sh = S.meta()[a["sprite"]]["cell"][1] * k
         if badge:
@@ -512,20 +566,19 @@ def p_action(plan, sc, t, dur, ctx):
             S.draw(img, badge, "idle", 0, px, max(bh // 2 + 1, py - sh // 2 - bh // 2 + 2), scale=k)
         if a.get("label") and not L["banner"]:
             text(img, px, py + sh // 2 + 2, a["label"], color(a.get("color", "ink"))[0], align="c")
-    for b in beats:
-        bt = float(b.get("t", 0))
-        if not b.get("fx") or t < bt or b.get("actor") not in actors:
+    cv = fx.Canvas(img, base)
+    for i, b in enumerate(beats):
+        name, bt = b.get("verb"), float(b.get("t", 0))
+        if not name or not bt <= t <= bt + verbs.duration(name) or b.get("actor") not in state:
             continue
-        fx_, fy_, *_ = _actor_state(actors[b["actor"]], beats, b["actor"], t)
-        px, py = int(x0 + fx_ * (x1 - x0)), int(y0 + fy_ * (y1 - y0))
-        if b["fx"] == "hit":
-            fx.hit_flash(img, px, py, t - bt)
-        elif b["fx"] == "alert" and t - bt < 1.2:
-            fx.alert(img, px, py - 30, t - bt)
-        elif b["fx"] == "sparkle" and t - bt < 1.0:
-            fx.sparkle(img, px, py - 20, t - bt)
-        elif b["fx"] == "particles":
-            fx.particles(img, px, py, t - bt, seed=int(bt * 10))
+        geo = {"actor": tuple(state[b["actor"]][:3])}
+        if b.get("target") in state:
+            geo["target"] = tuple(state[b["target"]][:3])
+        verbs.play(cv, name, t - bt, geo, seed=int(plan.get("seed", 0)) * 101 + i)
+    if shake:
+        s = shake if int(T * 30) % 2 else -shake
+        cv.shift(s, -s // 2)
+    img = cv.image()
     _caption(img, L, sc, t)
     return img
 
