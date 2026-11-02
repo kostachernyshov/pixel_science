@@ -5,6 +5,7 @@
 #
 #   formats                                   list the formats and their output sizes
 #   sheet     OUT.png                         cast sheet: every sprite of the library
+#   verbs     [OUT.png] [-p pack,...]       verbs (actions for beats); OUT.png: a contact sheet of each verb
 #   check     PLAN                            rules: sources, voice-over, sprites, captions, timing
 #   board     PLAN OUTDIR [-f a,b]            storyboard for each format: OUTDIR/board-<format>.png
 #   render    PLAN OUTDIR [-f a,b] [--gif]    video for each format: OUTDIR/<name>-<format>.mp4
@@ -48,8 +49,15 @@ def _name(plan, plan_path):
     return plan.get("name") or os.path.splitext(os.path.basename(plan_path))[0]
 
 
+def _split(problems):
+    """(errors, warnings): a problem that starts with "warning:" does not stop a render."""
+    return [p for p in problems if not p.startswith("warning:")], [p for p in problems if p.startswith("warning:")]
+
+
 def _stop_on_problems(plan):
-    problems = explain.check(plan)
+    problems, warnings = _split(explain.check(plan))
+    for w in warnings:
+        print(w)
     if problems:
         print("CHECK FAILED:")
         for p in problems:
@@ -68,13 +76,46 @@ def cmd_sheet(a):
     runpy.run_path(os.path.join(HERE, "tools", "make_sheet.py"), run_name="__main__")
 
 
+def cmd_verbs(a):
+    from pixel_kit import verbs, fx
+    pos, packs_, _ = _args([x if x != "-p" else "-f" for x in a])
+    verbs.use(packs_)
+    for name, v in sorted(verbs.all().items(), key=lambda kv: (kv[1]["pack"] != "core", kv[1]["pack"], kv[0])):
+        tgt = " target" if v.get("target") else ""
+        print(f"{v['pack']:10} {name:12}{tgt:8} {v.get('desc', '')}")
+    if not pos:
+        return
+    from PIL import Image, ImageDraw
+    from pixel_kit.font import text
+    names = sorted(verbs.all())
+    cw, ch, n = 160, 90, 6
+    sheet = Image.new("RGB", (80 + cw * n, ch * len(names)), (251, 250, 247))
+    for row, name in enumerate(names):
+        text(sheet, 4, row * ch + ch // 2 - 4, name, 1)
+        d = verbs.duration(name)
+        for i in range(n):
+            img = Image.new("RGB", (cw, ch), (251, 250, 247))
+            base = img.copy()
+            dr = ImageDraw.Draw(img)
+            for x in (40, 120):                            # two grey stand-ins: actor, target
+                dr.ellipse([x - 12, 33, x + 12, 57], fill=(194, 195, 199), outline=(95, 87, 79))
+            cv = fx.Canvas(img, base)
+            verbs.play(cv, name, d * i / (n - 1) * 0.98, {"actor": (40, 45, 12), "target": (120, 45, 12)}, seed=1)
+            sheet.paste(cv.image(), (80 + i * cw, row * ch))
+    sheet = sheet.resize((sheet.width * 2, sheet.height * 2), Image.NEAREST)
+    sheet.save(pos[0])
+    print("sheet ->", pos[0])
+
+
 def cmd_check(a):
     plan = _plan(a[0])
-    problems = explain.check(plan)
+    problems, warnings = _split(explain.check(plan))
     times = explain.durations(plan)
     for sc, (s, e) in zip(plan["scenes"], times):
         print(f"{sc.get('id', '?'):5} {sc.get('type', '?'):8} {s:6.1f}-{e:6.1f} s  {sc.get('caption', '')}")
     print(f"total {times[-1][1]:.1f} s" if times else "no scenes")
+    for w in warnings:
+        print(w)
     if problems:
         print("CHECK FAILED:")
         for p in problems:

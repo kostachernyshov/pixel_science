@@ -26,6 +26,12 @@ folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.
 
 Sprites drawn in code live in the pack's `code/library.py` and build with `python tools/build_sprites.py <pack> <name>`. Sprites added as PNG stay when the code sprites are built again.
 
+## Add a verb or a primitive
+
+Actions in scenes are verbs: YAML in `packs/<pack>/verbs.yaml` that lists primitives of `pixel_kit/fx.py`.
+Follow `.agents/skills/add-verb/SKILL.md`. A verb fits its pack's subject (no ice or fire in biology).
+Look at it on the contact sheet: `python pixsci.py verbs out/verbs.png`.
+
 ## Add a scene type or a background
 
 Scene painters are the `p_<type>` functions in `pixel_kit/explain.py`; backgrounds are in `pixel_kit/bg.py`. Read `frame.W` and `frame.H` at draw time, never fixed sizes. Check the result in all four formats with `pixsci.py board`. Document the new fields in `.agents/skills/animate/PLAN.md`.

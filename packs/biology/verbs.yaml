@@ -1,0 +1,41 @@
+# Biology verbs. Format and rules: pixel_kit/verbs.yaml and .agents/skills/add-verb/SKILL.md.
+# Only motion that exists in the body: no fire, ice, magic, or explosions.
+
+colors:
+  granule: [PLUM, XCRIMSON, RED, PINK]     # granzymes, perforin
+  pdl1: [XPLUM, PLUM, XPURPLE, LAV]        # the PD-L1 shield of a tumor cell
+  membrane: [BROWN, XORANGE, ORANGE, PEACH]
+  cytoplasm: [XMAUVE, LAV, PINK, PEACH]
+  antibody: [XNAVY, XBLUE, BLUE, XLEMON]
+
+verbs:
+  secrete:
+    desc: The actor releases granules (granzymes, perforin) at the target; they hit it.
+    target: true
+    hit: {at: 0.22, preset: soft}
+    steps:
+      - {prim: jet, from: actor, to: target, color: granule, dur: 0.6, n: 4, arc: 4}
+      - {prim: sparks, at: target, color: granule, t: 0.22, dur: 0.6, n: 6}
+
+  block:
+    desc: The actor raises a PD-L1 shield; the target's blow glances off it.
+    target: true
+    hit: {at: 0.5, preset: soft, by: target}
+    steps:
+      - {prim: shell, at: actor, color: pdl1, dur: 1.8, flash: 0.5}
+      - {prim: burst, at: actor, color: pdl1, t: 0.5, dur: 0.5, n: 8, speed: 60, edge: target}
+
+  apoptosis:
+    desc: The actor dies quietly; it breaks up into small pieces from the edge (not an explosion).
+    hide: actor
+    steps:
+      - {prim: dissolve, at: actor, color: membrane, dur: 1.2}
+      - {prim: burst, at: actor, color: cytoplasm, t: 0.2, dur: 1.0, n: 8, speed: 25}
+
+  bind:
+    desc: The actor (an antibody) binds the target; a small wave and a glow where they touch.
+    target: true
+    steps:
+      - {prim: ring, at: target, color: antibody, dur: 0.5, size: 10}
+      - {prim: glow, at: target, color: antibody, dur: 0.8, size: 1.2}
+      - {prim: sparks, at: target, color: antibody, dur: 0.6, n: 4}

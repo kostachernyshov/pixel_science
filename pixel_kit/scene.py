@@ -12,13 +12,26 @@
 import os, subprocess
 import numpy as np
 from PIL import Image
-from .fx import dither_to
 from .palette import PAPER, C
 
 from . import frame
 SCALE, FPS = frame.SCALE, 30
 FADE = 0.25
 SCANLINES = False
+
+BAYER = np.array([[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]])
+_bayer_cache = {}
+
+
+def dither_to(arr, a, col=PAPER):
+    """Dissolve to one color with a Bayer matrix (a=0: none, a=1: all col). arr is HxWx3."""
+    if a <= 0:
+        return arr
+    h, w = arr.shape[:2]
+    if (h, w) not in _bayer_cache:
+        _bayer_cache[(h, w)] = np.tile(BAYER, (h // 4 + 1, w // 4 + 1))[:h, :w]
+    arr[_bayer_cache[(h, w)] < a * 16] = C(col)
+    return arr
 
 
 def upscale(arr, scale=SCALE, scan=None):

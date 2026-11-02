@@ -42,15 +42,18 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
 ```
 
 - `explainer.yaml`: scenes (`title`, `cast`, `action`, `fact`, `flow`, `summary`, `custom`). Format: `.agents/skills/animate/PLAN.md`.
-- `action` scenes place actors in fractions of the frame and run timed beats (move, animation, badge, effect), so one scene fits every format.
+- `action` scenes place actors in fractions of the frame and run timed beats (move, animation, badge, verb), so one scene fits every format.
+- Verbs are actions with effects (`secrete`, `block`, `hit`): YAML in a pack that lists primitives of the core
+  (`pixel_kit/fx.py`), with a light layer over the colors and hit mechanics (windup, freeze, shake, push).
+  `pixsci.py verbs out/verbs.png` lists and draws them. Why: `docs/adr/0001-verbs-and-primitives.md`.
 - The frame is small (480x270 for 16:9) and scaled x4 with nearest neighbor: sharp pixels at any size.
 
 ## Layout
 
 ```
-pixsci.py              command line: formats, sheet, check, board, render, frames
-pixel_kit/             the core: frame, explain, packs, sprites, ui, bg, fx, font, palette, scene
-packs/biology/         pack.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
+pixsci.py              command line: formats, sheet, verbs, check, board, render, frames
+pixel_kit/             the core: frame, explain, packs, sprites, verbs, ui, bg, fx, font, palette, scene
+packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
 .agents/skills/animate the agent skill
 .agents/skills/storyboard the story and key-frame skill before animate
