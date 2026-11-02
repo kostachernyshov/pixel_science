@@ -46,8 +46,9 @@ A style pack sets roles (background, ink, accent, caption plate), UI colors, spr
 outline, glow), a background filter, a frame filter, and scanlines. Copy `packs/style-arcade/pack.yaml`.
 Check it with the storyboards of every example: `python pixsci.py board examples/<x>/explainer.yaml out --html`.
 
-## Add a scene type, a generator, or a background
+## Add a link kind, a scene type, a generator, or a background
 
+Link kinds and the drawing rules are in `pixel_kit/mechanism.py`; keep a new kind a verb that fits any science.
 Scene painters are the `p_<type>` functions in `pixel_kit/explain.py`; generators are in `pixel_kit/gen.py`;
 backgrounds are in a pack's `backgrounds.py`. Read `frame.W` and `frame.H` at draw time, never fixed sizes;
 use roles (`INK`, `ACCENT`, `PLATE`) for text so that every style can set them. Backgrounds draw in base

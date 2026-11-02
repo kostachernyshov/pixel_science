@@ -8,7 +8,7 @@
 #   frame.use("vertical")
 #   tl, marks = explain.timeline(plan)        # marks: key times for the storyboard
 #
-# Scene types: title, cast, action, fact, flow, summary, custom.
+# Scene types: title, cast, action, contact, fact, flow, summary, custom.
 # Layout is relative to the frame, so one plan renders in every format of frame.FORMATS.
 # Timing comes from words (words.py): the voice-over text at 2.7 words/s, or a recording.
 
@@ -17,10 +17,10 @@ from PIL import ImageDraw
 from .palette import *
 from .font import text, text_w, title_text, TITLE_GLYPHS, LINE
 from .timing import clamp, seg, ease, lerp
-from . import sprites as S, fx, ui, bg, voice, frame, words, gen, camera, style, packs
+from . import sprites as S, fx, ui, bg, voice, frame, words, gen, camera, style, packs, contact, mechanism
 from .scene import Timeline
 
-TYPES = ("title", "cast", "action", "fact", "flow", "summary", "custom")
+TYPES = ("title", "cast", "action", "contact", "fact", "flow", "summary", "custom")
 COLOR_NAMES = {
     "favorable": FAVORABLE[0], "favorable2": FAVORABLE[1], "favorable3": FAVORABLE[2],
     "unfavorable": UNFAVORABLE[0], "unfavorable2": UNFAVORABLE[1], "unfavorable3": UNFAVORABLE[2],
@@ -230,7 +230,7 @@ def _texts(sc):
             yield "label", a["label"]
 
 
-def _sprites(sc):
+def _sprites(sc, plan=None):
     for key in ("items", "steps"):
         for it in sc.get(key) or []:
             yield it.get("sprite"), it.get("anim", "idle")
@@ -238,27 +238,15 @@ def _sprites(sc):
         yield a.get("sprite"), a.get("anim", "idle")
         if a.get("badge"):
             yield a["badge"], "idle"
-    for b in sc.get("beats") or []:
-        if b.get("anim") and b.get("actor") in (sc.get("actors") or {}):
-            yield sc["actors"][b["actor"]].get("sprite"), b["anim"]
-        if b.get("badge"):
-            yield b["badge"], "idle"
-        if b.get("sprite"):
-            yield b["sprite"], b.get("anim", "idle")
-    if sc.get("sprite"):
-        yield sc["sprite"], sc.get("anim", "idle")
-    for g in sc.get("swarm") or []:
-        yield g.get("sprite"), g.get("anim", "idle")
-        if g.get("arrive_sprite"):
-            yield g["arrive_sprite"], g.get("arrive_anim", "idle")
-        elif g.get("arrive_anim"):
-            yield g.get("sprite"), g["arrive_anim"]
-    for g in sc.get("grow") or []:
-        for n in g.get("sprites") or [g.get("sprite")]:
-            yield n, "idle"
-    for g in sc.get("field") or []:
-        if g.get("sprite"):
-            yield g["sprite"], "idle"
+    if sc.get("type") == "contact" and plan is not None:
+        things, _ = mechanism.model(plan)
+        for side in ("left", "right"):
+            sp = (things.get(sc.get(side)) or {}).get("sprite")
+            if sp:
+                yield sp, "idle"
+                for b in sc.get("beats") or []:
+                    if b.get("cell") == side and b.get("anim"):
+                        yield sp, b["anim"]
 
 
 def check(plan):
@@ -291,7 +279,7 @@ def check(plan):
             out.append(f"{sid}: no '## {sid}' heading in the voice-over")
         if typ not in TYPES:
             out.append(f"{sid}: unknown type {typ!r}; use {', '.join(TYPES)}")
-        for name, anim in _sprites(sc):
+        for name, anim in _sprites(sc, plan):
             if name not in meta:
                 out.append(f"{sid}: unknown sprite {name!r} (find one: pixsci find <word>)")
             elif anim not in meta[name]["anims"]:
@@ -302,14 +290,14 @@ def check(plan):
             if len(sc.get(key) or []) > 4:
                 out.append(f"{sid}: {key} has more than 4 entries (they do not fit a vertical frame)")
         actors = sc.get("actors") or {}
-        for beat in sc.get("beats") or []:
+        for beat in sc.get("beats") or [] if typ != "contact" else []:
             if beat.get("actor") not in actors:
                 out.append(f"{sid}: beat {beat.get('on', beat.get('t'))} names an unknown actor {beat.get('actor')!r}")
         for key in ("swarm", "field", "camera", "grow"):
             for it in sc.get(key) or []:
                 for f in ("target", "drag", "at", "pan_to"):
                     v = it.get(f)
-                    if isinstance(v, str) and v not in actors:
+                    if isinstance(v, str) and v not in (actors if typ != "contact" else ("left", "right", "gap")):
                         out.append(f"{sid}: {key} {f}: {v!r} is not an actor of the scene")
         cap = sc.get("caption")
         if cap and len(cap.split()) > 3:
@@ -346,6 +334,7 @@ def check(plan):
                 if len(lines) > (1 if L["banner"] else 2):
                     out.append(f"{sc.get('id')}: caption {cap!r} does not fit the {f} frame")
     frame.use("landscape")
+    out += mechanism.check(plan)
     if not plan["scenes"] or plan["scenes"][-1].get("type") != "summary":
         out.append("the last scene must be a summary")
     from . import pace
@@ -678,6 +667,28 @@ def p_action(plan, sc, t, dur, ctx):
     cams = sc.get("camera") or []
     if cams:
         z, cx, cy, dx, dy = camera.state(cams, t, lambda v, tt: _stage_px(L, *target(v, tt)))
+        img = camera.apply(img, z, cx, cy, dx, dy, fill=C(PAPER))
+    _heading(img, L, sc.get("title"))
+    _caption(img, L, sc, t)
+    return img
+
+
+def p_contact(plan, sc, t, dur, ctx):
+    """Two bodies face to face, their parts on stalks, drawn from the plan's mechanism model (contact.py).
+    The scene starts in the state the last scene left."""
+    img = _bg(sc, t)
+    L = layout()
+    if "_start" not in ctx:
+        i = plan["scenes"].index(sc)
+        ctx["_start"] = mechanism.world(plan)[i]
+    cams = sc.get("camera") or []
+    z = 1
+    if cams:
+        z, cx, cy, dx, dy = camera.state(cams, t, lambda v, tt: _stage_px(L, *v) if not isinstance(v, str)
+                                         else contact.where(plan, sc, L, v))
+    # labels only in the wide shot: a close-up would cut them and push them under the caption
+    contact.draw(img, plan, sc, t, L, ctx["_start"], labels=z == 1)
+    if cams:
         img = camera.apply(img, z, cx, cy, dx, dy, fill=C(PAPER))
     _heading(img, L, sc.get("title"))
     _caption(img, L, sc, t)

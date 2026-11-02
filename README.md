@@ -55,10 +55,14 @@ packs/ ─────────┘   (layout per format, style per frame, gen
 - **Words.** Each scene lasts as long as its words. With a recording, `pixsci transcribe` makes a local
   transcript (faster-whisper `small.en`, installed on first use), and scenes start on their first spoken words.
   Beats are keyed to words: `on: attacks`. `pixsci align` reports the drift between the recording and the text.
+- **The mechanism model.** A plan lists what takes part and each link of the story with its source
+  (`bind`, `occupy`, `kill`). A `contact` scene draws two bodies with their parts on the surfaces; partners
+  get matching shapes made from the link. `pixsci check` holds every plan to the same rules: contact,
+  ownership, specificity, persistence, causality, and a source for every link.
 - **Generators.** `swarm` (N sprites that seek, orbit, flow, wander), `grow` (cells that divide, colored by
   generation), `field` (a lattice that clings to a particle, a flow, a spreading gradient). Each has a seed.
 - **Camera.** Integer zoom (x2, x3), pan, shake: pixels stay square.
-- **Pace.** `pixsci check` enforces a shot every 2 to 4 s, something new every 1.5 s in an action scene,
+- **Pace.** `pixsci check` enforces a shot every 2 to 4 s, something new every 1.5 s in an action or contact scene,
   motion in every frame, and a final hold of 3 s. It warns about invented counts and numbers on screen.
 - The frame is small (480x270 for 16:9) and scaled x4 with nearest neighbor: sharp pixels at any size.
 
@@ -67,7 +71,7 @@ packs/ ─────────┘   (layout per format, style per frame, gen
 ```
 pixsci.py              command line (pixel_kit/cli.py)
 pixel_kit/             the core: frame, palette, style, packs, sprites, catalog, words, voice, gen, camera,
-                       pace, explain, scene, board, font, fx, ui, bg
+                       pace, mechanism, contact, explain, scene, board, font, fx, ui, bg
 packs/                 biology/, physics/, style-paper/, style-arcade/, style-gameboy/, catalog.json
 tools/                 build_sprites.py, validate_sprites.py
 examples/              anti-pdl1/ (biology), higgs-boson/ (physics)

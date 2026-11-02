@@ -6,22 +6,22 @@
 Cancer has a trick to stop killer T cells.
 
 ## S02
-A killer T cell finds a cancer cell and gets ready to attack.
+A killer T cell meets a cancer cell.
 
 ## S03
-But the cancer cell shows a protein called PD-L1.
+Its receptor, the TCR, grabs MHC-I on the cancer cell. The T cell gets ready to kill.
 
 ## S04
-PD-L1 binds PD-1 on the T cell, and the T cell stops.
+But the cancer cell also carries PD-L1. PD-L1 binds PD-1, and the T cell stops.
 
 ## S05
-The drug is an antibody. It sticks to PD-L1 and covers it.
+The drug is an antibody. It sticks to PD-L1, so PD-1 cannot hold on.
 
 ## S06
-Now PD-1 has nothing to bind. The brake is off.
+Now PD-1 has nothing to bind. The brake is off, and the T cell attacks.
 
 ## S07
-The T cell attacks, and the cancer cell dies.
+The cancer cell dies: it shrinks and breaks up.
 
 ## S08
 The drug does not attack the cancer. It frees the T cells to do it.

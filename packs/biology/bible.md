@@ -26,7 +26,10 @@ Soft warm tones (peach, pink), dot eyes, no brows.
 
 ## Molecules
 
-Shown as badges above a cell. Yellow is reserved for MHC class I. PD-1 is light grey, PD-L1 pink, CTLA-4 lavender.
+When the story is about molecules that touch, show them as parts on the cell surface in a `contact` scene,
+with the links of the plan's `model:`. Badges above a cell are for wide shots that only name a cell type.
+Colors of parts: MHC class I yellow (yellow is reserved for it), TCR green, PD-1 light grey, PD-L1 pink,
+CTLA-4 lavender, CD80 peach, antibodies blue.
 
 ## Rules
 

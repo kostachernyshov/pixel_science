@@ -14,6 +14,12 @@ seed: 7                               # generators: the same seed gives the same
 max_s: 60                             # optional: longest story before the summary (default 60 s)
 sources:                              # required: the papers or textbooks behind each claim
   - "Author A. Title. Journal Year;Vol:Pages. doi:..."
+model:                                # the mechanism: what takes part and every link, with its source
+  things:                             #   (see "The mechanism model" below)
+    t:     {sprite: killer_t, label: "KILLER T CELL", parts: {pd1: {label: "PD-1", color: LGREY}}}
+    tumor: {sprite: tumor_pdl1, label: "TUMOR CELL", parts: {pdl1: {label: "PD-L1", color: PINK}}}
+  links:
+    brake: {kind: bind, a: pd1, b: pdl1, source: 1}
 numbers:                              # each number shown on screen, with its source
   "125 GeV": "CMS Phys Lett B 2012;716:30-61"
 voice:                                # optional: only with a recording
@@ -59,7 +65,7 @@ shifts it). Prefer `on`: it stays right when the voice changes.
 | Field | Meaning |
 |---|---|
 | `id` | Unique id, the same as the heading in `voiceover.md`. |
-| `type` | `title`, `cast`, `action`, `fact`, `flow`, `summary`, `custom`. The last scene is a `summary`. |
+| `type` | `title`, `cast`, `action`, `contact`, `fact`, `flow`, `summary`, `custom`. The last scene is a `summary`. |
 | `caption` | 1 to 3 words at the bottom, on screen 2 s or more. |
 | `title` | Short heading at the top left (not in `banner`). |
 | `bg` | A background: `paper` (default), `plain`, or one of a pack (`pixsci find --kind background`). |
@@ -116,6 +122,44 @@ field:                                                         # drawn behind th
 Actor fields: `sprite`, `at`, `anim`, `hold`, `scale`, `flip`, `badge` (a sprite drawn on the top of the body),
 `label`, `color`, `hidden`. A swarm `n`, a grow `max`, a flow `n` are schematic counts: check warns, and the
 person hears about them before the render.
+
+### contact
+Two bodies face to face, their parts on stalks out of each surface, drawn from the model. Use it for every
+step where two things touch: a receptor and its ligand, a drug on its target, two particles that collide.
+```yaml
+- id: S04
+  type: contact
+  left: t                       # things of the model, each with a sprite
+  right: tumor
+  show: [brake, signal]         # bind links as rows, top to bottom (default: every bind between the two)
+  beats:
+    - {on: binds, do: brake}    # do / undo a link of the model
+    - {on: sticks, do: block}   # an occupy link: the agent flies in and takes the part's place
+    - {on: dies, do: kill}      # a kill link: the right body dies (apoptosis) and stays dead
+    - {on: stops, cell: left, anim: blocked}   # cell: left | right, with anim or fx
+  camera:
+    - {on: binds, zoom: 2, at: gap}            # at: left, right, gap, or [x, y]
+```
+The scene starts in the state the last scene left: a bound link stays bound, a docked agent stays docked,
+a dead body stays dead. Labels show in the wide shot only.
+
+## The mechanism model
+
+The plan names what takes part in the story and how. There is no table of all molecules: write only the
+links of this story (usually 3 to 6), each from a source.
+
+- `things`: bodies with a `sprite`, a `label`, and `parts` (each with `label` and a palette `color` from
+  the pack's `bible.md`); or a free agent (a drug, a photon) with `label` and `color` and no parts.
+- `links`: `kind` is a verb that fits any science:
+  - `bind`: two parts on two bodies touch and hold (`a` gets a socket, `b` the matching key).
+  - `occupy`: free agent `a` sits on part `b`; `b` lets go of its other binds.
+  - `kill`: thing `a` ends thing `b`.
+  Each link has `source:` (its number in `sources`).
+
+`pixsci check` holds every plan to the same rules: a bind only between parts of the two bodies on screen
+(contact); a part on its own body (ownership); an agent only on its named part (specificity); the state
+carries from scene to scene (persistence); `undo` only after `do` (causality); every link cites a source
+and is shown in some scene. Shapes come from the links: partners fit, other parts do not.
 
 ### fact
 `sprite`, `anim`, `text` (1 to 3 short lines). One idea, typed letter by letter.

@@ -1,6 +1,6 @@
 # Pace rules (pixsci check):
 #   - a shot changes every 2 to 4 s: a scene, a camera cut (zoom) or a pan starts a shot
-#   - in an action scene something new happens at least every 1.5 s (a beat, a generator, the camera)
+#   - in an action or contact scene something new happens at least every 1.5 s (a beat, a generator, the camera)
 #   - something moves in every frame (motion(): renders the video small and compares frames)
 #   - the final frame holds 3 s; the story lasts 20 to 60 s
 #   - the voice-over goes at about 2.7 words/s (with a recording: warn above 3.5 words/s)
@@ -21,6 +21,8 @@ def _events(sc):
         pts.append(b["_t"])
         if "move_to" in b:
             spans.append((b["_t"], b["_t"] + float(b.get("dur", 1.0))))
+        if "do" in b or "undo" in b:
+            spans.append((b["_t"], b["_t"] + 0.6))
     for g in sc.get("swarm") or []:
         pts.append(g["_t"])
         if g.get("rule", "wander") in ("seek", "flee"):
@@ -73,7 +75,7 @@ def check(plan):
             if b - a > SHOT_MAX + SLACK:
                 probs.append(f"{sid}: one shot runs {a:.1f}-{b:.1f} s ({b - a:.1f} s, max {SHOT_MAX:.0f} s): "
                              f"add a camera move (zoom, pan) or split the scene")
-        if typ == "action":
+        if typ in ("action", "contact"):
             pts, spans = _events(sc)
             for a, b in _gaps(pts, spans, d):
                 if b - a > ACTION_GAP + SLACK:
