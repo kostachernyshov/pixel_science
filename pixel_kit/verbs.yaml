@@ -4,6 +4,8 @@
 #   name:
 #     desc: one line, what the viewer sees
 #     target: true          the beat must name a target actor
+#     relation: transfer    optional: the kind(s) of model relation the verb shows (pixel_kit/model.py);
+#                           a beat with it must match a relation of the plan's model
 #     hit: {at: 0.2, preset: soft, by: actor}   optional: contact at t=0.2 s (windup, freeze, shake, push)
 #     show: actor           optional: show this actor at the start
 #     hide: actor           optional: hide this actor (or target) at the end

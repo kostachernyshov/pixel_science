@@ -9,6 +9,10 @@ The job is the **form**. Each time, think again: how do we tell this story, and 
 
 The output is `videos/<slug>/storyboard.md`: 6 to 12 key frames with the voice-over. `animate` builds its plan from this file. Write all files in English.
 
+## Truth at the chosen level
+
+Each frame works at one level of detail (organism, cell, molecule...). What is drawn at that level is true to the sources. What lies below it may be left out, never replaced by fiction. When a frame says "PD-L1 binds PD-1", the frame is at the level of molecules: the two parts sit on their own cells and touch. The camera does not have to go there; zoom only where the storyboard asks for it. This holds for any science.
+
 ## Two modes
 
 - **Direct** (the person runs `/storyboard`): offer forms in step 4 and wait for a choice. Ask for acceptance in step 8.
@@ -28,9 +32,10 @@ The output is `videos/<slug>/storyboard.md`: 6 to 12 key frames with the voice-o
    - One term once, with an image. One line of the story at a time.
    - The result reads with the sound off: one caption word or one HUD value.
    - The end is the answer and the final frame from step 3.
-7. **Check each frame.** Under a frame with a metaphor or a simplification, write what it claims and what it does not claim. The frame stays true to the science even where the voice simplifies. This line is for the storyboard only; it is not shown in the video.
-8. **Show.** Write `storyboard.md` (format below). If the harness can publish artifacts, publish one page made from it: each frame is a card with a rough sketch on the left (inline SVG: boxes, circles, arrows, labels; who stands where and what happens) and the voice-over and caption on the right. Else show the file as text. Direct mode: ask "Accept the storyboard? yes / changes".
-9. **Hand over.** After "yes" (or at once from `explain`), go to `animate`. It takes the topic, sources, voice-over, and scenes from `storyboard.md`.
+7. **Model.** If the story is a mechanism (who acts on whom), write `model:`: 2 to 4 things with their parts, and 3 to 6 relations (`bind`, `occupy`, `transfer`, `change`, `destroy`), each with `source: "<number>: <short quote>"`. Only what this story needs; no list of everything that binds. `animate` copies the block into the plan, and `pixsci check` holds the video to it. Format: `pixel_kit/model.py`.
+8. **Check each frame.** Under a frame with a metaphor or a simplification, write what it claims and what it does not claim. The frame stays true to the science even where the voice simplifies. This line is for the storyboard only; it is not shown in the video.
+9. **Show.** Write `storyboard.md` (format below). If the harness can publish artifacts, publish one page made from it: each frame is a card with a rough sketch on the left (inline SVG: boxes, circles, arrows, labels; who stands where and what happens) and the voice-over and caption on the right. Else show the file as text. Direct mode: ask "Accept the storyboard? yes / changes".
+10. **Hand over.** After "yes" (or at once from `explain`), go to `animate`. It takes the topic, sources, voice-over, and scenes from `storyboard.md`.
 
 ## Long topic: a series
 
@@ -48,6 +53,12 @@ Emotion: <main> (+ <support>)
 Length: ~N s, N words
 Sources:
 - <author, title, journal, year, doi>
+
+```yaml
+model:          # only for a mechanism
+  things: {...}
+  relations: {...}
+```
 
 | Time, frame | Voice-over, caption |
 |---|---|

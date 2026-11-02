@@ -15,7 +15,7 @@ from PIL import ImageDraw
 from .palette import *
 from .font import text, text_w, title_text, TITLE_GLYPHS, LINE
 from .timing import clamp, seg, ease, lerp
-from . import sprites as S, fx, ui, bg, frame, verbs
+from . import sprites as S, fx, ui, bg, frame, verbs, model
 from .scene import Timeline
 
 WORDS_PER_S = 2.5        # voice-over pace
@@ -223,10 +223,11 @@ def check(plan):
         for key in ("items", "steps"):
             if len(sc.get(key) or []) > 4:
                 out.append(f"{sid}: {key} has more than 4 entries (they do not fit a vertical frame)")
+        names = set(sc.get("actors") or {}) | set(model.parts(plan))
         for beat in sc.get("beats") or []:
-            if beat.get("actor") not in (sc.get("actors") or {}):
+            if beat.get("actor") not in names:
                 out.append(f"{sid}: beat at {beat.get('t')} s names an unknown actor {beat.get('actor')!r}")
-            out += [f"{sid}: {p}" for p in verbs.check_beat(beat, sc.get("actors") or {})]
+            out += [f"{sid}: {p}" for p in verbs.check_beat(beat, names)]
             if beat.get("verb"):
                 used.add(beat["verb"])
         cap = sc.get("caption")
@@ -260,6 +261,13 @@ def check(plan):
         ms = verbs.bench(name)
         if ms > verbs.MAX_MS:
             out.append(f"warning: verb {name} takes {ms:.1f} ms a frame (limit {verbs.MAX_MS} ms); make its primitives faster")
+    plan.pop("_world", None)
+    fmts = [x for x in (plan.get("formats") or ["landscape"]) if x in frame.FORMATS] or ["landscape"]
+    for i, f in enumerate(fmts):          # the model once; contact (geometry) in each format
+        frame.use(f)
+        found = model.check(plan, positions=lambda si, sc, t: _positions(sc, t))
+        out += found if i == 0 else [f"{p} [{f}]" for p in found if "(contact)" in p]
+    frame.use("landscape")
     if not plan["scenes"] or plan["scenes"][-1].get("type") != "summary":
         out.append("the last scene must be a summary")
     story_end = times[-2][1] if len(times) > 1 and plan["scenes"][-1].get("type") == "summary" else (times[-1][1] if times else 0)
@@ -526,6 +534,20 @@ def _hits(sc):
     return out
 
 
+def _positions(sc, t):
+    """Actor state of an action scene at time t, for checks (no hit offsets)."""
+    beats = _expand(sc)
+    L = layout()
+    x0, y0, x1, y1 = L["stage"]
+    out = {}
+    for name, a in (sc.get("actors") or {}).items():
+        fx_, fy_, anim, at, flip, badge, shown = _actor_state(a, beats, name, t)
+        k = int(a.get("scale", L["sprite_scale"]))
+        cw, ch = S.meta()[a["sprite"]]["cell"]
+        out[name] = [x0 + fx_ * (x1 - x0), y0 + fy_ * (y1 - y0), max(cw, ch) * k / 2, k, anim, at, flip, badge, shown]
+    return out
+
+
 def p_action(plan, sc, T, dur, ctx):
     """Actors on a stage and timed beats: move, change animation, flip, add or remove a badge, verbs.
     Positions are fractions of the stage (0..1), so the scene fits every format.
@@ -554,6 +576,8 @@ def p_action(plan, sc, T, dur, ctx):
                 o = fx.offset(t, th, p, role)
                 state[who][0] += dx / d * o
                 state[who][1] += dy / d * o
+    si = ctx.get("si", 0)
+    model.agent_place(plan, si, sc, t, state, beats)
     for i, (name, a) in enumerate(actors.items()):
         px, py, r, k, anim, at, flip, badge, shown = state[name]
         if not shown:
@@ -566,14 +590,17 @@ def p_action(plan, sc, T, dur, ctx):
             S.draw(img, badge, "idle", 0, px, max(bh // 2 + 1, py - sh // 2 - bh // 2 + 2), scale=k)
         if a.get("label") and not L["banner"]:
             text(img, px, py + sh // 2 + 2, a["label"], color(a.get("color", "ink"))[0], align="c")
+    heads = model.draw(img, plan, si, sc, t, state, beats)
+    where = {n: tuple(v[:3]) for n, v in state.items()}
+    where.update({n: v for n, v in heads.items() if n not in where})
     cv = fx.Canvas(img, base)
     for i, b in enumerate(beats):
         name, bt = b.get("verb"), float(b.get("t", 0))
-        if not name or not bt <= t <= bt + verbs.duration(name) or b.get("actor") not in state:
+        if not name or not bt <= t <= bt + verbs.duration(name) or b.get("actor") not in where:
             continue
-        geo = {"actor": tuple(state[b["actor"]][:3])}
-        if b.get("target") in state:
-            geo["target"] = tuple(state[b["target"]][:3])
+        geo = {"actor": where[b["actor"]]}
+        if b.get("target") in where:
+            geo["target"] = where[b["target"]]
         verbs.play(cv, name, t - bt, geo, seed=int(plan.get("seed", 0)) * 101 + i)
     if shake:
         s = shake if int(T * 30) % 2 else -shake
@@ -642,8 +669,9 @@ def timeline(plan):
     marks are (time, label) for the storyboard."""
     times = durations(plan)
     scenes, marks = [], []
-    for sc, (a, b) in zip(plan["scenes"], times):
-        ctx = {}
+    plan.pop("_world", None)
+    for si, (sc, (a, b)) in enumerate(zip(plan["scenes"], times)):
+        ctx = {"si": si}
         painter = PAINTERS[sc["type"]]
         dur = b - a
         scenes.append((a, b, lambda t, sc=sc, dur=dur, ctx=ctx, painter=painter: painter(plan, sc, t, dur, ctx),

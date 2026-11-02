@@ -11,6 +11,7 @@ colors:
 verbs:
   secrete:
     desc: The actor releases granules (granzymes, perforin) at the target; they hit it.
+    relation: transfer
     target: true
     hit: {at: 0.22, preset: soft}
     steps:
@@ -27,13 +28,15 @@ verbs:
 
   apoptosis:
     desc: The actor dies quietly; it breaks up into small pieces from the edge (not an explosion).
+    relation: destroy
     hide: actor
     steps:
       - {prim: dissolve, at: actor, color: membrane, dur: 1.2}
       - {prim: burst, at: actor, color: cytoplasm, t: 0.2, dur: 1.0, n: 8, speed: 25}
 
   bind:
-    desc: The actor (an antibody) binds the target; a small wave and a glow where they touch.
+    desc: Two parts touch and hold, or an agent (an antibody) sits on a part; a small wave and a glow where they touch.
+    relation: [bind, occupy]
     target: true
     steps:
       - {prim: ring, at: target, color: antibody, dur: 0.5, size: 10}

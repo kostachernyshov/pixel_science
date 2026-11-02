@@ -12,6 +12,7 @@ formats: [landscape, vertical, square, banner]
 max_s: 60                             # optional: longest story before the summary (default 60 s)
 sources:                              # required: the papers or textbooks behind each claim
   - "Author A. Title. Journal Year;Vol:Pages. doi:..."
+model: {things: ..., relations: ...}  # a mechanism: see "Model and parts" below
 scenes:
   - id: S01
     type: title
@@ -86,6 +87,15 @@ Core verbs: `appear` (set `hidden: true` on the actor), `vanish`, `hit`, `highli
 Biology verbs: `secrete`, `block`, `apoptosis`, `bind`. Effects have no coordinates: they take place and size
 from the actor and the `target`. `hit: heavy` on a beat makes a hit stronger, `hit: false` removes it.
 A verb is missing? Add it to the pack, then go on with the scene: `.agents/skills/add-verb/SKILL.md`.
+
+**Model and parts.** A mechanism has `model:` at the top of the plan (from `storyboard.md`; format in
+`pixel_kit/model.py`). Actors are things of the model by name (or `thing: t`, for a second T cell).
+`parts: [tcr, pd1]` on an actor (or on a beat, to change them) shows parts on stalks out of its membrane,
+facing the partner; partners get a matching lock and key. A verb with `relation:` (`bind`, `secrete`,
+`apoptosis`) must match a relation: `{actor: pdl1, verb: bind, target: pd1}` closes a bind and it stays
+closed in later scenes; `{actor: drug, verb: bind, target: pdl1}` puts the drug on PD-L1, which lets go of
+PD-1. `pixsci check` fails on a relation not in the model, a part not shown, parts too far apart or with
+no room for labels, a destroyed actor that comes back, `after:` out of order, or a source with no quote.
 
 ### fact
 `sprite`, `anim`, `text` (1 to 3 short lines). One idea, typed letter by letter.
