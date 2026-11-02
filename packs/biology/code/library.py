@@ -1,10 +1,10 @@
-# All sprites and animations of the library. tools/build_sprites.py builds
-# sprites/*.png (frame = grid cell, row = animation) and sprites/sprites.json from here.
+# All sprites and animations of the biology pack. tools/build_sprites.py biology builds
+# packs/biology/sprites/*.png (frame = grid cell, row = animation) and sprites.json from here.
 # A frame is a triple (Spr, dx, dy): dx, dy is the shift from the cell anchor (bob, lunge).
 
 import math
-from .palette import *
-from .pixdraw import Spr, scale, silhouette, dominant, from_image
+from pixel_kit.palette import *
+from pixel_kit.pixdraw import Spr, scale, silhouette, dominant, from_image
 from . import cast as K
 from . import props as PR
 from . import people as PP

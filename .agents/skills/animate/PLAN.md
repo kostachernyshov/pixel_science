@@ -1,19 +1,17 @@
 # explainer.yaml format
 
-Paths are relative to the plan file. A full example: `examples/nk-missing-self/`.
+Paths are relative to the plan file.
 
 ```yaml
 title: "How NK cells find cancer"     # used by the summary heading
 name: nk-missing-self                 # output file names: <name>-<format>.mp4
 lang: en                              # en: on-screen text must be plain ASCII
+packs: [biology]                      # sprite packs in packs/ (default: all)
 voiceover: voiceover.md               # '## S01' headings, the voice-over text under each
 formats: [landscape, vertical, square, banner]
 max_s: 60                             # optional: longest story before the summary (default 60 s)
 sources:                              # required: the papers or textbooks behind each claim
   - "Author A. Title. Journal Year;Vol:Pages. doi:..."
-voice:                                # optional: only with a recording
-  audio: voice.wav
-  transcript: voice.srt               # SRT, VTT, Whisper JSON, or "0:12 text" lines
 scenes:
   - id: S01
     type: title
@@ -35,8 +33,7 @@ sits above the bottom 20 % (apps cover it with buttons). In `banner`, there is n
 
 ## Timing
 
-- Without a voice: a scene lasts (words of its voice-over) / 2.5 + 0.8 s, at least 2.5 s. `dur: 4` sets it by hand.
-- With a voice: `cues: [C03, C04]` starts the scene at its first cue. Get cue ids from `pixsci.py cues`.
+- A scene lasts (words of its voice-over) / 2.5 + 0.8 s, at least 2.5 s. `dur: 4` sets it by hand.
 - Story before the summary: 20 to 45 s. The summary holds 8 s (`dur` sets more).
 
 ## Fields of all scenes

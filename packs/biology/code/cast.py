@@ -5,8 +5,8 @@
 
 import math
 import numpy as np
-from .palette import *
-from .pixdraw import (Spr, T, mask_radial, mask_circle, mask_superellipse, mask_capsule,
+from pixel_kit.palette import *
+from pixel_kit.pixdraw import (Spr, T, mask_radial, mask_circle, mask_superellipse, mask_capsule,
                       paint_body, outline, polar)
 
 # ---------------------------------------------------------------- faces

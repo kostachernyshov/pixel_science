@@ -5,8 +5,8 @@
 #
 
 import numpy as np
-from .palette import *
-from .pixdraw import Spr, mask_circle, mask_superellipse, outline
+from pixel_kit.palette import *
+from pixel_kit.pixdraw import Spr, mask_circle, mask_superellipse, outline
 
 
 # ---------------------------------------------------------------- people

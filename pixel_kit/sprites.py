@@ -1,4 +1,5 @@
-# Load sprites and animations by name from sprites/*.png + sprites/sprites.json.
+# Load sprites and animations by name from the packs: packs/<pack>/sprites/*.png + sprites.json.
+# All packs are loaded; S.use(["biology"]) limits them to the plan's packs (later packs win on a name).
 #
 #   from pixel_kit import sprites as S
 #   S.draw(img, "nk", "idle", t, x, y)           animation frame at time t (s)
@@ -10,19 +11,34 @@
 
 import json, os
 from PIL import Image
+from . import packs
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SPR_DIR = os.path.join(ROOT, "sprites")
-
+_use = None            # pack names, or None for all packs
 _meta = None
 _sheets = {}
 _frames = {}
 
 
+def use(names=None):
+    """Load sprites only from these packs (bottom -> top). None: all packs."""
+    global _use, _meta
+    _use = list(names) if names else None
+    _meta = None
+    _sheets.clear()
+    _frames.clear()
+
+
 def meta():
+    """{name: entry} from the sprites.json of each pack; each entry also gets "pack" and "_dir"."""
     global _meta
     if _meta is None:
-        _meta = json.load(open(os.path.join(SPR_DIR, "sprites.json")))
+        _meta = {}
+        for name in _use or sorted(packs.find()):
+            p = packs.get(name)
+            j = os.path.join(p.sprites_dir, "sprites.json")
+            if os.path.exists(j):
+                for k, m in json.load(open(j, encoding="utf-8")).items():
+                    _meta[k] = dict(m, pack=p.name, _dir=p.sprites_dir)
     return _meta
 
 
@@ -36,7 +52,7 @@ def anims(name):
 
 def _sheet(name):
     if name not in _sheets:
-        _sheets[name] = Image.open(os.path.join(SPR_DIR, meta()[name]["file"])).convert("RGBA")
+        _sheets[name] = Image.open(os.path.join(meta()[name]["_dir"], meta()[name]["file"])).convert("RGBA")
     return _sheets[name]
 
 

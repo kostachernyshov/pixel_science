@@ -1,5 +1,5 @@
 # explainer.yaml -> Timeline, for each video format. The agent writes the plan; this module draws it.
-# The plan format is in skills/explain/PLAN.md. Paths in the plan are relative to the plan file.
+# The plan format is in .agents/skills/animate/PLAN.md. Paths in the plan are relative to the plan file.
 #
 #   from pixel_kit import explain, frame
 #   plan = explain.load("my-video/explainer.yaml")
@@ -15,7 +15,7 @@ from PIL import ImageDraw
 from .palette import *
 from .font import text, text_w, title_text, TITLE_GLYPHS, LINE
 from .timing import clamp, seg, ease, lerp
-from . import sprites as S, fx, ui, bg, voice, frame
+from . import sprites as S, fx, ui, bg, frame
 from .scene import Timeline
 
 WORDS_PER_S = 2.5        # voice-over pace
@@ -39,6 +39,7 @@ def load(path):
     plan.setdefault("scenes", [])
     plan.setdefault("lang", "en")
     plan.setdefault("formats", list(frame.FORMATS))
+    S.use(plan.get("packs"))              # packs: [biology]; without it, every pack
     return plan
 
 
@@ -62,36 +63,11 @@ def voiceover(plan):
     return {k: v.strip() for k, v in out.items()}
 
 
-def cues(plan):
-    v = plan.get("voice") or {}
-    tr = path(plan, v.get("transcript"))
-    if tr and os.path.exists(tr):
-        return voice.load(tr, float(v.get("start", 0.0)), v.get("end"))
-    return []
-
-
 def durations(plan):
-    """Start and end of each scene. With a transcript: from the cues of each scene ("cues: [C01, C02]").
-    Without: from the words of the voice-over (2.5 words/s), or "dur" in the scene."""
+    """Start and end of each scene: from the words of its voice-over (2.5 words/s), or "dur" in the scene."""
     scenes = plan["scenes"]
-    cs = cues(plan)
     vo = voiceover(plan)
     times = []
-    if cs:
-        by_id = {c.id: c for c in cs}
-        starts = [by_id[sc["cues"][0]].start if sc.get("cues") else None for sc in scenes]
-        starts[0] = 0.0
-        for i in range(len(scenes)):
-            if starts[i] is None:
-                starts[i] = starts[i - 1] + float(scenes[i - 1].get("dur", MIN_SCENE))
-        last_ids = scenes[-1].get("cues") or []
-        end = (by_id[last_ids[-1]].end if last_ids else cs[-1].end) + 0.8
-        for i in range(len(scenes)):
-            times.append((starts[i], starts[i + 1] if i + 1 < len(scenes) else end))
-        if scenes[-1].get("type") == "summary":
-            a, b = times[-1]
-            times[-1] = (a, max(b, a + float(scenes[-1].get("dur", SUMMARY_HOLD))))
-        return times
     t = 0.0
     for sc in scenes:
         words = len(vo.get(sc.get("id"), "").split())

@@ -9,9 +9,6 @@
 #   board     PLAN OUTDIR [-f a,b]            storyboard for each format: OUTDIR/board-<format>.png
 #   render    PLAN OUTDIR [-f a,b] [--gif]    video for each format: OUTDIR/<name>-<format>.mp4
 #   frames    PLAN OUTDIR [-f a,b] [t ...]    single frames as PNG (default: the key frames)
-#   cues      PLAN                            voice cues with times (needs voice.transcript)
-#   animatic  PLAN OUTDIR [-f a,b]            key frames held under the voice (fast)
-#   preview   PLAN OUTDIR [-f a,b]            rendered video + voice, to check sync
 #
 # -f limits the formats (default: the plan's "formats", else all four).
 
@@ -19,7 +16,7 @@ import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from pixel_kit import explain, frame, voice
+from pixel_kit import explain, frame
 
 
 def _args(a):
@@ -128,47 +125,6 @@ def cmd_frames(a):
         times = [float(x) for x in pos[2:]] or [t for t, _ in marks]
         for p in tl.export_frames(os.path.join(pos[1], f), times):
             print(p)
-
-
-def cmd_cues(a):
-    plan = _plan(a[0])
-    cs = explain.cues(plan)
-    if not cs:
-        print("no transcript: set voice.transcript in the plan")
-        sys.exit(1)
-    voice.table(cs)
-
-
-def _audio(plan):
-    p = explain.path(plan, (plan.get("voice") or {}).get("audio"))
-    return p if p and os.path.exists(p) else None
-
-
-def cmd_animatic(a):
-    pos, fmts, _ = _args(a)
-    plan = _plan(pos[0])
-    _stop_on_problems(plan)
-    os.makedirs(pos[1], exist_ok=True)
-    name = _name(plan, pos[0])
-    for f in _formats(plan, fmts):
-        frame.use(f)
-        tl, marks = explain.timeline(plan)
-        out = os.path.join(pos[1], f"{name}-{f}-animatic.mp4")
-        voice.animatic(tl, [0.0] + [t for t, _ in marks], _audio(plan), out)
-        print("animatic ->", out)
-
-
-def cmd_preview(a):
-    pos, fmts, _ = _args(a)
-    plan = _plan(pos[0])
-    audio = _audio(plan)
-    if not audio:
-        print("no voice.audio in the plan")
-        sys.exit(1)
-    name = _name(plan, pos[0])
-    for f in _formats(plan, fmts):
-        video = os.path.join(pos[1], f"{name}-{f}.mp4")
-        print(voice.mux(video, audio, os.path.join(pos[1], f"{name}-{f}-preview.mp4")))
 
 
 COMMANDS = {k[4:]: v for k, v in globals().items() if k.startswith("cmd_")}

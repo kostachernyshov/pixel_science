@@ -4,8 +4,8 @@
 import math
 import numpy as np
 from PIL import ImageDraw
-from .palette import *
-from .pixdraw import Spr, mask_circle, mask_radial, mask_superellipse, paint_body, outline
+from pixel_kit.palette import *
+from pixel_kit.pixdraw import Spr, mask_circle, mask_radial, mask_superellipse, paint_body, outline
 
 
 def syringe(liquid=BLUE):

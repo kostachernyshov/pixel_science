@@ -1,6 +1,6 @@
-# Builds sprites/*.png and sprites/sprites.json from pixel_kit/library.py.
-#   python3 tools/build_sprites.py            all sprites
-#   python3 tools/build_sprites.py nk tumor   only these (so that PNGs edited by hand stay)
+# Builds packs/<pack>/sprites/*.png and sprites.json from the pack's code/library.py.
+#   python3 tools/build_sprites.py biology            all sprites of the pack
+#   python3 tools/build_sprites.py biology nk tumor   only these (so that PNGs edited by hand stay)
 # Sprites added as PNG (not in library.py) stay in sprites.json; see CONTRIBUTING.md.
 # Sheet: row = animation, column = frame, all cells have one size, transparent background.
 # Light theme: each frame gets a 1 px INK outline if it has none (white bodies on PAPER).
@@ -8,12 +8,9 @@ import json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
-from pixel_kit.library import build
+from pixel_kit import packs
 from pixel_kit.pixdraw import Spr, pad, outline, has_outline
 from pixel_kit.palette import INK
-
-OUT = os.path.join(ROOT, "sprites")
-
 
 def light(s):
     if has_outline(s, INK):
@@ -23,7 +20,12 @@ def light(s):
     return p
 
 
-def main(only):
+def main(pack, only):
+    p = packs.get(pack)
+    if not p.code():
+        sys.exit(f"pack {pack} has no code/library.py")
+    build = p.code().build
+    OUT = p.sprites_dir
     os.makedirs(OUT, exist_ok=True)
     jpath = os.path.join(OUT, "sprites.json")
     meta = json.load(open(jpath)) if os.path.exists(jpath) else {}
@@ -51,9 +53,12 @@ def main(only):
         sheet.image().save(os.path.join(OUT, name + ".png"))
         meta[name] = {"file": name + ".png", "group": spec["group"], "cell": [cw, ch],
                       "anchor": [cw / 2, ch / 2], "anims": info, "source": "code"}
-    json.dump(meta, open(jpath, "w"), indent=1, ensure_ascii=False)
+    with open(jpath, "w", encoding="utf-8") as fh:
+        json.dump(meta, fh, indent=1, ensure_ascii=False)
     print(len(meta), "sprites ->", OUT)
 
 
 if __name__ == "__main__":
-    main(set(sys.argv[1:]))
+    if len(sys.argv) < 2:
+        sys.exit("usage: build_sprites.py <pack> [sprite ...]")
+    main(sys.argv[1], set(sys.argv[2:]))
