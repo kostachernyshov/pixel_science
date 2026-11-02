@@ -601,7 +601,7 @@ def p_action(plan, sc, T, dur, ctx):
         geo = {"actor": where[b["actor"]]}
         if b.get("target") in where:
             geo["target"] = where[b["target"]]
-        verbs.play(cv, name, t - bt, geo, seed=int(plan.get("seed", 0)) * 101 + i)
+        verbs.play(cv, name, t - bt, geo, seed=int(plan.get("seed", 0)) * 101 + i, color=b.get("color"))
     if shake:
         s = shake if int(T * 30) % 2 else -shake
         cv.shift(s, -s // 2)

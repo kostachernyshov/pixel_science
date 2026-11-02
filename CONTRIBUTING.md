@@ -20,7 +20,7 @@ folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.
              "anims": {"idle": {"row": 0, "frames": 2, "fps": 3, "loop": true},
                        "death": {"row": 1, "frames": 4, "fps": 6, "loop": false}}}
    ```
-   Groups: `hero` (immune cells), `villain` (tumor cells, pathogens), `civilian` (body cells), `people`, `prop`, `badge` (molecules shown above a cell).
+   Groups: `hero` (immune cells), `villain` (tumor cells, pathogens), `civilian` (body cells), `people`, `prop`, `badge` (molecules or tags shown above an actor), `plant` (trees, roots), `fungus`.
 5. **Credits.** Add a row to the pack's `sprites/CREDITS.csv`: sprite, file, author, license, source URL, notes.
 6. **Check.** `python tools/validate_sprites.py` prints `VALID`. Look at the cast sheet: `python pixsci.py sheet out/sheet.png`.
 

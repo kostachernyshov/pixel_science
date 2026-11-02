@@ -9,6 +9,7 @@ from . import cast as K
 from . import props as PR
 from . import people as PP
 from . import office as OF
+from . import forest as FO
 
 A = K.MHC_ANGLES
 
@@ -281,4 +282,22 @@ def build():
     register("sequencer", {"idle": anim([F(PR.sequencer()), F(PR.sequencer(False))], fps=2),
                            "off": anim([F(PR.sequencer(False))], fps=1)}, "prop")
     register("datasheet", one(PR.datasheet()), "prop")
+    # forest: tree seedlings, roots, fungal threads, tracers (no faces: the story is about carbon, not wishes)
+    for nm, gen in (("birch", FO.birch), ("fir", FO.fir), ("cedar", FO.cedar)):
+        register(nm, {
+            "idle": anim([F(gen(0)), F(gen(1))], fps=1),
+            "bag": anim([F(FO.bag(gen(0)), 0, -1)], fps=1),
+        }, "plant")
+    register("roots_em", one(FO.roots(True)), "plant")
+    register("roots_am", one(FO.roots(False)), "plant")
+    register("hyphae", {"idle": anim([F(FO.hyphae())], fps=1),
+                        "grow": anim([F(FO.hyphae(grow=k)) for k in (0.15, 0.4, 0.7, 1.0)], fps=4, loop=False)},
+             "fungus")
+    register("gas_14", {"idle": anim([F(FO.gas(ORANGE, k)) for k in (0, 1)], fps=2)}, "prop")
+    register("gas_13", {"idle": anim([F(FO.gas(BLUE, k)) for k in (0, 1)], fps=2)}, "prop")
+    register("shade_cloth", one(FO.shade_cloth()), "prop")
+    register("tag_14c", one(FO.tag("14C", ORANGE)), "badge")
+    register("tag_14c_big", one(FO.tag("14C", ORANGE, big=True)), "badge")
+    register("tag_14c_trace", one(FO.tag("14C", ORANGE, faint=True)), "badge")
+    register("tag_13c", one(FO.tag("13C", BLUE)), "badge")
     return SPRITES

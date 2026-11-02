@@ -2404,5 +2404,302 @@
    }
   },
   "source": "code"
+ },
+ "birch": {
+  "file": "birch.png",
+  "group": "plant",
+  "cell": [
+   36,
+   44
+  ],
+  "anchor": [
+   18.0,
+   22.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 1,
+    "loop": true
+   },
+   "bag": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "fir": {
+  "file": "fir.png",
+  "group": "plant",
+  "cell": [
+   36,
+   44
+  ],
+  "anchor": [
+   18.0,
+   22.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 1,
+    "loop": true
+   },
+   "bag": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "cedar": {
+  "file": "cedar.png",
+  "group": "plant",
+  "cell": [
+   36,
+   44
+  ],
+  "anchor": [
+   18.0,
+   22.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 1,
+    "loop": true
+   },
+   "bag": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "roots_em": {
+  "file": "roots_em.png",
+  "group": "plant",
+  "cell": [
+   38,
+   24
+  ],
+  "anchor": [
+   19.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "roots_am": {
+  "file": "roots_am.png",
+  "group": "plant",
+  "cell": [
+   38,
+   24
+  ],
+  "anchor": [
+   19.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "hyphae": {
+  "file": "hyphae.png",
+  "group": "fungus",
+  "cell": [
+   74,
+   18
+  ],
+  "anchor": [
+   37.0,
+   9.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "grow": {
+    "row": 1,
+    "frames": 4,
+    "fps": 4,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "gas_14": {
+  "file": "gas_14.png",
+  "group": "prop",
+  "cell": [
+   24,
+   16
+  ],
+  "anchor": [
+   12.0,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "gas_13": {
+  "file": "gas_13.png",
+  "group": "prop",
+  "cell": [
+   24,
+   16
+  ],
+  "anchor": [
+   12.0,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 2,
+    "fps": 2,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "shade_cloth": {
+  "file": "shade_cloth.png",
+  "group": "prop",
+  "cell": [
+   40,
+   46
+  ],
+  "anchor": [
+   20.0,
+   23.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "tag_14c": {
+  "file": "tag_14c.png",
+  "group": "badge",
+  "cell": [
+   22,
+   15
+  ],
+  "anchor": [
+   11.0,
+   7.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "tag_14c_big": {
+  "file": "tag_14c_big.png",
+  "group": "badge",
+  "cell": [
+   26,
+   15
+  ],
+  "anchor": [
+   13.0,
+   7.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "tag_14c_trace": {
+  "file": "tag_14c_trace.png",
+  "group": "badge",
+  "cell": [
+   22,
+   15
+  ],
+  "anchor": [
+   11.0,
+   7.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "tag_13c": {
+  "file": "tag_13c.png",
+  "group": "badge",
+  "cell": [
+   21,
+   15
+  ],
+  "anchor": [
+   10.5,
+   7.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
  }
 }
