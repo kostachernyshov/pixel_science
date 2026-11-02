@@ -24,6 +24,9 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # also need
 
 A 46 s video in all four formats renders in about 25 s on a laptop. Plans and videos are not committed.
 
+Voice-over, subtitles, and word timing use optional open-source tools; nothing above needs them.
+What to install and why, also for cloud sessions: [docs/optional-tools.md](docs/optional-tools.md).
+
 ## With an agent
 
 The skill `/animate` (in `.agents/skills/animate/`, linked for Claude Code in `.claude/skills/`)
