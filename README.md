@@ -30,6 +30,9 @@ The skill `/animate` (in `.agents/skills/animate/`, linked for Claude Code in `.
 takes a topic to a video: sources, a voice-over that you accept, a plan, a storyboard that you accept,
 and the render. Ask: "make a pixel explainer about how vaccines train B cells".
 
+Not sure what to show? `/storyboard` finds the form (how to tell it, how to show the result, which emotion)
+and writes 6 to 12 key frames with the voice-over; `/animate` builds the video from them.
+
 ## How it works
 
 ```
@@ -50,6 +53,7 @@ pixel_kit/             the core: frame, explain, packs, sprites, ui, bg, fx, fon
 packs/biology/         pack.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
 .agents/skills/animate the agent skill
+.agents/skills/storyboard the story and key-frame skill before animate
 ```
 
 ## Contribute

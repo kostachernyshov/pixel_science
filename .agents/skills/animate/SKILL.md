@@ -25,6 +25,8 @@ The tool needs `ffmpeg`. If `ffmpeg -version` fails, tell the person to install 
 Work in `videos/<slug>/`, outside the repo or ignored by git: plans and videos are not committed.
 Sprites come from the packs in `packs/` (now `biology`); name them in the plan with `packs: [biology]`.
 
+If the person does not know what to show yet, or the topic is long or has 3 or more steps, run the `storyboard` skill first. With an accepted `videos/<slug>/storyboard.md`, take the topic, sources, and voice-over from it (one scene per frame), skip steps 1 to 3, and use step 6 only as a technical check.
+
 ## Steps
 
 1. **Topic.** Get the idea in one sentence ("how NK cells find cancer cells"), the viewer (school, adult, student), and the formats. Default: adult viewer, all four formats. Cut the idea to one mechanism. A second mechanism is a second video.

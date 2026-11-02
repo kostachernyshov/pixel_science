@@ -4,6 +4,7 @@ Local tool, agent skill, and sprite library for pixel-art science explainer vide
 
 - Read `README.md` (layout, commands) and, for sprites or scene types, `CONTRIBUTING.md`.
 - Making a video: skill `.agents/skills/animate/SKILL.md`; plan format `.agents/skills/animate/PLAN.md`. Sprites live in packs (`packs/<name>/`).
+- Finding what to show (form, emotion, key frames, voice-over): skill `.agents/skills/storyboard/SKILL.md`, before `animate`.
 - Run commands with `.venv/bin/python` from the repo root. Before a commit: `tools/validate_sprites.py` prints `VALID`.
 - Layout code reads `frame.W` and `frame.H` at draw time; never use fixed 480x270 sizes.
 - Rendered videos (`out/`), plans of test videos, and generated code are not committed.
