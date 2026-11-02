@@ -13,7 +13,7 @@ from PIL import Image
 from pixel_kit.palette import P
 from pixel_kit import packs
 LICENSES = {"CC0-1.0", "CC-BY-4.0"}
-GROUPS = {"hero", "villain", "civilian", "people", "prop", "badge"}
+GROUPS = {"hero", "villain", "civilian", "people", "prop", "badge", "plant", "fungus"}
 
 
 def main():

@@ -10,6 +10,7 @@ Local tool, agent skill, and sprite library for pixel-art science explainer vide
 - Rendered videos (`out/`), plans of test videos, and generated code are not committed.
 - Effects: a beat names a verb (`pixsci.py verbs`). A verb is YAML in a pack; a primitive is Python in the core. Terms: `GLOSSARY.md`.
 - A verb is missing: add it to the pack with `.agents/skills/add-verb/SKILL.md` and go on. A new primitive in the core needs the maintainer's "yes" first.
+- Something reusable that a video needed and the repo did not have (a sprite, a verb, a color role, a background, a scene type, a check, a fix in the core) goes into the repo in the same task, as one small pull request. The video's plan, voice-over, and renders stay out. An idea the video did not need goes into an issue instead (below).
 
 ## Ideas, bugs, and pull requests
 

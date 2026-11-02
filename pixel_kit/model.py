@@ -129,12 +129,14 @@ def match(plan, beat, actors):
             return x
         return thing_of(x, actors[x]) if x in actors else x
     a, b = name_of(beat.get("actor")), name_of(beat.get("target"))
-    for n, r in rels.items():
-        if r.get("kind") not in ks:
-            continue
+    cand = [(n, r) for n, r in rels.items() if r.get("kind") in ks]
+    for n, r in cand:                       # the same direction first: a transfer a -> b is not b -> a
         if r.get("kind") == "destroy" and r.get("b") == a and not beat.get("target"):
             return n, r
-        if {r.get("a"), r.get("b")} == {a, b} or (r.get("a"), r.get("b")) == (a, b):
+        if (r.get("a"), r.get("b")) == (a, b):
+            return n, r
+    for n, r in cand:
+        if r.get("kind") != "transfer" and {r.get("a"), r.get("b")} == {a, b}:
             return n, r
     who = f"{beat.get('actor')}" + (f" and {beat.get('target')}" if beat.get("target") else "")
     return None, (f"verb {beat['verb']} shows a {'/'.join(ks)} relation, but the model has none for {who} "

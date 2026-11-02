@@ -95,11 +95,16 @@ def geometry(step, geo):
     return {"a": a, "b": q[:2] if q else None, "r": p[2]}
 
 
-def play(cv, name, t, geo, seed=0):
-    """Draw the verb at time t (s from the beat)."""
+def play(cv, name, t, geo, seed=0, color=None):
+    """Draw the verb at time t (s from the beat). color: a color role that replaces the roles of the
+    verb's steps (a beat's color:, e.g. one flow verb in two tracer colors)."""
     v = get(name)
     colors = _load()[1]
+    if color is not None and color not in colors:
+        raise KeyError(f"verb {name}: unknown color role {color!r}; add it under colors: in the verbs.yaml")
     for i, s in enumerate(v["steps"]):
+        if color is not None and "color" in s:
+            s = dict(s, color=color)
         o = {k: x for k, x in s.items() if k not in ("prim", "at", "from", "to", "color", "t", "edge")}
         o["seed"] = seed * 31 + i
         if "color" in s and s["color"] not in colors:
@@ -138,6 +143,9 @@ def check_beat(beat, actors):
     except KeyError as e:
         return [str(e).strip('"')]
     out = check_verb(name)
+    if beat.get("color") is not None and beat["color"] not in _load()[1]:
+        out.append(f"beat at {beat.get('t')} s: color {beat['color']!r} is not a color role "
+                   f"(roles: {', '.join(sorted(_load()[1]))})")
     if v.get("target") and beat.get("target") not in actors:
         out.append(f"beat at {beat.get('t')} s: verb {name} needs 'target:' (an actor of the scene)")
     return out

@@ -9,7 +9,7 @@ Pixel-art science explainers, made locally from a short plan. One plan renders f
 | square 1:1 | 1080x1080 | feed posts |
 | banner 4:1 | 1920x480 | site header, wide banner |
 
-Sprites come in packs (`packs/`). The first pack is `biology`: 70 sprites of immune cells, tumor cells,
+Sprites come in packs (`packs/`). The first pack is `biology`: 83 sprites of immune cells, tumor cells, tree seedlings and fungi,
 body cells, molecules, lab props, and people, in one style (PICO-8 palette, 1 px outline, light background).
 
 ## Quick start

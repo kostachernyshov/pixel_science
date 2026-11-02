@@ -155,5 +155,38 @@ def tme(w=None, h=None):
     return _cached(("tme", w, h), make)
 
 
+GROUND = 0.55            # forest: the ground line, as a fraction of the stage of action scenes
+
+
+def ground_y(h=None):
+    """y of the forest ground line: GROUND of the stage (the stage of explain.layout: under the
+    heading, over the caption), so actors placed at y = GROUND stand on it in every format."""
+    from .explain import layout
+    x0, y0, x1, y1 = layout()["stage"]
+    return int(y0 + GROUND * (y1 - y0))
+
+
+def forest(w=None, h=None):
+    """A forest plot in cross-section: pale air above the ground line, a soil cut below it
+    (darker with depth, small stones), a grass edge on top. Trees stand at y = GROUND."""
+    w, h = w or frame.W, h or frame.H
+    g = ground_y()
+    def make():
+        im = Image.new("RGB", (w, h), C(PAPER))
+        d = ImageDraw.Draw(im)
+        d.rectangle([0, g, w, h], fill=(242, 232, 220))
+        d.rectangle([0, g + (h - g) // 2, w, h], fill=(236, 224, 210))
+        rnd = random.Random(11)
+        for _ in range(w * (h - g) // 160):
+            x, y = rnd.randrange(w), rnd.randrange(g + 4, h)
+            d.rectangle([x, y, x + rnd.choice((0, 1)), y], fill=(224, 210, 194))
+        d.line([0, g, w, g], fill=(196, 178, 160))
+        for x in range(0, w, 3):                       # a grass edge
+            if rnd.random() < 0.55:
+                d.line([x, g - 1 - rnd.randrange(3), x, g - 1], fill=(170, 200, 160))
+        return im
+    return _cached(("forest", w, h, g), make)
+
+
 ALL = {"paper": paper, "plain": plain, "dishes": dishes, "tissue": tissue, "epithelium": epithelium,
-       "bloodstream": lambda: bloodstream(0), "lymph_node": lymph_node, "tme": tme}
+       "bloodstream": lambda: bloodstream(0), "lymph_node": lymph_node, "tme": tme, "forest": forest}

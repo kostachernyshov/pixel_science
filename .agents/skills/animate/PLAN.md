@@ -45,7 +45,7 @@ sits above the bottom 20 % (apps cover it with buttons). In `banner`, there is n
 | `type` | `title`, `cast`, `action`, `fact`, `flow`, `summary`, `custom`. The last scene is a `summary`. |
 | `caption` | 1 to 3 words at the bottom, on screen 2 s or more. |
 | `title` | Short heading at the top left (not in `banner`). |
-| `bg` | `paper` (default), `plain`, `tissue`, `epithelium`, `bloodstream`, `lymph_node`, `tme`, `dishes`. |
+| `bg` | `paper` (default), `plain`, `tissue`, `epithelium`, `bloodstream`, `lymph_node`, `tme`, `dishes`, `forest` (a soil cut; the ground line is at y 0.55 of the stage). |
 | `fade` | `false`: no dissolve into this scene (one continuous shot). |
 | `key` | 0..1: where in the scene the storyboard takes its frame (default 0.75). |
 
@@ -84,7 +84,9 @@ drawn above), `label`, `color`, `hidden`. Keep x between 0.1 and 0.9: the vertic
 (the attacker pulls back, the picture stops on contact, the frame shakes, the target is pushed back).
 `pixsci.py verbs` lists the verbs of the core and the packs; `pixsci.py verbs out/verbs.png` draws them.
 Core verbs: `appear` (set `hidden: true` on the actor), `vanish`, `hit`, `highlight`, `alert`.
-Biology verbs: `secrete`, `block`, `apoptosis`, `bind`. Effects have no coordinates: they take place and size
+Biology verbs: `secrete`, `block`, `apoptosis`, `bind`, `flow`, `seep`, `absorb`, `inject`, `shade`, `question`.
+`color: <role>` on a beat draws the verb in another color role of the verbs.yaml (`{actor: a, verb: flow, target: b, color: tracer2}`):
+one verb, two tracers. Effects have no coordinates: they take place and size
 from the actor and the `target`. `hit: heavy` on a beat makes a hit stronger, `hit: false` removes it.
 A verb is missing? Add it to the pack, then go on with the scene: `.agents/skills/add-verb/SKILL.md`.
 
@@ -92,7 +94,7 @@ A verb is missing? Add it to the pack, then go on with the scene: `.agents/skill
 `pixel_kit/model.py`). Actors are things of the model by name (or `thing: t`, for a second T cell).
 `parts: [tcr, pd1]` on an actor (or on a beat, to change them) shows parts on stalks out of its membrane,
 facing the partner; partners get a matching lock and key. A verb with `relation:` (`bind`, `secrete`,
-`apoptosis`) must match a relation: `{actor: pdl1, verb: bind, target: pd1}` closes a bind and it stays
+`apoptosis`) must match a relation (a `transfer` keeps its direction: a -> b is not b -> a): `{actor: pdl1, verb: bind, target: pd1}` closes a bind and it stays
 closed in later scenes; `{actor: drug, verb: bind, target: pdl1}` puts the drug on PD-L1, which lets go of
 PD-1. `pixsci check` fails on a relation not in the model, a part not shown, parts too far apart or with
 no room for labels, a destroyed actor that comes back, `after:` out of order, or a source with no quote.
