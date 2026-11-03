@@ -141,6 +141,12 @@ def word_time(words, key, n=1):
     return None
 
 
+def cue(plan, sc, key, n=1, dt=0.0, default=0.0):
+    """For custom scenes: the time in the scene when a word is heard (see word_time), plus dt."""
+    t = word_time((plan.get("_words") or {}).get(sc.get("id")) or [], key, n)
+    return default if t is None else t + dt
+
+
 def resolve_beats(plan):
     """Sets t of each beat with `word:` from the words of its scene. Returns problems (strings)."""
     words = plan.get("_words") or {}

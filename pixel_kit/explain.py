@@ -290,8 +290,8 @@ def check(plan):
         found = model.check(plan, positions=lambda si, sc, t: _positions(sc, t))
         out += found if i == 0 else [f"{p} [{f}]" for p in found if "(contact)" in p]
     frame.use("landscape")
-    if not plan["scenes"] or plan["scenes"][-1].get("type") != "summary":
-        out.append("the last scene must be a summary")
+    if not plan["scenes"] or plan["scenes"][-1].get("type") not in ("summary", "custom"):
+        out.append("the last scene must be a summary (or a custom final frame)")
     story_end = times[-2][1] if len(times) > 1 and plan["scenes"][-1].get("type") == "summary" else (times[-1][1] if times else 0)
     limit = float(plan.get("max_s", 60))
     if story_end > limit:
@@ -733,10 +733,14 @@ def subtitles(plan, times):
     from PIL import Image
     import numpy as np
 
+    st = plan.get("subtitles") if isinstance(plan.get("subtitles"), dict) else {}
+    fill, edge, inner = st.get("fill", NAVY), st.get("border", BLACK), st.get("inner", XBLUE)
+    ink, hi = st.get("text", WHITE), st.get("highlight", YELLOW)
+
     def box(img):
         d = ImageDraw.Draw(img)
-        d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=C(NAVY), outline=C(BLACK))
-        d.rectangle([x0 + 2, y0 + 2, x1 - 3, y1 - 3], outline=C(XBLUE))
+        d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=C(fill), outline=C(edge))
+        d.rectangle([x0 + 2, y0 + 2, x1 - 3, y1 - 3], outline=C(inner))
 
     def overlay(arr, T):
         k = next((i for i, (a, b) in enumerate(spans) if a <= T < b), None)
@@ -752,7 +756,7 @@ def subtitles(plan, times):
                         continue
                     # letters appear over the first 80 % of the word, at least 1 letter
                     m = len(w) if T >= s + (e - s) * 0.8 else max(1, int(len(w) * (T - s) / max(1e-3, (e - s) * 0.8)))
-                    col = YELLOW if s <= T < e else WHITE
+                    col = hi if s <= T < e else ink
                     text(img, x0 + 6 + x, y, w[:m], col)
         return np.array(img)
     return overlay
@@ -773,4 +777,4 @@ def timeline(plan):
                        sc.get("fade", True)))
         key = a + min(dur - 0.3, max(1.2, dur * float(sc.get("key", 0.75))))
         marks.append((key, f"{sc['id']} {sc['type']} {a:.1f}-{b:.1f}s"))
-    return Timeline(scenes, overlay=subtitles(plan, times)), marks
+    return Timeline(scenes, overlay=subtitles(plan, times), fade_col=plan.get("fade_color", PAPER)), marks
