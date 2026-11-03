@@ -1,127 +1,118 @@
-# pixel_science
+# Pixel-art science videos that you make by talking to an agent
 
-Pixel-art science explainers, made locally from a short plan. One plan renders four videos:
+Tell Claude what idea you want to explain. It finds the sources, writes the voice-over, shows you a storyboard,
+and renders a short pixel-art video in four formats: YouTube, Reels, a feed post, and a banner. You accept each
+step; the agent does the work. The first topic is biology: immune cells, tumors, molecules, labs, people.
 
 | Format | Size | For |
 |---|---|---|
 | landscape 16:9 | 1920x1080 | YouTube, slides |
 | vertical 9:16 | 1080x1920 | Reels, Shorts, TikTok |
 | square 1:1 | 1080x1080 | feed posts |
-| banner 4:1 | 1920x480 | site header, wide banner |
+| banner 4:1 | 1920x480 | site header |
 
-Sprites come in packs (`packs/`). The first pack is `biology`: 70 sprites of immune cells, tumor cells,
-body cells, molecules, lab props, and people, in one style (PICO-8 palette, 1 px outline, light background).
+## Install (2 minutes)
 
-## Install with Claude
+### 1. Add the plugin
 
-The repo is a Claude plugin and its own marketplace. One install gives the skills `setup`, `storyboard`,
-`animate`, and `add-verb`, and the tool they run.
+**Claude Code** (terminal, desktop app, IDE). In your shell:
 
-**Claude Code (terminal, desktop, IDE).** In a session:
+```bash
+claude plugin marketplace add kostachernyshov/pixel_science
+claude plugin install pixel-science@pixel-science
+```
+
+Or in a session, in one line: `/plugin install pixel-science --marketplace kostachernyshov/pixel_science`.
+
+**Cowork and claude.ai.** Open [Customize > Plugins](https://claude.ai/customize/plugins), choose
+**Add > Add marketplace**, enter `kostachernyshov/pixel_science`, and add **pixel-science**. The plugin then also
+reaches Claude Code on each computer where you sign in with the same account.
+
+### 2. Set it up once
+
+Open a folder for your videos, start a session there, and type:
 
 ```
-/plugin install pixel-science --marketplace kostachernyshov/pixel_science
 /pixel-science:setup
 ```
 
-`setup` makes a Python environment in the plugin's data folder (it stays across updates), checks ffmpeg,
-asks whether to install the voice, and renders a 15 s check video. Then: `/pixel-science:animate`
-("make a pixel explainer about how vaccines train B cells") or `/pixel-science:storyboard`. Videos go to
-the folder you work in. Updates: `/plugin marketplace update pixel-science`, or turn on auto-update for it in `/plugin`.
+The agent makes a Python environment, checks ffmpeg, asks whether you want a synthetic voice, and renders a 15 s
+check video. The plugin adds the prefix `pixel-science:` to each command. Below, the commands are short:
+`/animate` means `/pixel-science:animate`.
 
-**Cowork and claude.ai.** Customize > Plugins > Add > Add marketplace: `kostachernyshov/pixel_science`, then add
-`pixel-science`. It also reaches Claude Code on every machine signed in to the same account. In Cowork, run
-`/pixel-science:setup` first; without ffmpeg there it uses the one of the `imageio-ffmpeg` package. The voice needs
-about 6 GB and a fast machine: in a sandbox, skip it or bring a recorded voice.
+### 3. Make a video
 
-**A clone (cloud sessions, contributors).** Cloud sessions do not load marketplace plugins; they work in the repo.
-`.claude/skills` links to `skills/`, so the same skills run without the prefix: `/setup`, `/animate`.
-Other agents read `.agents/skills` (the same link) and `AGENTS.md`.
+```
+/animate how vaccines train B cells
+```
 
-## Quick start
+<details>
+<summary><strong>Update</strong></summary>
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # also needs ffmpeg
-.venv/bin/python pixsci.py doctor                                     # what is there, what is missing
-.venv/bin/python pixsci.py sheet  out/sheet.png                       # the sprites you can use
-.venv/bin/python pixsci.py check  videos/my-topic/explainer.yaml       # a plan you wrote (PLAN.md)
-.venv/bin/python pixsci.py board  videos/my-topic/explainer.yaml out   # storyboards, every format
-.venv/bin/python pixsci.py render videos/my-topic/explainer.yaml out   # the videos
+claude plugin marketplace update pixel-science
+claude plugin update pixel-science@pixel-science
 ```
 
-A 46 s video in all four formats renders in about 25 s on a laptop. Plans and videos are not committed.
+Restart the session after the update. In Cowork and claude.ai, open the plugin and choose **Check for updates**.
 
-### Voice and subtitles
+</details>
 
-`--voice` speaks `voiceover.md`, times each word, and puts the sound into the video:
+<details>
+<summary><strong>Cloud sessions and a clone of the repo</strong></summary>
 
-```
-voiceover.md ─> Qwen3-TTS ─> voice/<scene>.wav ─> Qwen3-ForcedAligner ─> voice/<scene>.words.json
-                                                                               │
-explainer.yaml: beats on words {word: "attacks"}, subtitles: true ─────────────┴─> render with sound
-```
+Cloud sessions (claude.ai/code) do not load plugins from a marketplace. Add this repo to the session instead:
+the same skills load from `.claude/skills` without the prefix (`/setup`, `/animate`). This also works on your own
+computer in a clone, which is the way to change the tool or add sprites.
 
-- [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) 1.7B CustomVoice speaks (Apache 2.0; English, Russian and 8 more
-  languages; voices `ryan`, `aiden`; `tts: {instruct: ...}` sets the manner). Each scene lasts as long as its audio.
-- [Qwen3-ForcedAligner](https://huggingface.co/Qwen/Qwen3-ForcedAligner-0.6B) finds when each word of the known text
-  is heard (no transcription needed). Then the start and end of each word are trimmed to the sound.
-- A beat on a word starts when the word is heard; `subtitles: true` shows the text word for word. Format: PLAN.md.
+</details>
 
-```bash
-.venv/bin/pip install -r requirements-voice.txt          # Python 3.10 to 3.12, PyTorch
-.venv/bin/pip install --no-deps qwen-asr==0.0.6           # the aligner; it pins another transformers but works with this one
-.venv/bin/python pixsci.py voice  videos/my-topic/explainer.yaml out          # listen: out/<name>-voice.wav
-.venv/bin/python pixsci.py render videos/my-topic/explainer.yaml out --voice  # video with sound and subtitles
-```
+## Quick examples
 
-The first run downloads about 6 GB from Hugging Face (a cloud sandbox must allow `huggingface.co` and `*.hf.co`).
-On a CPU, speech takes about 5 to 10 times its length; a scene is spoken and aligned again only when its text or
-`tts:` changes. Without the aligner, word times are estimated from the text.
-
-## With an agent
-
-The skill `/animate` (in `skills/animate/`; `/pixel-science:animate` from the plugin)
-takes a topic to a video: sources, a voice-over that you accept, a plan, a storyboard that you accept,
-and the render. Ask: "make a pixel explainer about how vaccines train B cells".
-
-Not sure what to show? `/storyboard` finds the form (how to tell it, how to show the result, which emotion)
-and writes 6 to 12 key frames with the voice-over; `/animate` builds the video from them.
-
-## How it works
+**"Make a 30 s reel about how NK cells find cancer cells."** You know the topic but not the picture.
 
 ```
-voiceover.md  ─┐
-explainer.yaml ─┼─> pixel_kit/explain.py ──> Timeline ──> ffmpeg ──> <name>-<format>.mp4
-packs/         ─┘        (layout per format: pixel_kit/frame.py)
+/storyboard     the form of the story, 6 to 12 key frames, the voice-over; you accept it
+/animate        the plan, a storyboard in each format, then the videos
 ```
 
-- `explainer.yaml`: scenes (`title`, `cast`, `action`, `fact`, `flow`, `summary`, `custom`). Format: `skills/animate/PLAN.md`.
-- `action` scenes place actors in fractions of the frame and run timed beats (move, animation, badge, verb), so one scene fits every format.
-- Verbs are actions with effects (`secrete`, `block`, `hit`): YAML in a pack that lists primitives of the core
-  (`pixel_kit/fx.py`), with a light layer over the colors and hit mechanics (windup, freeze, shake, push).
-  `pixsci.py verbs out/verbs.png` lists and draws them. Why: `docs/adr/0001-verbs-and-primitives.md`.
-- The frame is small (480x270 for 16:9) and scaled x4 with nearest neighbor: sharp pixels at any size.
+**"I know what to show."** Type `/animate` with the idea. The agent asks you to accept the voice-over and the
+storyboard before it renders.
 
-## Layout
+**"I want a voice and subtitles."** Run `/setup` again and answer "yes" to the voice (about 6 GB, best on a fast
+computer). Then ask `/animate` for a video with a voice: each action lands on the word that names it.
 
-```
-pixsci.py              command line: doctor, formats, sheet, verbs, check, board, render, frames, voice
-pixel_kit/             the core: frame, explain, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
-packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
-tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
-skills/                agent skills: setup, storyboard, animate, add-verb (linked from .claude/skills and .agents/skills)
-.claude-plugin/        plugin.json and marketplace.json: the repo installs as a Claude plugin
-```
+**"There is no action for this."** When a scene needs an action the library does not have (a cell releases
+something, a drug blocks a receptor), the agent adds it with `add-verb` and goes on.
+
+## Commands
+
+**Person** commands start when you type them. **Agent** skills start by themselves when the task needs them.
+
+**Person**
+
+- **[setup](skills/setup/SKILL.md)**: Gets the computer ready: Python environment, ffmpeg, the voice if you want it, a check video.
+- **[storyboard](skills/storyboard/SKILL.md)**: Finds how to tell the story (form, emotion, key frames) and writes the voice-over with sources. Use it first when you are not sure what to show.
+- **[animate](skills/animate/SKILL.md)**: From an idea or a storyboard to the videos: sources, voice-over, plan, check, storyboard images, render.
+
+**Agent**
+
+- **[add-verb](skills/add-verb/SKILL.md)**: Adds a missing action (a verb such as `secrete` or `block`) to a sprite pack.
+
+## What is inside
+
+- 70 sprites in one style in the `biology` pack: immune cells, tumor cells, body cells, molecules, lab props, people.
+- Actions with light and hit effects, one plan for all four formats, a synthetic voice (Qwen3-TTS) with word-timed
+  subtitles.
+- The tool `pixsci.py`, which the skills run. To run it by hand or to see how it works: [docs/tool.md](docs/tool.md).
 
 ## Contribute
 
-New sprites, packs, scene types, and backgrounds are welcome. Ideas and bugs go to GitHub Issues. Read [CONTRIBUTING.md](CONTRIBUTING.md).
+New sprites, packs, scene types, and actions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md); rules for agents
+are in [AGENTS.md](AGENTS.md). Ideas and bugs: [Issues](https://github.com/kostachernyshov/pixel_science/issues).
 
-## Origin
+The tool comes from the `animate` skill of [kostachernyshov/skills](https://github.com/kostachernyshov/skills)
+and the *Cancer Wars* video series.
 
-`pixel_kit` comes from the `/animate` skill of [kostachernyshov-skills](https://github.com/kostachernyshov)
-and the *Cancer Wars* video series. This repo removes the data-report parts and adds the four formats.
-
-## License
-
-Code: MIT. Sprites: CC0-1.0 or CC-BY-4.0, per file in each pack's `sprites/CREDITS.csv`. Font: GNU Unifont. See [LICENSE](LICENSE).
+License: code MIT; sprites CC0-1.0 or CC-BY-4.0, per file in each pack's `sprites/CREDITS.csv`; font GNU Unifont.
+See [LICENSE](LICENSE).

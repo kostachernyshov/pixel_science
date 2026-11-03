@@ -14,7 +14,7 @@ a primitive is a Python function in the **core** (`pixel_kit/fx.py`) with no top
 - If these two are empty or read literally as `${...}`, the skill runs from a clone of the repo:
   `ROOT` is the repo root and `VENV` is `ROOT/.venv`.
 - Run the tool from the person's working folder: `"VENV/bin/python" "ROOT/pixsci.py" <command> ...`.
-  Below, `pixsci.py <command>` means this. Other paths of the tool (`packs/`, `pixel_kit/`, README.md,
+  Below, `pixsci.py <command>` means this. Other paths of the tool (`packs/`, `pixel_kit/`, docs/tool.md,
   CONTRIBUTING.md, GLOSSARY.md) are under `ROOT`.
 - No `VENV/bin/python`, no ffmpeg (`pixsci.py formats` says so), or a video with a voice and no voice packages:
   run the `setup` skill first, then come back.

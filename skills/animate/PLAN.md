@@ -8,7 +8,7 @@ name: nk-missing-self                 # output file names: <name>-<format>.mp4
 lang: en                              # en: on-screen text must be plain ASCII
 packs: [biology]                      # sprite packs in packs/ (default: all)
 voiceover: voiceover.md               # '## S01' headings, the voice-over text under each
-tts: {voice: ryan, instruct: "Warm, natural documentary narrator."}   # optional: the voice of `--voice` (README, Voice)
+tts: {voice: ryan, instruct: "Warm, natural documentary narrator."}   # optional: the voice of `--voice` (docs/tool.md, Voice)
 subtitles: true                       # optional: the voice-over word for word in a box at the bottom (replaces captions)
 formats: [landscape, vertical, square, banner]
 max_s: 60                             # optional: longest story before the summary (default 60 s)

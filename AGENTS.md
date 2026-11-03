@@ -2,14 +2,14 @@
 
 Local tool, agent skill, and sprite library for pixel-art science explainer videos in four formats (16:9, 9:16, 1:1, 4:1). Open to community contributions. First topic: biology.
 
-- Read `README.md` (layout, commands) and, for sprites or scene types, `CONTRIBUTING.md`.
+- Read `docs/tool.md` (commands, voice, how it works, layout) and, for sprites or scene types, `CONTRIBUTING.md`.
 - Making a video: skill `skills/animate/SKILL.md`; plan format `skills/animate/PLAN.md`. Sprites live in packs (`packs/<name>/`).
 - Finding what to show (form, emotion, key frames, voice-over): skill `skills/storyboard/SKILL.md`, before `animate`.
 - Setting up a machine: skill `skills/setup/SKILL.md` (`pixsci.py doctor` says what is missing). The repo is also a Claude plugin (`.claude-plugin/`): skills find the tool through `${CLAUDE_PLUGIN_ROOT}`, or the repo root in a clone; keep both working.
 - Run commands with `.venv/bin/python` from the repo root. Before a commit: `tools/validate_sprites.py` prints `VALID`.
 - Layout code reads `frame.W` and `frame.H` at draw time; never use fixed 480x270 sizes.
 - Rendered videos (`out/`), plans of test videos, and generated code are not committed.
-- Voice, word times, and subtitles (`--voice`, `subtitles: true`): README, Voice and subtitles. Their packages stay in `requirements-voice.txt`, never in `requirements.txt`.
+- Voice, word times, and subtitles (`--voice`, `subtitles: true`): docs/tool.md, Voice and subtitles. Their packages stay in `requirements-voice.txt`, never in `requirements.txt`.
 - Effects: a beat names a verb (`pixsci.py verbs`). A verb is YAML in a pack; a primitive is Python in the core. Terms: `GLOSSARY.md`.
 - A verb is missing: add it to the pack with `skills/add-verb/SKILL.md` and go on. A new primitive in the core needs the maintainer's "yes" first.
 

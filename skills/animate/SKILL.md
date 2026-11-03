@@ -14,7 +14,7 @@ one rule at the end. The voice explains; the picture shows. Each claim comes fro
 - If these two are empty or read literally as `${...}`, the skill runs from a clone of the repo:
   `ROOT` is the repo root and `VENV` is `ROOT/.venv`.
 - Run the tool from the person's working folder: `"VENV/bin/python" "ROOT/pixsci.py" <command> ...`.
-  Below, `pixsci.py <command>` means this. Other paths of the tool (`packs/`, `pixel_kit/`, README.md,
+  Below, `pixsci.py <command>` means this. Other paths of the tool (`packs/`, `pixel_kit/`, docs/tool.md,
   CONTRIBUTING.md, GLOSSARY.md) are under `ROOT`.
 - No `VENV/bin/python`, no ffmpeg (`pixsci.py formats` says so), or a video with a voice and no voice packages:
   run the `setup` skill first, then come back.
@@ -26,7 +26,7 @@ one rule at the end. The voice explains; the picture shows. Each claim comes fro
         → 6 storyboard [person] → 7 render → 8 summary
 ```
 
-A video with a synthetic voice and subtitles (README, Voice and subtitles) speaks the accepted voice-over before
+A video with a synthetic voice and subtitles (docs/tool.md, Voice and subtitles) speaks the accepted voice-over before
 the plan, times each word to the audio, puts beats on the words, and renders with `--voice`.
 
 Work in `videos/<slug>/`, outside the repo or ignored by git: plans and videos are not committed.

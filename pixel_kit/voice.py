@@ -3,7 +3,7 @@
 #   pixsci voice  PLAN OUTDIR             OUTDIR/voice/<scene>.wav and OUTDIR/<name>-voice.wav
 #   pixsci render PLAN OUTDIR --voice     the same audio, scenes timed to it, sound in each mp4
 #
-# Optional: requirements-voice.txt (Python 3.10 to 3.12, PyTorch; see README, Voice). The first run downloads
+# Optional: requirements-voice.txt (Python 3.10 to 3.12, PyTorch; see docs/tool.md, Voice). The first run downloads
 # the model from Hugging Face (1.7B: ~4.5 GB). Each scene is spoken once; a scene is spoken again only when
 # its text or the `tts:` settings change. After the voice, words.align times each word (subtitles, beats).
 

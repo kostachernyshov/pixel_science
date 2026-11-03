@@ -99,7 +99,7 @@ def cmd_doctor(a):
     ready = ready and bool(found)
     missing = [m for m in ("torch", "qwen_tts", "qwen_asr") if not have(m)]
     if missing:
-        print(f"voice   not installed (optional; missing {', '.join(missing)}): README, Voice and subtitles")
+        print(f"voice   not installed (optional; missing {', '.join(missing)}): docs/tool.md, Voice and subtitles")
     else:
         import torch
         dev = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
