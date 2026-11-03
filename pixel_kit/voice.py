@@ -22,7 +22,44 @@ PITFALL = ("Kokoro is not installed. Install it (Python 3.10 to 3.12):\n"
 def settings(plan):
     """(voice, speed) from `tts:` in the plan."""
     t = plan.get("tts") or {}
-    return str(t.get("voice", VOICE)), float(t.get("speed", 1.0))
+    return str(t.get("voice", VOICE)).lower(), float(t.get("speed", 1.0))
+
+
+def engine(plan):
+    """`tts: {engine: kokoro | qwen3}`. kokoro: English. qwen3: Qwen3-TTS, 10 languages with Russian."""
+    t = plan.get("tts") or {}
+    return str(t.get("engine", "kokoro"))
+
+
+QWEN3_MODEL = "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice"
+QWEN3_PITFALL = ("Qwen3-TTS is not installed. Install it (Python 3.10 to 3.12, PyTorch):\n"
+                 "  .venv/bin/pip install qwen-tts")
+
+
+def qwen3(plan):
+    """A function text -> float32 samples at RATE, made with Qwen3-TTS CustomVoice (Apache 2.0).
+    tts: {engine: qwen3, voice: aiden, lang: Russian, model: ..., instruct: "calm, clear"}.
+    The first run downloads the model (1.7B: ~4.5 GB; 0.6B: ~2.5 GB) from Hugging Face."""
+    t = plan.get("tts") or {}
+    try:
+        import torch
+        from qwen_tts import Qwen3TTSModel
+    except ImportError:
+        raise SystemExit(QWEN3_PITFALL)
+    dev = "cuda:0" if torch.cuda.is_available() else "cpu"
+    m = Qwen3TTSModel.from_pretrained(t.get("model", QWEN3_MODEL), device_map=dev,
+                                      dtype=torch.bfloat16 if dev != "cpu" else torch.float32)
+    torch.manual_seed(int(t.get("seed", 1)))     # sampling: the same seed gives the same voice take
+
+    def say(text):
+        kw = {"instruct": t["instruct"]} if t.get("instruct") else {}
+        wavs, sr = m.generate_custom_voice(text=text, speaker=str(t.get("voice", "aiden")),
+                                           language=str(t.get("lang", "Auto")), **kw)
+        a = np.asarray(wavs[0], np.float32)
+        if sr != RATE:                         # Qwen3-TTS speaks at 24 kHz, as Kokoro; resample otherwise
+            a = np.interp(np.arange(0, len(a), sr / RATE), np.arange(len(a)), a).astype(np.float32)
+        return a
+    return say
 
 
 def kokoro(voice, speed):
@@ -75,9 +112,11 @@ def attach(plan, texts, outdir, say=None):
         if not text:
             continue
         p = os.path.join(d, f"{sid}.wav")
-        key = {"text": text, "voice": voice, "speed": speed}
+        key = {"text": text, "voice": voice, "speed": speed, "engine": engine(plan)}
+        if engine(plan) == "kokoro":
+            key.pop("engine")                  # keeps the cache of plans made before engines
         if meta.get(sid) != key or not os.path.exists(p):
-            say = say or kokoro(voice, speed)
+            say = say or (qwen3(plan) if engine(plan) == "qwen3" else kokoro(voice, speed))
             print(f"voice {sid}: {text[:60]}")
             write_wav(p, say(text))
             meta[sid] = key

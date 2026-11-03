@@ -43,12 +43,20 @@ def _args(a):
 
 def _voice(plan, outdir):
     """Speaks the voice-over (only scenes that changed) and times the scenes to it. Returns {scene: wav}."""
-    from pixel_kit import voice
-    return voice.attach(plan, explain.voiceover(plan), outdir)
+    from pixel_kit import voice, words
+    texts = {k: words.spoken(v) for k, v in explain.voiceover(plan).items()}
+    paths = voice.attach(plan, texts, outdir)
+    n = words.align(plan, explain.voiceover(plan), paths, outdir)
+    if n:
+        print(f"word times: {n} scenes aligned")
+    plan.pop("_words", None)          # words and beats are timed again, now to the audio
+    return paths
 
 
-def _plan(p):
-    return explain.load(p)
+def _plan(p, outdir=None):
+    plan = explain.load(p)
+    plan["_outdir"] = outdir          # where voice/ is: aligned word times for beats and subtitles
+    return plan
 
 
 def _formats(plan, fmts):
@@ -136,7 +144,7 @@ def cmd_check(a):
 
 def cmd_board(a):
     pos, fmts, _, vo = _args(a)
-    plan = _plan(pos[0])
+    plan = _plan(pos[0], pos[1])
     _stop_on_problems(plan)
     os.makedirs(pos[1], exist_ok=True)
     if vo:
@@ -152,7 +160,7 @@ def cmd_board(a):
 
 def cmd_render(a):
     pos, fmts, gif, vo = _args(a)
-    plan = _plan(pos[0])
+    plan = _plan(pos[0], pos[1])
     _stop_on_problems(plan)
     os.makedirs(pos[1], exist_ok=True)
     name = _name(plan, pos[0])
@@ -178,7 +186,7 @@ def cmd_render(a):
 
 def cmd_frames(a):
     pos, fmts, _, vo = _args(a)
-    plan = _plan(pos[0])
+    plan = _plan(pos[0], pos[1])
     if vo:
         _voice(plan, pos[1])
     for f in _formats(plan, fmts):

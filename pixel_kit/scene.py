@@ -46,19 +46,24 @@ def upscale(arr, scale=SCALE, scan=None):
 
 
 class Timeline:
-    def __init__(self, scenes, fade=FADE, fps=FPS, fade_col=PAPER):
+    def __init__(self, scenes, fade=FADE, fps=FPS, fade_col=PAPER, overlay=None):
         """scenes: [(start, end, fn(t_local) -> PIL.Image RGB of the frame size, fade=True)].
         fade=False: no dissolve into this scene (a continuous shot, for example a camera move)."""
         self.scenes = scenes
         self.fade = fade
         self.fps = fps
         self.fade_col = fade_col
+        self.overlay = overlay      # overlay(arr, T) -> arr: drawn over the dissolve (subtitles)
 
     @property
     def duration(self):
         return self.scenes[-1][1]
 
     def frame(self, T):
+        arr = self._frame(T)
+        return self.overlay(arr, T) if self.overlay else arr
+
+    def _frame(self, T):
         last_end = self.scenes[-1][1]
         for i, sc in enumerate(self.scenes):
             a, b, fn = sc[:3]

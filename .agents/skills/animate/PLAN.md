@@ -9,6 +9,8 @@ lang: en                              # en: on-screen text must be plain ASCII
 packs: [biology]                      # sprite packs in packs/ (default: all)
 voiceover: voiceover.md               # '## S01' headings, the voice-over text under each
 tts: {voice: af_heart, speed: 1.0}    # optional: Kokoro voice for `pixsci voice` and `--voice` (a = American, b = British)
+# tts: {engine: qwen3, voice: aiden, lang: Russian}   # Qwen3-TTS (pip install qwen-tts): Russian and 9 more languages
+subtitles: true                       # optional: the voice-over word for word in a box at the bottom (replaces captions)
 formats: [landscape, vertical, square, banner]
 max_s: 60                             # optional: longest story before the summary (default 60 s)
 sources:                              # required: the papers or textbooks behind each claim
@@ -38,6 +40,11 @@ sits above the bottom 20 % (apps cover it with buttons). In `banner`, there is n
 - A scene lasts (words of its voice-over) / 2.5 + 0.8 s, at least 2.5 s. `dur: 4` sets it by hand.
 - With `--voice`, a scene lasts as long as its spoken audio (0.25 s before the words, 0.6 s after); `dur` can make it longer, not shorter.
 - Story before the summary: 20 to 45 s. The summary holds 8 s (`dur` sets more).
+- A beat can start on a word of its scene instead of a time: `{word: "тормоз", dt: -0.3, actor: t, verb: alert}`
+  (`n: 2`: the second time the word is said; a word matches by its start, so "тормоз" finds "тормоза").
+  With `--voice`, the times come from the audio: Qwen3-ForcedAligner (`pip install qwen-asr`, or a venv in
+  `PIXSCI_ALIGN_PYTHON`) writes `OUTDIR/voice/<scene>.words.json`. Without it, word times are estimated.
+- In `voiceover.md`, `[PD-L1|пи-ди-эль-один]` shows the first form on screen and speaks the second.
 
 ## Fields of all scenes
 

@@ -15,7 +15,7 @@ from PIL import ImageDraw
 from .palette import *
 from .font import text, text_w, title_text, TITLE_GLYPHS, LINE
 from .timing import clamp, seg, ease, lerp
-from . import sprites as S, fx, ui, bg, frame, verbs, model
+from . import sprites as S, fx, ui, bg, frame, verbs, model, words as WD
 from .scene import Timeline
 
 WORDS_PER_S = 2.5        # voice-over pace
@@ -96,6 +96,10 @@ def color(name):
 
 # ---------------------------------------------------------------- layout for the current format
 
+SUBS = False             # subtitles on: set from plan["subtitles"] by timeline() and check()
+SUB_LINES = 2
+
+
 def layout():
     """Sizes for the current format. Tall frames stack items; the banner is one low row."""
     W, H = frame.W, frame.H
@@ -106,8 +110,20 @@ def layout():
     # vertical video: apps cover the bottom ~20 % with buttons and text, keep the caption above it
     cap_y = H - cap_h - (int(H * 0.2) if tall else (2 if banner else 10))
     head_h = 0 if banner else 30
-    return dict(W=W, H=H, tall=tall, banner=banner, cap_scale=cap_scale, cap_y=cap_y,
-                head_h=head_h, stage=(0, head_h, W, cap_y - 4), sprite_scale=2)
+    L = dict(W=W, H=H, tall=tall, banner=banner, cap_scale=cap_scale, cap_y=cap_y,
+             head_h=head_h, stage=(0, head_h, W, cap_y - 4), sprite_scale=2, subs=None)
+    if SUBS:
+        # subtitles: a box of SUB_LINES lines at the bottom (one line in the banner); no caption
+        n = 1 if banner else SUB_LINES
+        box_h = n * LINE + (n - 1) * 2 + 10
+        margin = int(H * 0.2) if tall else (2 if banner else 6)
+        side = 4 if banner else 8
+        box = (side, H - margin - box_h, W - side, H - margin)
+        if banner:      # the banner has no room below: the box sits on the right third
+            box = (W * 2 // 3, H - margin - box_h, W - side, H - margin)
+        L.update(subs=dict(box=box, lines=n), cap_y=box[1],
+                 stage=(0, head_h, box[0] - 4 if banner else W, box[1] - 4 if not banner else H))
+    return L
 
 
 def wrap(s, scale, maxw):
@@ -199,7 +215,7 @@ def _sprites(sc):
 
 def check(plan):
     """Rules of the skill. Returns a list of problems (empty: all pass)."""
-    out = []
+    out = list(prepare(plan))
     if not plan.get("sources"):
         out.append("sources: list at least one source for the science in the video")
     vo = voiceover(plan)
@@ -300,7 +316,7 @@ def _heading(img, L, s):
 
 def _caption(img, L, sc, t):
     cap = sc.get("caption")
-    if not cap or t < 0.3:
+    if not cap or t < 0.3 or L.get("subs"):
         return
     k, lines = fit_text(cap, L["W"] - 16, (L["cap_scale"], 1), max_lines=1 if L["banner"] else 2)
     lh = LINE * k + 2
@@ -670,9 +686,82 @@ PAINTERS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 
 # ---------------------------------------------------------------- timeline
 
+def prepare(plan):
+    """Words of the voice-over in time (aligned, or estimated) and beats placed on their words.
+    Runs once per plan; plan["_outdir"] is where voice/<scene>.words.json are. Returns problems."""
+    global SUBS
+    SUBS = bool(plan.get("subtitles"))
+    if "_words" in plan:
+        return plan.get("_word_problems", [])
+    WD.attach(plan, voiceover(plan), plan.get("_outdir"))
+    plan["_word_problems"] = WD.resolve_beats(plan)
+    return plan["_word_problems"]
+
+
+def _sub_lines(ws, maxw):
+    """Words into lines that fit maxw (scale 1): [[(i, word, x)]], x from the line start."""
+    lines, cur, x = [], [], 0
+    sp = text_w(" ")
+    for i, w in enumerate(ws):
+        ww = text_w(w)
+        if cur and x + sp + ww > maxw:
+            lines.append(cur)
+            cur, x = [], 0
+        if cur:
+            x += sp
+        cur.append((i, w, x))
+        x += ww
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def subtitles(plan, times):
+    """overlay(arr, T) for Timeline: the voice-over word for word in a box at the bottom.
+    Each word types in letter by letter while it is said; the word being said is yellow."""
+    if not SUBS:
+        return None
+    L = layout()
+    x0, y0, x1, y1 = L["subs"]["box"]
+    n = L["subs"]["lines"]
+    maxw = x1 - x0 - 12
+    allw = WD.timeline_words(plan, times)
+    fits = lambda ws: len(_sub_lines(ws, maxw)) <= n
+    pgs = WD.pages(allw, fits)
+    spans = WD.page_spans(pgs, times[-1][1] if times else 0)
+    laid = [_sub_lines([w[0] for w in p], maxw) for p in pgs]
+    from PIL import Image
+    import numpy as np
+
+    def box(img):
+        d = ImageDraw.Draw(img)
+        d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=C(NAVY), outline=C(BLACK))
+        d.rectangle([x0 + 2, y0 + 2, x1 - 3, y1 - 3], outline=C(XBLUE))
+
+    def overlay(arr, T):
+        k = next((i for i, (a, b) in enumerate(spans) if a <= T < b), None)
+        img = Image.fromarray(arr)
+        box(img)
+        if k is not None:
+            p = pgs[k]
+            for r, line in enumerate(laid[k]):
+                y = y0 + 5 + r * (LINE + 2)
+                for i, w, x in line:
+                    _, s, e = p[i]
+                    if T < s:
+                        continue
+                    # letters appear over the first 80 % of the word, at least 1 letter
+                    m = len(w) if T >= s + (e - s) * 0.8 else max(1, int(len(w) * (T - s) / max(1e-3, (e - s) * 0.8)))
+                    col = YELLOW if s <= T < e else WHITE
+                    text(img, x0 + 6 + x, y, w[:m], col)
+        return np.array(img)
+    return overlay
+
+
 def timeline(plan):
     """Builds the Timeline for the current format (frame.use). Returns (timeline, marks):
     marks are (time, label) for the storyboard."""
+    prepare(plan)
     times = durations(plan)
     scenes, marks = [], []
     plan.pop("_world", None)
@@ -684,4 +773,4 @@ def timeline(plan):
                        sc.get("fade", True)))
         key = a + min(dur - 0.3, max(1.2, dur * float(sc.get("key", 0.75))))
         marks.append((key, f"{sc['id']} {sc['type']} {a:.1f}-{b:.1f}s"))
-    return Timeline(scenes), marks
+    return Timeline(scenes, overlay=subtitles(plan, times)), marks
