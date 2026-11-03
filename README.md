@@ -24,6 +24,33 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # also need
 
 A 46 s video in all four formats renders in about 25 s on a laptop. Plans and videos are not committed.
 
+### Voice and subtitles
+
+`--voice` speaks `voiceover.md`, times each word, and puts the sound into the video:
+
+```
+voiceover.md ─> Qwen3-TTS ─> voice/<scene>.wav ─> Qwen3-ForcedAligner ─> voice/<scene>.words.json
+                                                                               │
+explainer.yaml: beats on words {word: "attacks"}, subtitles: true ─────────────┴─> render with sound
+```
+
+- [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) 1.7B CustomVoice speaks (Apache 2.0; English, Russian and 8 more
+  languages; voices `ryan`, `aiden`; `tts: {instruct: ...}` sets the manner). Each scene lasts as long as its audio.
+- [Qwen3-ForcedAligner](https://huggingface.co/Qwen/Qwen3-ForcedAligner-0.6B) finds when each word of the known text
+  is heard (no transcription needed). Then the start and end of each word are trimmed to the sound.
+- A beat on a word starts when the word is heard; `subtitles: true` shows the text word for word. Format: PLAN.md.
+
+```bash
+.venv/bin/pip install -r requirements-voice.txt          # Python 3.10 to 3.12, PyTorch
+.venv/bin/pip install --no-deps qwen-asr==0.0.6           # the aligner; it pins another transformers but works with this one
+.venv/bin/python pixsci.py voice  videos/my-topic/explainer.yaml out          # listen: out/<name>-voice.wav
+.venv/bin/python pixsci.py render videos/my-topic/explainer.yaml out --voice  # video with sound and subtitles
+```
+
+The first run downloads about 6 GB from Hugging Face (a cloud sandbox must allow `huggingface.co` and `*.hf.co`).
+On a CPU, speech takes about 5 to 10 times its length; a scene is spoken and aligned again only when its text or
+`tts:` changes. Without the aligner, word times are estimated from the text.
+
 ## With an agent
 
 The skill `/animate` (in `.agents/skills/animate/`, linked for Claude Code in `.claude/skills/`)
@@ -51,8 +78,8 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
 ## Layout
 
 ```
-pixsci.py              command line: formats, sheet, verbs, check, board, render, frames
-pixel_kit/             the core: frame, explain, packs, sprites, verbs, ui, bg, fx, font, palette, scene
+pixsci.py              command line: formats, sheet, verbs, check, board, render, frames, voice
+pixel_kit/             the core: frame, explain, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
 packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
 .agents/skills/animate the agent skill

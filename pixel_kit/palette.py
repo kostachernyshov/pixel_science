@@ -44,8 +44,9 @@ SEQUENTIAL = [LGREY, BLUE, XBLUE, NAVY, XNAVY]
 
 
 def C(i):
-    return P[i]
+    """A palette index, or an RGB tuple as it is (a video with its own palette)."""
+    return tuple(i) if isinstance(i, (tuple, list)) else P[i]
 
 
 def CA(i):
-    return P[i] + (255,)
+    return C(i) + (255,)

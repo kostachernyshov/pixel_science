@@ -8,6 +8,8 @@ name: nk-missing-self                 # output file names: <name>-<format>.mp4
 lang: en                              # en: on-screen text must be plain ASCII
 packs: [biology]                      # sprite packs in packs/ (default: all)
 voiceover: voiceover.md               # '## S01' headings, the voice-over text under each
+tts: {voice: ryan, instruct: "Warm, natural documentary narrator."}   # optional: the voice of `--voice` (README, Voice)
+subtitles: true                       # optional: the voice-over word for word in a box at the bottom (replaces captions)
 formats: [landscape, vertical, square, banner]
 max_s: 60                             # optional: longest story before the summary (default 60 s)
 sources:                              # required: the papers or textbooks behind each claim
@@ -35,14 +37,29 @@ sits above the bottom 20 % (apps cover it with buttons). In `banner`, there is n
 ## Timing
 
 - A scene lasts (words of its voice-over) / 2.5 + 0.8 s, at least 2.5 s. `dur: 4` sets it by hand.
+- With `--voice`, a scene lasts as long as its spoken audio (0.25 s before the words, 0.6 s after); `dur` can make it longer, not shorter.
 - Story before the summary: 20 to 45 s. The summary holds 8 s (`dur` sets more).
+- A beat can start on a word of its scene instead of a time: `{word: "attacks", dt: -0.3, actor: t, verb: hit}`
+  (`n: 2`: the second time the word is said; a word matches by its start, so "attack" finds "attacks").
+  With `--voice`, the time is when the word is heard (`OUTDIR/voice/<scene>.words.json`); without it, estimated.
+  A `custom` scene asks for the same time with `words.cue(ctx["plan"], scene, "attacks")`.
+- In `voiceover.md`, `[PD-L1|pee dee el one]` shows the first form (subtitles) and speaks the second (voice).
+  Write numbers, units, and gene or protein names this way.
+
+## Subtitles
+
+`subtitles: true` shows the voice-over word for word in a box at the bottom of every scene: each word types in
+while it is heard, the word being said is highlighted. A page holds 2 lines (1 in the banner) and ends at the end
+of a sentence or a pause. Captions are not drawn. Colors: `subtitles: {fill, border, inner, text, highlight}`,
+each a palette index or `[r, g, b]`; `fade_color: [r, g, b]` is the color of the dissolve between scenes
+(default the paper background) for a plan with its own palette.
 
 ## Fields of all scenes
 
 | Field | Meaning |
 |---|---|
 | `id` | Unique id, the same as the heading in `voiceover.md`. |
-| `type` | `title`, `cast`, `action`, `fact`, `flow`, `summary`, `custom`. The last scene is a `summary`. |
+| `type` | `title`, `cast`, `action`, `fact`, `flow`, `summary`, `custom`. The last scene is a `summary` (or a `custom` final frame). |
 | `caption` | 1 to 3 words at the bottom, on screen 2 s or more. |
 | `title` | Short heading at the top left (not in `banner`). |
 | `bg` | `paper` (default), `plain`, `tissue`, `epithelium`, `bloodstream`, `lymph_node`, `tme`, `dishes`. |
@@ -109,4 +126,6 @@ no room for labels, a destroyed actor that comes back, `after:` out of order, or
 ### custom
 `module` (path to a .py file), `function` (default `draw`). The function gets
 `(img, t, scene, ctx)`; `ctx["layout"]` has the frame size, stage, and caption place. Read
-`frame.W` and `frame.H`, never 480 and 270. A custom scene is a candidate for a new scene type.
+`frame.W` and `frame.H`, never 480 and 270. With subtitles, the stage ends above their box. `ctx["dur"]` is
+the scene length; time events with `words.cue` (see Timing). Colors are palette indices or `(r, g, b)`.
+A custom scene is a candidate for a new scene type.
