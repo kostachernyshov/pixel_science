@@ -1,1 +1,6 @@
-kokoro>=0.9.4
+qwen-tts==0.1.1                # Qwen3-TTS: the voice
+# The aligner (Qwen3-ForcedAligner) comes from qwen-asr, which pins another transformers.
+# It works with the one of qwen-tts: install it after this file with --no-deps (README, Voice).
+nagisa==0.2.11                 # dependencies of qwen-asr
+soynlp==0.0.493
+qwen-omni-utils

@@ -1,19 +1,20 @@
 # Words of the voice-over in time: what is said, when, and the subtitles drawn from it.
 #
-#   voiceover.md may write a word one way and say it another: [PD-L1|пи-ди-эль один].
+#   voiceover.md may write a word one way and say it another: [PD-L1|пи-ди-эль-один].
 #   written(text)  the text for the screen ("PD-L1")      spoken(text)  the text for the voice
 #
-#   voice/<scene>.words.json  [{"w": "PD-L1", "s": 1.20, "e": 1.85}, ...]  (s, e: seconds in the scene's wav)
-#   comes from align.py (forced alignment of the spoken text to the wav). Without it, times are estimated.
+#   align() writes voice/<scene>.words.json: [{"w": "PD-L1", "s": 1.20, "e": 1.85}, ...] (seconds in the
+#   scene's wav), by forced alignment of the known text to the audio. Without it, times are estimated.
 #
-#   A beat can start on a word: {word: "тормоз", dt: -0.3, actor: t, verb: alert}  (n: 2 for the 2nd time)
+#   A beat can start on a word: {word: "тормоз", dt: -0.3, actor: t, verb: alert}  (n: 2 for the 2nd time).
+#   A custom scene asks for the same time with cue(plan, scene, "тормоз").
 #   subtitles: true in the plan draws the words in a box at the bottom, each word when it is heard.
 
 import json, os, re
 
 MARK = re.compile(r"\[([^\]|]+)\|([^\]]+)\]")
 EST_WPS = 2.5            # words a second, when there is no alignment
-LEAD = 0.25              # the same as voice.LEAD: silence before the words of a scene
+from .voice import LEAD  # silence before the words of a scene
 
 
 def written(text):
@@ -246,17 +247,20 @@ def trim_silence(ws, wav):
         out.append(x)
     return out
 
-LANGS = {"ru": "Russian", "en": "English", "de": "German", "fr": "French", "es": "Spanish"}
+ALIGNER = "Qwen/Qwen3-ForcedAligner-0.6B"
+ALIGN_PITFALL = ("The aligner is not installed: word times are estimated. Install it into .venv:\n"
+                 "  .venv/bin/pip install --no-deps qwen-asr==0.0.6")
 
 
 def align(plan, texts, paths, outdir):
-    """Writes voice/<id>.words.json for each scene whose audio or text changed: the written words of
-    the scene with the times they are heard. texts: {id: text with [written|spoken] marks};
-    paths: {id: wav} from voice.attach. Returns the number of scenes aligned now."""
-    from . import align as AL
-    lang = (plan.get("tts") or {}).get("lang") or LANGS.get(plan.get("lang", "en"), "English")
+    """Writes voice/<id>.words.json for each scene whose audio or text changed: the written words of the
+    scene with the times they are heard (Qwen3-ForcedAligner, Apache 2.0, ~1.8 GB on the first run).
+    texts: {id: text with [written|spoken] marks}; paths: {id: wav} from voice.attach.
+    Returns the number of scenes aligned now."""
+    from .voice import settings
+    lang = settings(plan)["lang"]
     d = os.path.join(outdir, "voice")
-    jobs, todo = [], []
+    todo = []
     for sid, wav in paths.items():
         text = texts.get(sid, "").strip()
         p = os.path.join(d, f"{sid}.words.json")
@@ -264,16 +268,24 @@ def align(plan, texts, paths, outdir):
             old = json.load(open(p, encoding="utf-8"))
             if old.get("text") == text and old.get("wav_mtime") == os.path.getmtime(wav):
                 continue
+        todo.append((sid, text, wav, p))
+    if not todo:
+        return 0
+    try:
+        import torch
+        from qwen_asr import Qwen3ForcedAligner
+    except ImportError:
+        print(ALIGN_PITFALL)
+        return 0
+    dev = "cuda:0" if torch.cuda.is_available() else "cpu"
+    m = Qwen3ForcedAligner.from_pretrained(ALIGNER, dtype=torch.float32, device_map=dev)
+    for sid, text, wav, p in todo:
         # "пи-ди-эль-один" as one unit gets too little time: the aligner times each part when they are apart
         unit_text = re.sub(r"(?<=\w)-(?=\w)", " ", spoken(text))
-        jobs.append({"wav": os.path.abspath(wav), "text": unit_text, "lang": lang,
-                     "out": os.path.join(d, f"{sid}.units.json")})
-        todo.append((sid, text, wav, p))
-    if not AL.run(jobs, d):
-        return 0
-    for (sid, text, wav, p), j in zip(todo, jobs):
-        units = json.load(open(j["out"], encoding="utf-8"))
+        res = m.align(audio=wav, text=unit_text, language=lang)[0]
+        units = [{"text": it.text, "start": float(it.start_time), "end": float(it.end_time)} for it in res.items]
         ws = trim_silence(from_alignment(text, units), wav)
-        json.dump({"text": text, "wav_mtime": os.path.getmtime(wav), "aligner": AL.MODEL, "words": ws},
+        json.dump({"text": text, "wav_mtime": os.path.getmtime(wav), "aligner": ALIGNER, "words": ws},
                   open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=0)
+        print(f"words {sid}: {len(ws)}", flush=True)
     return len(todo)

@@ -10,10 +10,10 @@
 #   board     PLAN OUTDIR [-f a,b]            storyboard for each format: OUTDIR/board-<format>.png
 #   render    PLAN OUTDIR [-f a,b] [--gif]    video for each format: OUTDIR/<name>-<format>.mp4
 #   frames    PLAN OUTDIR [-f a,b] [t ...]    single frames as PNG (default: the key frames)
-#   voice     PLAN OUTDIR                     voice-over spoken by Kokoro: OUTDIR/<name>-voice.wav
+#   voice     PLAN OUTDIR                     voice-over spoken (Qwen3-TTS) and its words timed: OUTDIR/voice/
 #
 # -f limits the formats (default: the plan's "formats", else all four).
-# --voice (board, render, frames): time scenes to the Kokoro voice in OUTDIR/voice/; render puts it in the mp4.
+# --voice (board, render, frames): time scenes and word beats to the voice in OUTDIR/voice/; render puts it in the mp4.
 
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))

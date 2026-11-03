@@ -1,83 +1,58 @@
-# Voice-over audio: voiceover.md spoken by Kokoro (local TTS, English, Apache 2.0).
+# Voice-over audio: voiceover.md spoken by Qwen3-TTS (local, Apache 2.0, Russian, English and 8 more languages).
 #
 #   pixsci voice  PLAN OUTDIR             OUTDIR/voice/<scene>.wav and OUTDIR/<name>-voice.wav
 #   pixsci render PLAN OUTDIR --voice     the same audio, scenes timed to it, sound in each mp4
 #
-# Kokoro is optional: pip install -r requirements-voice.txt (Python 3.10 to 3.12), and espeak-ng.
-# The first run downloads the model (~330 MB) and the voice from Hugging Face.
-# Each scene is synthesized once; a scene is spoken again only when its text, voice, or speed changes.
+# Optional: requirements-voice.txt (Python 3.10 to 3.12, PyTorch; see README, Voice). The first run downloads
+# the model from Hugging Face (1.7B: ~4.5 GB). Each scene is spoken once; a scene is spoken again only when
+# its text or the `tts:` settings change. After the voice, words.align times each word (subtitles, beats).
 
 import json, os, wave
 import numpy as np
 
-RATE = 24000             # Hz, Kokoro output
-VOICE = "af_heart"       # American English, female; `tts: {voice: ...}` in the plan
+RATE = 24000             # Hz, Qwen3-TTS output
+MODEL = "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice"
+VOICE = "ryan"           # speakers of the CustomVoice model: ryan, aiden (English); vivian, serena... (Chinese)
+LANGS = {"en": "English", "ru": "Russian", "de": "German", "fr": "French", "es": "Spanish",
+         "it": "Italian", "pt": "Portuguese", "ja": "Japanese", "ko": "Korean", "zh": "Chinese"}
 LEAD = 0.25              # s of silence before the words of a scene (the fade between scenes)
 TAIL = 0.6               # s after them
-PITFALL = ("Kokoro is not installed. Install it (Python 3.10 to 3.12):\n"
+PITFALL = ("Qwen3-TTS is not installed. Install it (Python 3.10 to 3.12 in .venv):\n"
            "  .venv/bin/pip install -r requirements-voice.txt\n"
-           "  brew install espeak-ng      # Linux: apt install espeak-ng")
+           "  .venv/bin/pip install --no-deps qwen-asr==0.0.6")
 
 
 def settings(plan):
-    """(voice, speed) from `tts:` in the plan."""
-    t = plan.get("tts") or {}
-    return str(t.get("voice", VOICE)).lower(), float(t.get("speed", 1.0))
+    """`tts:` in the plan with defaults: voice, lang (from the plan's lang), instruct, model, seed."""
+    t = dict(plan.get("tts") or {})
+    t["voice"] = str(t.get("voice", VOICE)).lower()
+    t["lang"] = str(t.get("lang") or LANGS.get(plan.get("lang", "en"), "English"))
+    t.setdefault("model", MODEL)
+    t.setdefault("seed", 1)
+    t.setdefault("instruct", "")
+    return t
 
 
-def engine(plan):
-    """`tts: {engine: kokoro | qwen3}`. kokoro: English. qwen3: Qwen3-TTS, 10 languages with Russian."""
-    t = plan.get("tts") or {}
-    return str(t.get("engine", "kokoro"))
-
-
-QWEN3_MODEL = "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice"
-QWEN3_PITFALL = ("Qwen3-TTS is not installed. Install it (Python 3.10 to 3.12, PyTorch):\n"
-                 "  .venv/bin/pip install qwen-tts")
-
-
-def qwen3(plan):
-    """A function text -> float32 samples at RATE, made with Qwen3-TTS CustomVoice (Apache 2.0).
-    tts: {engine: qwen3, voice: aiden, lang: Russian, model: ..., instruct: "calm, clear"}.
-    The first run downloads the model (1.7B: ~4.5 GB; 0.6B: ~2.5 GB) from Hugging Face."""
-    t = plan.get("tts") or {}
+def qwen3(t):
+    """A function text -> float32 samples at RATE. t: settings(plan)."""
+    os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")   # Apple Silicon: ops that MPS lacks run on CPU
     try:
         import torch
         from qwen_tts import Qwen3TTSModel
     except ImportError:
-        raise SystemExit(QWEN3_PITFALL)
+        raise SystemExit(PITFALL)
     dev = "cuda:0" if torch.cuda.is_available() else "cpu"
-    m = Qwen3TTSModel.from_pretrained(t.get("model", QWEN3_MODEL), device_map=dev,
+    m = Qwen3TTSModel.from_pretrained(t["model"], device_map=dev,
                                       dtype=torch.bfloat16 if dev != "cpu" else torch.float32)
-    torch.manual_seed(int(t.get("seed", 1)))     # sampling: the same seed gives the same voice take
 
     def say(text):
-        kw = {"instruct": t["instruct"]} if t.get("instruct") else {}
-        wavs, sr = m.generate_custom_voice(text=text, speaker=str(t.get("voice", "aiden")),
-                                           language=str(t.get("lang", "Auto")), **kw)
+        torch.manual_seed(int(t["seed"]))   # sampling: the same seed and text give the same take
+        kw = {"instruct": t["instruct"]} if t["instruct"] else {}
+        wavs, sr = m.generate_custom_voice(text=text, speaker=t["voice"], language=t["lang"], **kw)
         a = np.asarray(wavs[0], np.float32)
-        if sr != RATE:                         # Qwen3-TTS speaks at 24 kHz, as Kokoro; resample otherwise
+        if sr != RATE:
             a = np.interp(np.arange(0, len(a), sr / RATE), np.arange(len(a)), a).astype(np.float32)
         return a
-    return say
-
-
-def kokoro(voice, speed):
-    """A function text -> float32 samples at RATE, made with Kokoro."""
-    os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")   # Apple Silicon: ops that MPS lacks run on CPU
-    try:
-        from kokoro import KPipeline
-    except ImportError:
-        raise SystemExit(PITFALL)
-    pipe = KPipeline(lang_code=voice[0])   # the first letter of a voice is its language: a = American, b = British
-
-    def say(text):
-        parts = []
-        for r in pipe(text, voice=voice, speed=speed):
-            if r.audio is not None:
-                a = r.audio
-                parts.append(np.asarray(a.cpu() if hasattr(a, "cpu") else a, np.float32))
-        return np.concatenate(parts) if parts else np.zeros(0, np.float32)
     return say
 
 
@@ -97,10 +72,10 @@ def write_wav(p, samples):
 
 def attach(plan, texts, outdir, say=None):
     """Speaks the voice-over of each scene into outdir/voice/<id>.wav (only what changed) and puts the
-    length of the words of each scene into plan["_spoken"], so that `explain.durations` times scenes to
-    the audio. texts: {scene id: text} (explain.voiceover). say: text -> samples; default Kokoro.
+    length of each scene's audio into plan["_spoken"], so that `explain.durations` times scenes to it.
+    texts: {scene id: spoken text} (words.spoken). say: text -> samples; default Qwen3-TTS.
     Returns {scene id: wav path}."""
-    voice, speed = settings(plan)
+    t = settings(plan)
     d = os.path.join(outdir, "voice")
     os.makedirs(d, exist_ok=True)
     meta_p = os.path.join(d, "meta.json")
@@ -112,15 +87,13 @@ def attach(plan, texts, outdir, say=None):
         if not text:
             continue
         p = os.path.join(d, f"{sid}.wav")
-        key = {"text": text, "voice": voice, "speed": speed, "engine": engine(plan)}
-        if engine(plan) == "kokoro":
-            key.pop("engine")                  # keeps the cache of plans made before engines
+        key = {"text": text, **{k: t[k] for k in ("voice", "lang", "instruct", "model", "seed")}}
         if meta.get(sid) != key or not os.path.exists(p):
-            say = say or (qwen3(plan) if engine(plan) == "qwen3" else kokoro(voice, speed))
-            print(f"voice {sid}: {text[:60]}")
+            say = say or qwen3(t)
+            print(f"voice {sid}: {text[:60]}", flush=True)
             write_wav(p, say(text))
             meta[sid] = key
-            json.dump(meta, open(meta_p, "w"), indent=1)
+            json.dump(meta, open(meta_p, "w"), indent=1, ensure_ascii=False)
         paths[sid] = p
         spoken[sid] = LEAD + len(read_wav(p)) / RATE + TAIL
     plan["_spoken"] = spoken
