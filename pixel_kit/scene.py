@@ -9,13 +9,25 @@
 # Between scenes: a Bayer dissolve to PAPER (FADE s), except at the very start.
 # Scanlines are off in the light theme (they make grey stripes on a light background).
 
-import os, subprocess
+import os, shutil, subprocess, sys
 import numpy as np
 from PIL import Image
 from .palette import PAPER, C
 
 from . import frame
 SCALE, FPS = frame.SCALE, 30
+
+
+def ffmpeg_exe():
+    """ffmpeg: $PIXSCI_FFMPEG, else ffmpeg on PATH, else the binary of the imageio-ffmpeg package."""
+    exe = os.environ.get("PIXSCI_FFMPEG") or shutil.which("ffmpeg")
+    if exe:
+        return exe
+    try:
+        import imageio_ffmpeg
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except ImportError:
+        sys.exit("ffmpeg not found: install it (brew install ffmpeg; apt install ffmpeg) or pip install imageio-ffmpeg")
 FADE = 0.25
 SCANLINES = False
 
@@ -82,7 +94,7 @@ class Timeline:
 
     def render(self, out, dur=None, progress=True):
         dur = dur or self.duration
-        cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
+        cmd = [ffmpeg_exe(), "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
                "-s", f"{frame.W * SCALE}x{frame.H * SCALE}", "-r", str(self.fps), "-i", "-",
                "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
                "-movflags", "+faststart", out]

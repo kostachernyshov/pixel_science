@@ -3,6 +3,7 @@
 #
 #   uv run --with pillow --with numpy --with pyyaml python3 pixsci.py <command> ...
 #
+#   doctor                                    what the tool needs (Python, ffmpeg, packs, voice) and what is missing
 #   formats                                   list the formats and their output sizes
 #   sheet     OUT.png                         cast sheet: every sprite of the library
 #   verbs     [OUT.png] [-p pack,...]       verbs (actions for beats); OUT.png: a contact sheet of each verb
@@ -81,6 +82,32 @@ def _stop_on_problems(plan):
         for p in problems:
             print(" -", p)
         sys.exit(1)
+
+
+def cmd_doctor(a):
+    """Prints what the tool finds, then READY or NOT READY. Voice is optional: it never makes NOT READY."""
+    import importlib.util, shutil
+    from pixel_kit import packs
+    have = lambda m: importlib.util.find_spec(m) is not None
+    ready = True
+    print(f"python  {sys.version.split()[0]} ({sys.executable})")
+    ff = os.environ.get("PIXSCI_FFMPEG") or shutil.which("ffmpeg") or ("imageio-ffmpeg" if have("imageio_ffmpeg") else None)
+    print(f"ffmpeg  {ff or 'MISSING: brew install ffmpeg, apt install ffmpeg, or pip install imageio-ffmpeg'}")
+    ready = ready and bool(ff)
+    found = packs.find()
+    print(f"packs   {', '.join(found) or 'NONE'} ({os.pathsep.join(packs.search_path())})")
+    ready = ready and bool(found)
+    missing = [m for m in ("torch", "qwen_tts", "qwen_asr") if not have(m)]
+    if missing:
+        print(f"voice   not installed (optional; missing {', '.join(missing)}): docs/tool.md, Voice and subtitles")
+    else:
+        import torch
+        dev = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+        print(f"voice   ready (torch {torch.__version__}, {dev})")
+    if not (3, 10) <= sys.version_info[:2] <= (3, 12):
+        print("        the voice packages need Python 3.10 to 3.12")
+    print("READY" if ready else "NOT READY")
+    sys.exit(0 if ready else 1)
 
 
 def cmd_formats(a):

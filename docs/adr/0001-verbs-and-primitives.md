@@ -39,6 +39,6 @@ a hit with windup, freeze, and recoil. Its effects are game effects, and its cod
 
 ## Consequences
 
-- A new action is usually 5 to 10 lines of YAML. The rules are in `.agents/skills/add-verb/SKILL.md`.
+- A new action is usually 5 to 10 lines of YAML. The rules are in `skills/add-verb/SKILL.md`.
 - `fx:` in a beat is replaced by `verb:`; `pixsci check` says so for an old plan.
 - Effects blend with sprites through the light layer; a style with a dark background sets `LIGHT["mode"] = "add"`.

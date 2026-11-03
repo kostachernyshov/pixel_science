@@ -3,7 +3,7 @@
 #   pixsci voice  PLAN OUTDIR             OUTDIR/voice/<scene>.wav and OUTDIR/<name>-voice.wav
 #   pixsci render PLAN OUTDIR --voice     the same audio, scenes timed to it, sound in each mp4
 #
-# Optional: requirements-voice.txt (Python 3.10 to 3.12, PyTorch; see README, Voice). The first run downloads
+# Optional: requirements-voice.txt (Python 3.10 to 3.12, PyTorch; see docs/tool.md, Voice). The first run downloads
 # the model from Hugging Face (1.7B: ~4.5 GB). Each scene is spoken once; a scene is spoken again only when
 # its text or the `tts:` settings change. After the voice, words.align times each word (subtitles, beats).
 
@@ -116,8 +116,9 @@ def mix(plan, paths, times, out):
 def mux(video, audio):
     """Puts the audio into the mp4 in place (video stream copied, audio AAC)."""
     import subprocess
+    from .scene import ffmpeg_exe
     tmp = video + ".tmp.mp4"
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", video, "-i", audio, "-map", "0:v", "-map", "1:a",
+    subprocess.run([ffmpeg_exe(), "-y", "-loglevel", "error", "-i", video, "-i", audio, "-map", "0:v", "-map", "1:a",
                     "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", tmp], check=True)
     os.replace(tmp, video)
     return video

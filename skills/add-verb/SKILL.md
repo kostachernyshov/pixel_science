@@ -8,6 +8,20 @@ description: Add a missing action (a verb) for the beats of a pixel_science scen
 Terms (see `GLOSSARY.md`): a **beat** names a **verb**; a verb is YAML in a **pack** and lists **primitives**;
 a primitive is a Python function in the **core** (`pixel_kit/fx.py`) with no topic.
 
+## Where the tool is
+
+- Installed as a plugin: `ROOT` is `${CLAUDE_PLUGIN_ROOT}` and `VENV` is `${CLAUDE_PLUGIN_DATA}/venv`.
+- If these two are empty or read literally as `${...}`, the skill runs from a clone of the repo:
+  `ROOT` is the repo root and `VENV` is `ROOT/.venv`.
+- Run the tool from the person's working folder: `"VENV/bin/python" "ROOT/pixsci.py" <command> ...`.
+  Below, `pixsci.py <command>` means this. Other paths of the tool (`packs/`, `pixel_kit/`, docs/tool.md,
+  CONTRIBUTING.md, GLOSSARY.md) are under `ROOT`.
+- No `VENV/bin/python`, no ffmpeg (`pixsci.py formats` says so), or a video with a voice and no voice packages:
+  run the `setup` skill first, then come back.
+- In an installed plugin, `ROOT` is replaced at each update, so a verb written there is lost. Write it in a
+  clone of the repo (and offer it as a pull request, CONTRIBUTING.md), or in a pack of the person's own:
+  `packs/<name>/pack.yaml` and `verbs.yaml` in the working folder, with `PIXSCI_PACKS=packs` before each command.
+
 ```
 Scene needs an action
  │

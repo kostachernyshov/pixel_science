@@ -1,0 +1,20 @@
+{
+  "name": "pixel-science",
+  "displayName": "pixel_science",
+  "description": "Pixel-art science explainer videos in four formats (16:9, 9:16, 1:1, 4:1) from a short plan: skills setup, storyboard, animate, add-verb, the pixsci tool, and sprite packs (biology).",
+  "author": {
+    "name": "Kosta Chernyshov",
+    "url": "https://github.com/kostachernyshov"
+  },
+  "homepage": "https://github.com/kostachernyshov/pixel_science",
+  "repository": "https://github.com/kostachernyshov/pixel_science",
+  "license": "MIT",
+  "keywords": [
+    "video",
+    "pixel-art",
+    "science",
+    "explainer",
+    "animation",
+    "biology"
+  ]
+}

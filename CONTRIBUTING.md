@@ -29,12 +29,12 @@ Sprites drawn in code live in the pack's `code/library.py` and build with `pytho
 ## Add a verb or a primitive
 
 Actions in scenes are verbs: YAML in `packs/<pack>/verbs.yaml` that lists primitives of `pixel_kit/fx.py`.
-Follow `.agents/skills/add-verb/SKILL.md`. A verb fits its pack's subject (no ice or fire in biology).
+Follow `skills/add-verb/SKILL.md`. A verb fits its pack's subject (no ice or fire in biology).
 Look at it on the contact sheet: `python pixsci.py verbs out/verbs.png`.
 
 ## Add a scene type or a background
 
-Scene painters are the `p_<type>` functions in `pixel_kit/explain.py`; backgrounds are in `pixel_kit/bg.py`. Read `frame.W` and `frame.H` at draw time, never fixed sizes. Check the result in all four formats with `pixsci.py board`. Document the new fields in `.agents/skills/animate/PLAN.md`.
+Scene painters are the `p_<type>` functions in `pixel_kit/explain.py`; backgrounds are in `pixel_kit/bg.py`. Read `frame.W` and `frame.H` at draw time, never fixed sizes. Check the result in all four formats with `pixsci.py board`. Document the new fields in `skills/animate/PLAN.md`.
 
 ## Pull requests
 

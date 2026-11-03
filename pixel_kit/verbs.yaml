@@ -1,5 +1,5 @@
 # Core verbs: actions with no topic, for every pack. A pack can replace one with its own verb of the same name.
-# How to add a verb: .agents/skills/add-verb/SKILL.md. Format of a verb:
+# How to add a verb: skills/add-verb/SKILL.md. Format of a verb:
 #
 #   name:
 #     desc: one line, what the viewer sees

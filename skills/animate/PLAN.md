@@ -8,7 +8,7 @@ name: nk-missing-self                 # output file names: <name>-<format>.mp4
 lang: en                              # en: on-screen text must be plain ASCII
 packs: [biology]                      # sprite packs in packs/ (default: all)
 voiceover: voiceover.md               # '## S01' headings, the voice-over text under each
-tts: {voice: ryan, instruct: "Warm, natural documentary narrator."}   # optional: the voice of `--voice` (README, Voice)
+tts: {voice: ryan, instruct: "Warm, natural documentary narrator."}   # optional: the voice of `--voice` (docs/tool.md, Voice)
 subtitles: true                       # optional: the voice-over word for word in a box at the bottom (replaces captions)
 formats: [landscape, vertical, square, banner]
 max_s: 60                             # optional: longest story before the summary (default 60 s)
@@ -103,7 +103,7 @@ drawn above), `label`, `color`, `hidden`. Keep x between 0.1 and 0.9: the vertic
 Core verbs: `appear` (set `hidden: true` on the actor), `vanish`, `hit`, `highlight`, `alert`.
 Biology verbs: `secrete`, `block`, `apoptosis`, `bind`. Effects have no coordinates: they take place and size
 from the actor and the `target`. `hit: heavy` on a beat makes a hit stronger, `hit: false` removes it.
-A verb is missing? Add it to the pack, then go on with the scene: `.agents/skills/add-verb/SKILL.md`.
+A verb is missing? Add it to the pack, then go on with the scene: [add-verb](../add-verb/SKILL.md).
 
 **Model and parts.** A mechanism has `model:` at the top of the plan (from `storyboard.md`; format in
 `pixel_kit/model.py`). Actors are things of the model by name (or `thing: t`, for a second T cell).
