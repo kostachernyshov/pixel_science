@@ -5,7 +5,7 @@
 #   PRIMS["jet"](cv, t, g, ramp, o)      draw one primitive at local time t (s)
 #   img = cv.image()                     color + light -> PIL image
 #
-# Contract of a primitive (read before you add one, see .agents/skills/add-verb/SKILL.md):
+# Contract of a primitive (read before you add one, see skills/add-verb/SKILL.md):
 # - fn(cv, t, g, ramp, o). t: seconds from the start of the primitive. Nothing is drawn when t < 0 or t > o["dur"].
 # - The frame comes from t and o["seed"] only (no state between frames), so any frame renders alone.
 # - g: geometry from the actors: g["a"] (x, y), g["b"] (x, y) or None, g["r"] the actor radius in px.

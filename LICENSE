@@ -1,4 +1,4 @@
-Code (pixel_kit/, tools/, pixsci.py, .agents/skills/): MIT License, see below.
+Code (pixel_kit/, tools/, pixsci.py, skills/): MIT License, see below.
 Sprites (sprites/*.png, sprites/sprites.json): each file has its license in sprites/CREDITS.csv.
   The library accepts only CC0-1.0 and CC-BY-4.0. Sprites drawn in pixel_kit/library.py are CC0-1.0.
 Font: fonts/unifont.otf, GNU Unifont, GPL-2.0-or-later with the font embedding exception,

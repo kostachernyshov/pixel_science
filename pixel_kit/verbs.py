@@ -15,7 +15,7 @@ from . import packs, palette, fx
 
 CORE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verbs.yaml")
 MAX_MS = 5          # a verb draws a 480x270 frame in this many ms or less (pixsci check warns)
-ADD = "add it to packs/<pack>/verbs.yaml (see .agents/skills/add-verb/SKILL.md)"
+ADD = "add it to packs/<pack>/verbs.yaml (see skills/add-verb/SKILL.md)"
 _use = None
 _cache = None
 

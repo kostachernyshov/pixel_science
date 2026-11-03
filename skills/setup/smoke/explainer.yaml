@@ -1,0 +1,28 @@
+# The setup check: a short video that uses each part of the tool once. Not a science video.
+title: "Setup check"
+name: setup-check
+lang: en
+packs: [biology]
+voiceover: voiceover.md
+formats: [landscape]
+sources:
+  - "Setup check of pixel_science: no claims."
+scenes:
+  - id: S01
+    type: title
+    title: "PIXEL SCIENCE"
+    sub: "setup check"
+  - id: S02
+    type: action
+    title: "It works"
+    actors:
+      t:    {sprite: killer_t, at: [0.2, 0.5], anim: move}
+      cell: {sprite: tumor, at: [0.75, 0.5], label: Cancer}
+    beats:
+      - {t: 0.2, actor: t, move_to: [0.5, 0.5], dur: 1.2}
+      - {word: "attacks", actor: t, verb: hit, target: cell}
+  - id: S03
+    type: summary
+    title: "Ready"
+    items: [{sprite: killer_t, label: "T cell"}, {sprite: tumor, label: Cancer}]
+    text: "One plan, four formats."

@@ -1,0 +1,13 @@
+{
+  "name": "pixel-science",
+  "owner": { "name": "Kosta Chernyshov", "url": "https://github.com/kostachernyshov" },
+  "metadata": { "description": "pixel_science: pixel-art science explainers made with an agent." },
+  "plugins": [
+    {
+      "name": "pixel-science",
+      "source": "./",
+      "description": "Pixel-art science explainer videos in four formats from a short plan: setup, storyboard, animate, add-verb.",
+      "category": "media"
+    }
+  ]
+}

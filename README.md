@@ -12,10 +12,37 @@ Pixel-art science explainers, made locally from a short plan. One plan renders f
 Sprites come in packs (`packs/`). The first pack is `biology`: 70 sprites of immune cells, tumor cells,
 body cells, molecules, lab props, and people, in one style (PICO-8 palette, 1 px outline, light background).
 
+## Install with Claude
+
+The repo is a Claude plugin and its own marketplace. One install gives the skills `setup`, `storyboard`,
+`animate`, and `add-verb`, and the tool they run.
+
+**Claude Code (terminal, desktop, IDE).** In a session:
+
+```
+/plugin install pixel-science --marketplace kostachernyshov/pixel_science
+/pixel-science:setup
+```
+
+`setup` makes a Python environment in the plugin's data folder (it stays across updates), checks ffmpeg,
+asks whether to install the voice, and renders a 15 s check video. Then: `/pixel-science:animate`
+("make a pixel explainer about how vaccines train B cells") or `/pixel-science:storyboard`. Videos go to
+the folder you work in. Updates: `/plugin marketplace update pixel-science`, or turn on auto-update for it in `/plugin`.
+
+**Cowork and claude.ai.** Customize > Plugins > Add > Add marketplace: `kostachernyshov/pixel_science`, then add
+`pixel-science`. It also reaches Claude Code on every machine signed in to the same account. In Cowork, run
+`/pixel-science:setup` first; without ffmpeg there it uses the one of the `imageio-ffmpeg` package. The voice needs
+about 6 GB and a fast machine: in a sandbox, skip it or bring a recorded voice.
+
+**A clone (cloud sessions, contributors).** Cloud sessions do not load marketplace plugins; they work in the repo.
+`.claude/skills` links to `skills/`, so the same skills run without the prefix: `/setup`, `/animate`.
+Other agents read `.agents/skills` (the same link) and `AGENTS.md`.
+
 ## Quick start
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # also needs ffmpeg
+.venv/bin/python pixsci.py doctor                                     # what is there, what is missing
 .venv/bin/python pixsci.py sheet  out/sheet.png                       # the sprites you can use
 .venv/bin/python pixsci.py check  videos/my-topic/explainer.yaml       # a plan you wrote (PLAN.md)
 .venv/bin/python pixsci.py board  videos/my-topic/explainer.yaml out   # storyboards, every format
@@ -53,7 +80,7 @@ On a CPU, speech takes about 5 to 10 times its length; a scene is spoken and ali
 
 ## With an agent
 
-The skill `/animate` (in `.agents/skills/animate/`, linked for Claude Code in `.claude/skills/`)
+The skill `/animate` (in `skills/animate/`; `/pixel-science:animate` from the plugin)
 takes a topic to a video: sources, a voice-over that you accept, a plan, a storyboard that you accept,
 and the render. Ask: "make a pixel explainer about how vaccines train B cells".
 
@@ -68,7 +95,7 @@ explainer.yaml ─┼─> pixel_kit/explain.py ──> Timeline ──> ffmpeg �
 packs/         ─┘        (layout per format: pixel_kit/frame.py)
 ```
 
-- `explainer.yaml`: scenes (`title`, `cast`, `action`, `fact`, `flow`, `summary`, `custom`). Format: `.agents/skills/animate/PLAN.md`.
+- `explainer.yaml`: scenes (`title`, `cast`, `action`, `fact`, `flow`, `summary`, `custom`). Format: `skills/animate/PLAN.md`.
 - `action` scenes place actors in fractions of the frame and run timed beats (move, animation, badge, verb), so one scene fits every format.
 - Verbs are actions with effects (`secrete`, `block`, `hit`): YAML in a pack that lists primitives of the core
   (`pixel_kit/fx.py`), with a light layer over the colors and hit mechanics (windup, freeze, shake, push).
@@ -78,12 +105,12 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
 ## Layout
 
 ```
-pixsci.py              command line: formats, sheet, verbs, check, board, render, frames, voice
+pixsci.py              command line: doctor, formats, sheet, verbs, check, board, render, frames, voice
 pixel_kit/             the core: frame, explain, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
 packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
-.agents/skills/animate the agent skill
-.agents/skills/storyboard the story and key-frame skill before animate
+skills/                agent skills: setup, storyboard, animate, add-verb (linked from .claude/skills and .agents/skills)
+.claude-plugin/        plugin.json and marketplace.json: the repo installs as a Claude plugin
 ```
 
 ## Contribute

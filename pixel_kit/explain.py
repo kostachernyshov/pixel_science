@@ -1,5 +1,5 @@
 # explainer.yaml -> Timeline, for each video format. The agent writes the plan; this module draws it.
-# The plan format is in .agents/skills/animate/PLAN.md. Paths in the plan are relative to the plan file.
+# The plan format is in skills/animate/PLAN.md. Paths in the plan are relative to the plan file.
 #
 #   from pixel_kit import explain, frame
 #   plan = explain.load("my-video/explainer.yaml")

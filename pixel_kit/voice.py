@@ -116,8 +116,9 @@ def mix(plan, paths, times, out):
 def mux(video, audio):
     """Puts the audio into the mp4 in place (video stream copied, audio AAC)."""
     import subprocess
+    from .scene import ffmpeg_exe
     tmp = video + ".tmp.mp4"
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", video, "-i", audio, "-map", "0:v", "-map", "1:a",
+    subprocess.run([ffmpeg_exe(), "-y", "-loglevel", "error", "-i", video, "-i", audio, "-map", "0:v", "-map", "1:a",
                     "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", tmp], check=True)
     os.replace(tmp, video)
     return video

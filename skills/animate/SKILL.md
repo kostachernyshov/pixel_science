@@ -8,14 +8,18 @@ description: Make a short pixel-art science video (20 to 45 s and a summary fram
 The video explains one science idea to a viewer without training: one mechanism, a few characters,
 one rule at the end. The voice explains; the picture shows. Each claim comes from a source.
 
-The tool is `pixsci.py` at the repo root. Run each command from the repo root:
+## Where the tool is
 
-```
-.venv/bin/python pixsci.py <command> ...
-```
+- Installed as a plugin: `ROOT` is `${CLAUDE_PLUGIN_ROOT}` and `VENV` is `${CLAUDE_PLUGIN_DATA}/venv`.
+- If these two are empty or read literally as `${...}`, the skill runs from a clone of the repo:
+  `ROOT` is the repo root and `VENV` is `ROOT/.venv`.
+- Run the tool from the person's working folder: `"VENV/bin/python" "ROOT/pixsci.py" <command> ...`.
+  Below, `pixsci.py <command>` means this. Other paths of the tool (`packs/`, `pixel_kit/`, README.md,
+  CONTRIBUTING.md, GLOSSARY.md) are under `ROOT`.
+- No `VENV/bin/python`, no ffmpeg (`pixsci.py formats` says so), or a video with a voice and no voice packages:
+  run the `setup` skill first, then come back.
 
-If `.venv` does not exist: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`.
-The tool needs `ffmpeg`. If `ffmpeg -version` fails, tell the person to install it (`brew install ffmpeg` on a Mac). Stop.
+## Flow
 
 ```
 1 topic → 2 sources → 3 voice-over [person] (→ voice [person listens]) → 4 plan → 5 check
