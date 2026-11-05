@@ -135,7 +135,15 @@ prints `108 sprites: VALID`; all 38 additions rebuild byte-for-byte. All 47 new
 animation frames load through the existing sprite interface, and a mixed-pack smoke
 plan passes `check` and renders storyboards in four formats. Light/dark review sheets
 and state comparisons are in ignored `out/base-assets/`. The renderer's unrelated
-text-only-summary crash is tracked separately in #43. Next: visual review of this
-base batch; environment-style integration and the remaining #26 roadmap stay open.
-Independent Standards and Spec reviews found no actionable issues. The PR is open
-for visual review; this is not yet maintainer acceptance or a merge.
+text-only-summary crash is tracked separately in #43. Independent Standards and
+Spec reviews found no actionable issues. Kosta approved the visual direction and
+asked to continue; PR #44 remains open, not merged.
+
+Two silent integration controls are in ignored `out/library-controls/`: a 27 s
+water cycle and a 20 s ligand/receptor binding study. Both keep a fixed camera,
+reuse pack sprites and existing mechanism profiles, and render in all four formats.
+The eight exports were checked for dimensions, duration, frame count, and a stable
+final hold. A light/dark comparison uses identical sprite sources without recoloring.
+These are local visual checks, not narrated educational releases or installed
+environment styles. Environment-style integration and the remaining #26 roadmap
+stay open.
