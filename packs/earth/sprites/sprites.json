@@ -1,0 +1,176 @@
+{
+ "sun": {
+  "file": "sun.png",
+  "group": "prop",
+  "cell": [
+   40,
+   36
+  ],
+  "anchor": [
+   20.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "cloud": {
+  "file": "cloud.png",
+  "group": "prop",
+  "cell": [
+   42,
+   27
+  ],
+  "anchor": [
+   21.0,
+   13.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "water_drop": {
+  "file": "water_drop.png",
+  "group": "prop",
+  "cell": [
+   26,
+   28
+  ],
+  "anchor": [
+   13.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "snowflake": {
+  "file": "snowflake.png",
+  "group": "prop",
+  "cell": [
+   36,
+   32
+  ],
+  "anchor": [
+   18.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "ice": {
+  "file": "ice.png",
+  "group": "prop",
+  "cell": [
+   36,
+   32
+  ],
+  "anchor": [
+   18.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "water_pool": {
+  "file": "water_pool.png",
+  "group": "prop",
+  "cell": [
+   50,
+   24
+  ],
+  "anchor": [
+   25.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "river": {
+  "file": "river.png",
+  "group": "prop",
+  "cell": [
+   50,
+   36
+  ],
+  "anchor": [
+   25.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "soil": {
+  "file": "soil.png",
+  "group": "prop",
+  "cell": [
+   44,
+   34
+  ],
+  "anchor": [
+   22.0,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "wet": {
+    "row": 1,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ }
+}

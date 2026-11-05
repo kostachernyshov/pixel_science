@@ -2404,5 +2404,647 @@
    }
   },
   "source": "code"
+ },
+ "protein": {
+  "file": "protein.png",
+  "group": "prop",
+  "cell": [
+   30,
+   24
+  ],
+  "anchor": [
+   15.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "rna": {
+  "file": "rna.png",
+  "group": "prop",
+  "cell": [
+   32,
+   19
+  ],
+  "anchor": [
+   16.0,
+   9.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "lipid": {
+  "file": "lipid.png",
+  "group": "prop",
+  "cell": [
+   24,
+   26
+  ],
+  "anchor": [
+   12.0,
+   13.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "plasmid": {
+  "file": "plasmid.png",
+  "group": "prop",
+  "cell": [
+   34,
+   30
+  ],
+  "anchor": [
+   17.0,
+   15.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "dna_fragment": {
+  "file": "dna_fragment.png",
+  "group": "prop",
+  "cell": [
+   21,
+   20
+  ],
+  "anchor": [
+   10.5,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "proteasome": {
+  "file": "proteasome.png",
+  "group": "prop",
+  "cell": [
+   34,
+   34
+  ],
+  "anchor": [
+   17.0,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "vesicle": {
+  "file": "vesicle.png",
+  "group": "prop",
+  "cell": [
+   32,
+   28
+  ],
+  "anchor": [
+   16.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "nucleus": {
+  "file": "nucleus.png",
+  "group": "prop",
+  "cell": [
+   38,
+   32
+  ],
+  "anchor": [
+   19.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "mitochondrion": {
+  "file": "mitochondrion.png",
+  "group": "prop",
+  "cell": [
+   42,
+   26
+  ],
+  "anchor": [
+   21.0,
+   13.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "ribosome": {
+  "file": "ribosome.png",
+  "group": "prop",
+  "cell": [
+   33,
+   26
+  ],
+  "anchor": [
+   16.5,
+   13.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "bacterium": {
+  "file": "bacterium.png",
+  "group": "prop",
+  "cell": [
+   40,
+   28
+  ],
+  "anchor": [
+   20.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "virus": {
+  "file": "virus.png",
+  "group": "prop",
+  "cell": [
+   36,
+   32
+  ],
+  "anchor": [
+   18.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "pipette": {
+  "file": "pipette.png",
+  "group": "prop",
+  "cell": [
+   20,
+   38
+  ],
+  "anchor": [
+   10.0,
+   19.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "microscope": {
+  "file": "microscope.png",
+  "group": "prop",
+  "cell": [
+   38,
+   38
+  ],
+  "anchor": [
+   19.0,
+   19.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "centrifuge": {
+  "file": "centrifuge.png",
+  "group": "prop",
+  "cell": [
+   42,
+   34
+  ],
+  "anchor": [
+   21.0,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "pcr_machine": {
+  "file": "pcr_machine.png",
+  "group": "prop",
+  "cell": [
+   42,
+   34
+  ],
+  "anchor": [
+   21.0,
+   17.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "heart": {
+  "file": "heart.png",
+  "group": "prop",
+  "cell": [
+   36,
+   36
+  ],
+  "anchor": [
+   18.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "lungs": {
+  "file": "lungs.png",
+  "group": "prop",
+  "cell": [
+   40,
+   36
+  ],
+  "anchor": [
+   20.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "liver": {
+  "file": "liver.png",
+  "group": "prop",
+  "cell": [
+   42,
+   29
+  ],
+  "anchor": [
+   21.0,
+   14.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "brain": {
+  "file": "brain.png",
+  "group": "prop",
+  "cell": [
+   40,
+   32
+  ],
+  "anchor": [
+   20.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "zebrafish": {
+  "file": "zebrafish.png",
+  "group": "prop",
+  "cell": [
+   42,
+   23
+  ],
+  "anchor": [
+   21.0,
+   11.5
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "fruit_fly": {
+  "file": "fruit_fly.png",
+  "group": "prop",
+  "cell": [
+   36,
+   28
+  ],
+  "anchor": [
+   18.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "nematode": {
+  "file": "nematode.png",
+  "group": "prop",
+  "cell": [
+   42,
+   22
+  ],
+  "anchor": [
+   21.0,
+   11.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "leaf": {
+  "file": "leaf.png",
+  "group": "prop",
+  "cell": [
+   36,
+   30
+  ],
+  "anchor": [
+   18.0,
+   15.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "flower": {
+  "file": "flower.png",
+  "group": "prop",
+  "cell": [
+   34,
+   38
+  ],
+  "anchor": [
+   17.0,
+   19.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "peptide_self": {
+  "file": "peptide_self.png",
+  "group": "prop",
+  "cell": [
+   30,
+   14
+  ],
+  "anchor": [
+   15.0,
+   7.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "peptide_mutant": {
+  "file": "peptide_mutant.png",
+  "group": "prop",
+  "cell": [
+   30,
+   14
+  ],
+  "anchor": [
+   15.0,
+   7.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
+ },
+ "seed": {
+  "file": "seed.png",
+  "group": "prop",
+  "cell": [
+   34,
+   38
+  ],
+  "anchor": [
+   17.0,
+   19.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "germinate": {
+    "row": 1,
+    "frames": 4,
+    "fps": 2,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "gel": {
+  "file": "gel.png",
+  "group": "prop",
+  "cell": [
+   38,
+   38
+  ],
+  "anchor": [
+   19.0,
+   19.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   },
+   "run": {
+    "row": 1,
+    "frames": 4,
+    "fps": 2,
+    "loop": false
+   }
+  },
+  "source": "code"
+ },
+ "chloroplast": {
+  "file": "chloroplast.png",
+  "group": "prop",
+  "cell": [
+   42,
+   26
+  ],
+  "anchor": [
+   21.0,
+   13.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "code"
  }
 }

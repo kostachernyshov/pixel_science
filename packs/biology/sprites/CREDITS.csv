@@ -69,3 +69,33 @@ supervisor,supervisor.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py
 lock,lock.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
 deck,deck.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
 person,person.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
+bacterium,bacterium.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+brain,brain.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+centrifuge,centrifuge.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+chloroplast,chloroplast.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+dna_fragment,dna_fragment.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+flower,flower.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+fruit_fly,fruit_fly.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+gel,gel.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+heart,heart.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+leaf,leaf.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+lipid,lipid.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+liver,liver.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+lungs,lungs.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+microscope,microscope.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+mitochondrion,mitochondrion.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+nematode,nematode.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+nucleus,nucleus.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+pcr_machine,pcr_machine.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+peptide_mutant,peptide_mutant.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+peptide_self,peptide_self.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+pipette,pipette.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+plasmid,plasmid.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+proteasome,proteasome.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+protein,protein.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+ribosome,ribosome.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+rna,rna.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+seed,seed.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+vesicle,vesicle.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+virus,virus.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+zebrafish,zebrafish.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles

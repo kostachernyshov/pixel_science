@@ -1,0 +1,4 @@
+name: earth
+version: 0.1.0
+description: Shared base sprites for water, weather, and soil; usable in any environment style.
+license: CC0-1.0 (sprites), MIT (code)

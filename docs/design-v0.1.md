@@ -126,5 +126,13 @@ the style cascade or additional packs are implemented.
 First comparison prepared on 2026-11-05 in `out/style-showcase/preview.html`. After
 Kosta clarified that the base library is shared, the study was corrected to use one
 `base/assets/` folder and identical sprite pixels across all three environments.
-Existing sprite validation and the setup smoke plan passed. Production integration
-is pending; the visual comparison is a local study rather than an installed style pack.
+The visual comparison remains a local study rather than an installed style pack.
+
+Base-asset batch #42 adds 30 biology sprites and 8 earth sprites in the production
+pack structure. All original 70 sheets and metadata entries are unchanged. Validation
+prints `108 sprites: VALID`; all 38 additions rebuild byte-for-byte. All 47 new
+animation frames load through the existing sprite interface, and a mixed-pack smoke
+plan passes `check` and renders storyboards in four formats. Light/dark review sheets
+and state comparisons are in ignored `out/base-assets/`. The renderer's unrelated
+text-only-summary crash is tracked separately in #43. Next: visual review of this
+base batch; environment-style integration and the remaining #26 roadmap stay open.
