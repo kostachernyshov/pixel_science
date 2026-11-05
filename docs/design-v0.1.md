@@ -98,9 +98,15 @@ the style cascade or additional packs are implemented.
 - **Detail.** Match the existing `tumor_pdl1`, `stem`, and `patient_a` sprites and the
   Cancer Wars character overview: distinct silhouettes, a few functional features,
   and readable states. Faces are optional. The same assets serve stills and video.
-- **Styles include environments.** A style defines the appearance of sprites and
-  assembled environments, including light, materials, contours, and visual texture.
-  The scientific objects and relationships remain consistent between styles.
+- **One base library.** Each sprite has one drawing and one set of animation frames
+  in its domain pack, shared by all styles and light/dark environments. Its identity
+  and meaningful colors remain recognizable. Adding a style must not require a new
+  sprite collection. This supersedes the per-style sprite cascade above for this work.
+- **Styles own environments.** Put the style's visual language in assembled environments,
+  backgrounds, lighting, labels, and framing. Use the base sprite unchanged by default.
+  If a demonstrated readability or harmony problem needs a slight palette adjustment,
+  apply a small color mapping at draw time, preserving meaningful distinctions; keep
+  the source PNG and animation frames shared. Do not produce per-style sprite files.
 - **First comparison.** Use approved atlas directions 03 Moss & Vermilion Woodcut,
   09 Porcelain Solarpunk, and 17 Sepia Clockwork Draft on two identical subjects:
   a ligand binding a membrane receptor, and the water cycle.
@@ -111,12 +117,14 @@ the style cascade or additional packs are implemented.
 - **Color and motion.** Keep each object's colors consistent within a video. Use
   shape and labels as well as color. Begin with a static drawing; add sprite frames
   for meaningful changes such as filling, binding, or growth. Reuse ordinary motion.
-- **Order.** Review the three-style comparison, let Kosta select the first style,
-  then finish the two examples in that style across all four formats before expanding
-  the five asset sets. Production sprites and metadata belong in the existing pack
+- **Order.** Expand the shared base assets and check them on light and dark backgrounds.
+  Develop styled environments separately, reusing those same assets. Style selection
+  does not gate the base library. Validate complete examples in four formats before
+  expanding widely. Production sprites and metadata belong in the existing pack
   structure; generated comparisons remain in `out/`.
 
-First comparison prepared on 2026-11-05 in `out/style-showcase/preview.html`, with
-individual transparent sprite studies and frames for four formats. Existing sprite
-validation and the setup smoke plan passed. The browser preview was checked at
-desktop and phone widths. Style selection and production integration are pending.
+First comparison prepared on 2026-11-05 in `out/style-showcase/preview.html`. After
+Kosta clarified that the base library is shared, the study was corrected to use one
+`base/assets/` folder and identical sprite pixels across all three environments.
+Existing sprite validation and the setup smoke plan passed. Production integration
+is pending; the visual comparison is a local study rather than an installed style pack.
