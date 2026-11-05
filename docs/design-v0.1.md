@@ -83,3 +83,40 @@ Voice only in v0.1. Music and 8-bit sound effects later, as a pack.
 6. Videos: anti-PD-L1 mechanism, Higgs boson. The Missing-self demo is removed.
 
 Next: mycorrhiza, the Chicxulub impact energy; then external packs, TTS, sound. The repo goes public after 3 to 5 videos and one outside sprite that passes the checks.
+
+## Reusable assets and styles: 2026-11-05 decisions
+
+Agreed with Kosta while discussing #26 (asset library) and #6 (styles). These decisions
+update the style priorities above; they are a direction for the work, not a claim that
+the style cascade or additional packs are implemented.
+
+- **Reuse first.** Start with existing drawings, sprite frames, packs, and motion. Add
+  a new drawing or abstraction only when an actual example needs it.
+- **Coverage.** First expand molecules, cells, laboratory equipment, organisms and
+  plants, and water/weather. Laboratory mechanisms and everyday natural processes
+  have equal priority. Geology, other physics, and astronomy follow later.
+- **Detail.** Match the existing `tumor_pdl1`, `stem`, and `patient_a` sprites and the
+  Cancer Wars character overview: distinct silhouettes, a few functional features,
+  and readable states. Faces are optional. The same assets serve stills and video.
+- **Styles include environments.** A style defines the appearance of sprites and
+  assembled environments, including light, materials, contours, and visual texture.
+  The scientific objects and relationships remain consistent between styles.
+- **First comparison.** Use approved atlas directions 03 Moss & Vermilion Woodcut,
+  09 Porcelain Solarpunk, and 17 Sepia Clockwork Draft on two identical subjects:
+  a ligand binding a membrane receptor, and the water cycle.
+- **Continuous explanation.** Keep the complete mechanism visible where useful,
+  particularly for the water cycle. Guide attention with movement and highlighting;
+  use readable silhouettes and compose each format independently. Add an enlarged
+  detail only when the explanation needs it.
+- **Color and motion.** Keep each object's colors consistent within a video. Use
+  shape and labels as well as color. Begin with a static drawing; add sprite frames
+  for meaningful changes such as filling, binding, or growth. Reuse ordinary motion.
+- **Order.** Review the three-style comparison, let Kosta select the first style,
+  then finish the two examples in that style across all four formats before expanding
+  the five asset sets. Production sprites and metadata belong in the existing pack
+  structure; generated comparisons remain in `out/`.
+
+First comparison prepared on 2026-11-05 in `out/style-showcase/preview.html`, with
+individual transparent sprite studies and frames for four formats. Existing sprite
+validation and the setup smoke plan passed. The browser preview was checked at
+desktop and phone widths. Style selection and production integration are pending.
