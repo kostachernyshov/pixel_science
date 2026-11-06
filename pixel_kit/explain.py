@@ -363,6 +363,8 @@ def _arrow(d, x0, y0, x1, y1, col):
 def _items(img, L, items, t, box, t0=0.3, step=0.35, labels=True, still=False):
     """Sprites in a grid with labels under them. Returns the cell centers."""
     n = len(items)
+    if not n:                         # a text-only scene (a summary with no items)
+        return []
     pts, cw, ch = grid(n, box, L["tall"])
     # one scale for all items, so that sizes compare
     common = min([best_scale(it["sprite"], cw, ch, room=22 if labels else 4, top=2 if L["banner"] else 4)
@@ -643,12 +645,17 @@ def p_summary(plan, sc, t, dur, ctx):
     lines = [lines] if isinstance(lines, str) else lines
     fitted = [_one_line(s, W - 20, (1,) if L["banner"] else (2, 1)) for s in lines]
     text_h = sum(len(ww) * LINE * kk + 4 for kk, ww in fitted)
-    x0, y0, x1, y1 = 0, L["head_h"], W, H - text_h - (int(H * 0.2) if L["tall"] else 8)
+    # the bottom of the free area: above the subtitle box when subtitles are on
+    bottom = L["subs"]["box"][1] - 4 if L["subs"] else H - (int(H * 0.2) if L["tall"] else 8)
+    x0, y0, x1, y1 = 0, L["head_h"], W, bottom - text_h
     if L["banner"]:
         # one low row: sprites on the left half, conclusion on the right half
         _items(img, L, sc.get("items") or [], t, (0, 4, W // 2, H - 4), t0=0.2, step=0.2, labels=False)
-        y = H // 2 - text_h // 2
-        for kk, ww in (fit_text(s, W // 2 - 16, (1,), max_lines=2) for s in lines):
+        banner_fit = [fit_text(s, W // 2 - 16, (1,), max_lines=2) for s in lines]
+        bh = sum(len(ww) * LINE * kk for kk, ww in banner_fit)
+        free = L["subs"]["box"][1] if L["subs"] else H     # the subtitle box sits on the right, at the bottom
+        y = max(2, free // 2 - bh // 2)
+        for kk, ww in banner_fit:
             if t >= 1.0:
                 for ln in ww:
                     text(img, W * 3 // 4, y, ln, NAVY, scale=kk, align="c")
@@ -676,6 +683,7 @@ def p_custom(plan, sc, t, dur, ctx):
         fn = ctx["_fn"] = getattr(mod, sc.get("function", "draw"))
     img = _bg(sc, t)
     L = layout()
+    _heading(img, L, sc.get("title"))     # the same heading as the other scene types
     fn(img, t, sc, dict(ctx, plan=plan, layout=L, dur=dur))
     _caption(img, L, sc, t)
     return img
