@@ -1,4 +1,5 @@
 # The setup check: a short video that uses each part of the tool once. Not a science video.
+# It is also the test of the tool: CI runs check and board on it, so each case below must keep working.
 title: "Setup check"
 name: setup-check
 lang: en
@@ -7,6 +8,12 @@ voiceover: voiceover.md
 formats: [landscape]
 sources:
   - "Setup check of pixel_science: no claims."
+model:
+  things:
+    t:    {parts: {tcr: {label: TCR, color: GREEN}}}
+    cell: {parts: {mhc1: {label: MHC-I, color: YELLOW}}}
+  relations:
+    signal: {kind: bind, a: tcr, b: mhc1, source: "1: setup check"}
 scenes:
   - id: S01
     type: title
@@ -16,13 +23,25 @@ scenes:
     type: action
     title: "It works"
     actors:
-      t:    {sprite: killer_t, at: [0.2, 0.5], anim: move}
-      cell: {sprite: tumor, at: [0.75, 0.5], label: Cancer}
+      syringe: {sprite: syringe, at: [0.15, 0.4]}
+      mouse:   {sprite: mouse_top, at: [0.7, 0.5]}
     beats:
-      - {t: 0.2, actor: t, move_to: [0.5, 0.5], dur: 1.2}
-      - {word: "attacks", actor: t, verb: hit, target: cell}
+      - {t: 0.2, actor: syringe, move_to: mouse, dur: 1.2}       # stops at the mouse's edge
+      - {word: "in", actor: syringe, verb: hit, target: mouse}     # "in", not "into": the same word wins
   - id: S03
+    type: action
+    title: "It binds"
+    actors:
+      t:    {sprite: killer_t, at: [0.2, 0.5], anim: move, parts: [tcr]}
+      cell: {sprite: tumor, at: [0.75, 0.5], label: Cancer, parts: [mhc1]}
+    beats:
+      - {word: "T", actor: t, move_to: cell, dur: 1.2}            # "T", not "The"; stops at the gap of the bind
+      - {word: "binds", actor: tcr, verb: bind, target: mhc1}
+  - id: S04
+    type: custom
+    title: "By hand"
+    module: scene.py
+  - id: S05
     type: summary
     title: "Ready"
-    items: [{sprite: killer_t, label: "T cell"}, {sprite: tumor, label: Cancer}]
     text: "One plan, four formats."

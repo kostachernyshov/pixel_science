@@ -128,18 +128,15 @@ def attach(plan, texts, outdir=None):
 # ---------------------------------------------------------------- beats on words
 
 def word_time(words, key, n=1):
-    """Start of a word in the scene: key is an index (0 = first word) or a word ("тормоз" matches
-    "тормоза": the start of the word is enough). n: the n-th time it is said."""
+    """Start of a word in the scene: key is an index (0 = first word) or a word. n: the n-th time it is said.
+    The same word wins ("B" finds "B", not "because"); only if the scene does not have it, the start of a
+    word is enough ("тормоз" finds "тормоза")."""
     if isinstance(key, int):
         return words[key]["s"] if 0 <= key < len(words) else None
     k = norm(str(key))
-    seen = 0
-    for w in words:
-        if norm(w["w"]).startswith(k):
-            seen += 1
-            if seen == n:
-                return w["s"]
-    return None
+    same = [w["s"] for w in words if norm(w["w"]) == k]
+    hits = same or [w["s"] for w in words if norm(w["w"]).startswith(k)]
+    return hits[n - 1] if 0 < n <= len(hits) else None
 
 
 def cue(plan, sc, key, n=1, dt=0.0, default=0.0):
@@ -157,9 +154,14 @@ def resolve_beats(plan):
         for b in sc.get("beats") or []:
             if "word" not in b:
                 continue
-            t = word_time(ws, b["word"], int(b.get("n", 1)))
+            n = int(b.get("n", 1))
+            t = word_time(ws, b["word"], n)
             if t is None:
-                problems.append(f"{sc.get('id')}: beat word {b['word']!r} is not in the voice-over of the scene")
+                k = norm(str(b["word"]))
+                said = sum(norm(w["w"]) == k for w in ws)
+                problems.append(f"{sc.get('id')}: beat word {b['word']!r} is not in the voice-over of the scene"
+                                if not said else f"{sc.get('id')}: beat word {b['word']!r} n: {n}, but the scene "
+                                f"says it {said} time(s) as a whole word (a whole word wins over the start of a longer one)")
                 continue
             b["t"] = round(max(0.0, t + float(b.get("dt", 0))), 3)
     return problems

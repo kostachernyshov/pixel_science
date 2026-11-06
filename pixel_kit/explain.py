@@ -249,6 +249,9 @@ def check(plan):
         for beat in sc.get("beats") or []:
             if beat.get("actor") not in names:
                 out.append(f"{sid}: beat at {beat.get('t')} s names an unknown actor {beat.get('actor')!r}")
+            mt = beat.get("move_to")
+            if isinstance(mt, str) and mt not in (sc.get("actors") or {}):
+                out.append(f"{sid}: beat at {beat.get('t')} s: move_to names an unknown actor {mt!r}")
             out += [f"{sid}: {p}" for p in verbs.check_beat(beat, names)]
             if beat.get("verb"):
                 used.add(beat["verb"])
@@ -287,7 +290,8 @@ def check(plan):
     fmts = [x for x in (plan.get("formats") or ["landscape"]) if x in frame.FORMATS] or ["landscape"]
     for i, f in enumerate(fmts):          # the model once; contact (geometry) in each format
         frame.use(f)
-        found = model.check(plan, positions=lambda si, sc, t: _positions(sc, t))
+        found = model.check(plan, positions=lambda si, sc, t: _positions(sc, t, plan), stage=layout()["stage"])
+        found += _touch(plan)
         out += found if i == 0 else [f"{p} [{f}]" for p in found if "(contact)" in p]
     frame.use("landscape")
     if not plan["scenes"] or plan["scenes"][-1].get("type") not in ("summary", "custom"):
@@ -514,7 +518,7 @@ def _actor_state(a, beats, name, t):
         bt = float(b.get("t", 0))
         if t < bt:
             break
-        if "move_to" in b:
+        if "move_to" in b and not isinstance(b["move_to"], str):    # an actor name is resolved by _approach
             d = float(b.get("dur", 1.0))
             k = ease(seg(t, bt, bt + d))
             tx, ty = b["move_to"]
@@ -530,9 +534,50 @@ def _actor_state(a, beats, name, t):
     return x, y, anim, t - a_t0, flip, badge, shown
 
 
-def _expand(sc):
-    """The scene's beats plus show/hide beats that verbs add (show: at the start, hide: at the end)."""
-    out = list(sc.get("beats") or [])
+HEAD_GAP = model.HEAD + 2 * model.STALK + 4      # units: a bind placed by move_to shows both stalks
+
+
+def _approach(plan, sc, beats):
+    """Beats with `move_to: <actor>` get the place where the mover touches that actor (fractions of the stage):
+    edge to edge along the way it comes, or, when their parts bind, at the gap of the bind on a level or
+    upright axis. Sizes come from the sprites, so the place fits every format."""
+    actors = sc.get("actors") or {}
+    if not any(isinstance(b.get("move_to"), str) for b in beats):
+        return beats
+    L = layout()
+    x0, y0, x1, y1 = L["stage"]
+    sw, sh = (x1 - x0) or 1, (y1 - y0) or 1
+    out = list(beats)
+    for i in sorted(range(len(out)), key=lambda i: float(out[i].get("t", 0))):
+        b = out[i]
+        me, tg = b.get("actor"), b.get("move_to")
+        if not isinstance(tg, str) or me not in actors or tg not in actors:
+            continue
+        bt = float(b.get("t", 0))
+        mx, my = _actor_state(actors[me], out, me, bt)[:2]
+        tx, ty = _actor_state(actors[tg], out, tg, bt + float(b.get("dur", 1.0)))[:2]
+        mx, my, tx, ty = x0 + mx * sw, y0 + my * sh, x0 + tx * sw, y0 + ty * sh
+        km = int(actors[me].get("scale", L["sprite_scale"]))
+        kt = int(actors[tg].get("scale", L["sprite_scale"]))
+        bind = model.bind_between(plan, sc, me, tg) if plan else None
+        if bind:
+            d = model._axis(mx - tx, my - ty)                      # level or upright, on the target's line
+            ua = model.unit(km)
+            lo, hi = model.bind_range(plan, bind[1], bind[2], ua, d)
+            gap = min(hi, max(lo + 2, (HEAD_GAP) * ua))
+        else:
+            dist = math.hypot(mx - tx, my - ty) or 1.0
+            d, gap = ((mx - tx) / dist, (my - ty) / dist), 0
+        far = model.reach(actors[tg]["sprite"], kt, d) + gap + model.reach(actors[me]["sprite"], km, (-d[0], -d[1]))
+        nx, ny = tx + d[0] * far, ty + d[1] * far
+        out[i] = dict(b, move_to=[round((nx - x0) / sw, 4), round((ny - y0) / sh, 4)])
+    return out
+
+
+def _expand(sc, plan=None):
+    """The scene's beats (move_to an actor resolved) plus show/hide beats that verbs add (show: at the start,
+    hide: at the end)."""
+    out = _approach(plan, sc, list(sc.get("beats") or []))
     for b in sc.get("beats") or []:
         if not b.get("verb"):
             continue
@@ -542,6 +587,33 @@ def _expand(sc):
             who = v.get(key)
             if who:
                 out.append({"t": when, "actor": b.get(who) if who == "target" else b["actor"], "show": val})
+    return out
+
+
+def _touch(plan):
+    """A verb with a hit must reach its target: at the moment of contact their sprites touch (current format)."""
+    out = []
+    for sc in plan["scenes"]:
+        if sc.get("type") != "action":
+            continue
+        actors = sc.get("actors") or {}
+        try:
+            hits = _hits(sc)
+        except KeyError:                  # an unknown verb: reported by the beat checks
+            continue
+        for th, _, att, tg in hits:
+            if att not in actors or tg not in actors:
+                continue
+            st = _positions(sc, th, plan)
+            (ax, ay, _, ka), (tx, ty, _, kt) = st[att][:4], st[tg][:4]
+            if not (st[att][8] and st[tg][8]):
+                continue
+            dist = math.hypot(tx - ax, ty - ay) or 1.0
+            d = ((tx - ax) / dist, (ty - ay) / dist)
+            gap = dist - model.reach(actors[att]["sprite"], ka, d) - model.reach(actors[tg]["sprite"], kt, (-d[0], -d[1]))
+            if gap > 2:
+                out.append(f"{sc.get('id')}: hit at {th:.2f} s: {att} does not touch {tg} ({gap:.0f} px apart) "
+                           f"(contact): move it with move_to: {tg}")
     return out
 
 
@@ -558,9 +630,9 @@ def _hits(sc):
     return out
 
 
-def _positions(sc, t):
+def _positions(sc, t, plan=None):
     """Actor state of an action scene at time t, for checks (no hit offsets)."""
-    beats = _expand(sc)
+    beats = _expand(sc, plan)
     L = layout()
     x0, y0, x1, y1 = L["stage"]
     out = {}
@@ -577,7 +649,7 @@ def p_action(plan, sc, T, dur, ctx):
     Positions are fractions of the stage (0..1), so the scene fits every format.
     A verb with hit mechanics stops the picture for a moment on contact (the scene time T is warped)."""
     if "beats" not in ctx:
-        ctx["beats"], ctx["hits"] = _expand(sc), _hits(sc)
+        ctx["beats"], ctx["hits"] = _expand(sc, plan), _hits(sc)
     beats, hits = ctx["beats"], ctx["hits"]
     t, shake = fx.warp(T, [h[:2] for h in hits])
     img = _bg(sc, t)
@@ -648,6 +720,8 @@ def p_summary(plan, sc, t, dur, ctx):
     # the bottom of the free area: above the subtitle box when subtitles are on
     bottom = L["subs"]["box"][1] - 4 if L["subs"] else H - (int(H * 0.2) if L["tall"] else 8)
     x0, y0, x1, y1 = 0, L["head_h"], W, bottom - text_h
+    if not sc.get("items"):            # a text-only frame: the conclusion in the middle
+        y1 = L["head_h"] + (bottom - L["head_h"] - text_h) // 2
     if L["banner"]:
         # one low row: sprites on the left half, conclusion on the right half
         _items(img, L, sc.get("items") or [], t, (0, 4, W // 2, H - 4), t0=0.2, step=0.2, labels=False)
@@ -658,7 +732,7 @@ def p_summary(plan, sc, t, dur, ctx):
         for kk, ww in banner_fit:
             if t >= 1.0:
                 for ln in ww:
-                    text(img, W * 3 // 4, y, ln, NAVY, scale=kk, align="c")
+                    text(img, W * 3 // 4 if sc.get("items") else W // 2, y, ln, NAVY, scale=kk, align="c")
                     y += LINE * kk
         return img
     _items(img, L, sc.get("items") or [], t, (x0, y0, x1, y1), t0=0.2, step=0.2)
