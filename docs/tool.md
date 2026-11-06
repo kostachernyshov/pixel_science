@@ -57,11 +57,16 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
   (`pixel_kit/fx.py`), with a light layer over the colors and hit mechanics (windup, freeze, shake, push).
   `pixsci.py verbs out/verbs.png` lists and draws them. Why: `docs/adr/0001-verbs-and-primitives.md`.
 - The frame is small (480x270 for 16:9) and scaled x4 with nearest neighbor: sharp pixels at any size.
+- Text: Medeo Pixel on a grid 2 times finer than the frame (one text pixel is half a frame pixel), so
+  text keeps its size (16 px line at scale 1) with finer letters. Sizes stay in frame pixels. Text is drawn
+  over the picture of the frame (over sprites). Medeo Pixel has Latin and Cyrillic.
+  `PIXEL_TEXT_FONT=unifont` brings back Unifont 16 px. How it works: `pixel_kit/font.py`, top.
 
 ## Layout
 
 ```
 pixsci.py              command line: doctor, formats, sheet, verbs, check, board, render, frames, voice
+fonts/                 unifont.otf, MedeoPixel.ttf (from npm medeo-font 1.0.0, WOFF to TTF) and their licenses
 pixel_kit/             the core: frame, explain, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
 packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
