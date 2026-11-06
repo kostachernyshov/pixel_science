@@ -158,10 +158,12 @@ def resolve_beats(plan):
             t = word_time(ws, b["word"], n)
             if t is None:
                 k = norm(str(b["word"]))
-                said = sum(norm(w["w"]) == k for w in ws)
+                same = sum(norm(w["w"]) == k for w in ws)
+                said = same or sum(norm(w["w"]).startswith(k) for w in ws)
+                how = " as a whole word (a whole word wins over the start of a longer one)" if same else ""
                 problems.append(f"{sc.get('id')}: beat word {b['word']!r} is not in the voice-over of the scene"
                                 if not said else f"{sc.get('id')}: beat word {b['word']!r} n: {n}, but the scene "
-                                f"says it {said} time(s) as a whole word (a whole word wins over the start of a longer one)")
+                                f"says it {said} time(s){how}")
                 continue
             b["t"] = round(max(0.0, t + float(b.get("dt", 0))), 3)
     return problems

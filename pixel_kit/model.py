@@ -27,7 +27,7 @@
 # touch; parts are drawn on stalks out of the membrane, and partners get a matching lock-and-key head made
 # from the relation, so no table of who binds whom is needed.
 
-import math, zlib
+import functools, math, zlib
 from PIL import ImageDraw
 from .palette import C, BLACK, NAMES
 from .timing import clamp, ease
@@ -232,24 +232,35 @@ def scene_state(plan, si, sc, t):
 
 # ---------------------------------------------------------------- drawing
 
-def _edge(name, anim_k, px, py, d, off):
-    """The membrane point of the sprite from its anchor along direction d, shifted by off across it."""
+@functools.lru_cache(maxsize=4096)
+def _ray(name, anim_k, d, off):
+    """Steps from the sprite's anchor (shifted by off across d) to its last opaque pixel along d, or None."""
     im = S.frame(name, "idle", 0, False, anim_k)
     ax, ay = S.meta()[name]["anchor"]
-    cx, cy = ax * anim_k, ay * anim_k
-    nx, ny = abs(d[1]), abs(d[0])          # a fixed side axis: partners on both bodies share their offset
-    while True:                            # a row past the side of a small body moves in until it meets the body
-        x, y, last = cx + nx * off, cy + ny * off, None
-        for s in range(0, max(im.size)):
-            xx, yy = int(x + d[0] * s), int(y + d[1] * s)
-            if not (0 <= xx < im.width and 0 <= yy < im.height):
-                break
-            if im.getpixel((xx, yy))[3] > 0:
-                last = s
-        if last is not None or abs(off) < 1:
+    nx, ny = abs(d[1]), abs(d[0])
+    x, y, last = ax * anim_k + nx * off, ay * anim_k + ny * off, None
+    for s in range(0, max(im.size)):
+        xx, yy = int(x + d[0] * s), int(y + d[1] * s)
+        if not (0 <= xx < im.width and 0 <= yy < im.height):
             break
+        if im.getpixel((xx, yy))[3] > 0:
+            last = s
+    return last
+
+
+def fit_off(name, anim_k, d, off):
+    """The offset nearest to off at which a row still meets the body (a row past the side of a small body
+    moves in)."""
+    while _ray(name, anim_k, d, off) is None and abs(off) >= 1:
         off -= math.copysign(1, off)
-    s = (last + 1) if last is not None else max(im.size) * 0.4
+    return off
+
+
+def _edge(name, anim_k, px, py, d, off):
+    """The membrane point of the sprite from its anchor along direction d, shifted by off across it."""
+    nx, ny = abs(d[1]), abs(d[0])          # a fixed side axis: partners on both bodies share their offset
+    last = _ray(name, anim_k, d, off)
+    s = (last + 1) if last is not None else max(S.frame(name, "idle", 0, False, anim_k).size) * 0.4
     return px + nx * off + d[0] * s, py + ny * off + d[1] * s
 
 
@@ -282,20 +293,21 @@ def bind_range(plan, pa, pb, u, d):
     return lo, hi
 
 
-def bind_between(plan, sc, me, tg):
-    """The first bind relation (name, part of me, part of tg) between parts of these two actors, or None."""
+def bind_between(plan, sc, me, tg, beats, t):
+    """The first bind relation (name, part of me, part of tg) between parts that these two actors show at t,
+    or None."""
     actors = sc.get("actors") or {}
     if me not in actors or tg not in actors:
         return None
     P = parts(plan)
     tm, tt = thing_of(me, actors[me]), thing_of(tg, actors[tg])
+    sm, st = shown_parts(actors[me], beats, me, t), shown_parts(actors[tg], beats, tg, t)
     for n, r in get(plan)[1].items():
         if r.get("kind") != "bind" or r.get("a") not in P or r.get("b") not in P:
             continue
-        if (P[r["a"]][0], P[r["b"]][0]) == (tm, tt):
-            return n, r["a"], r["b"]
-        if (P[r["a"]][0], P[r["b"]][0]) == (tt, tm):
-            return n, r["b"], r["a"]
+        for pa, pb in ((r["a"], r["b"]), (r["b"], r["a"])):
+            if (P[pa][0], P[pb][0]) == (tm, tt) and pa in sm and pb in st:
+                return n, pa, pb
     return None
 
 
@@ -323,7 +335,7 @@ def layout_parts(plan, sc, t, state, beats):
     actors = sc.get("actors") or {}
     shown = {name: [p for p in shown_parts(a, beats, name, t) if p in P and P[p][0] == thing_of(name, a)]
              for name, a in actors.items() if name in state and state[name][8]}
-    rows = sorted({sl[p] for ps in shown.values() for p in ps})    # the slots of this moment, packed
+    rows = scene_rows(plan, sc, beats)
     out = {}
     for name, ps in shown.items():
         a = actors[name]
@@ -346,9 +358,28 @@ def layout_parts(plan, sc, t, state, beats):
                     target = min(others, key=lambda o: math.hypot(state[o][0] - px, state[o][1] - py))
             d = _axis(state[target][0] - px, state[target][1] - py) if target else (1, 0)
             off = (rows.index(sl[p]) - (len(rows) - 1) / 2) * (ROWS + 3) * u
-            bx, by = _edge(a["sprite"], k, px, py, d, off)
-            out[(p, name)] = {"base": (bx, by), "d": d, "u": u, "off": off}
+            out[(p, name)] = {"d": d, "u": u, "off": fit_off(a["sprite"], k, d, off), "_at": (a["sprite"], k, px, py)}
+    near = {}                       # partners share a row: the offset that fits on every body of the slot
+    for (p, name), g in out.items():
+        o = near.get(sl[p])
+        near[sl[p]] = g["off"] if o is None or abs(g["off"]) < abs(o) else o
+    for (p, name), g in out.items():
+        sprite, k, px, py = g.pop("_at")
+        g["off"] = near[sl[p]]
+        g["base"] = _edge(sprite, k, px, py, g["d"], g["off"])
     return out
+
+
+def scene_rows(plan, sc, beats):
+    """The slots of the parts that the scene shows at any time, packed: rows stay put when parts come and go."""
+    P = parts(plan)
+    sl, _ = slots(plan)
+    ps = set()
+    for name, a in (sc.get("actors") or {}).items():
+        ps.update(a.get("parts") or [])
+    for b in beats:
+        ps.update(b.get("parts") or [])
+    return sorted({sl[p] for p in ps if p in P})
 
 
 def _label_box(lab, g, bx, by, sx, sy, length):

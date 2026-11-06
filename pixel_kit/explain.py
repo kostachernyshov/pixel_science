@@ -250,8 +250,10 @@ def check(plan):
             if beat.get("actor") not in names:
                 out.append(f"{sid}: beat at {beat.get('t')} s names an unknown actor {beat.get('actor')!r}")
             mt = beat.get("move_to")
-            if isinstance(mt, str) and mt not in (sc.get("actors") or {}):
-                out.append(f"{sid}: beat at {beat.get('t')} s: move_to names an unknown actor {mt!r}")
+            if isinstance(mt, str) and (mt not in (sc.get("actors") or {}) or beat.get("actor") == mt):
+                out.append(f"{sid}: beat at {beat.get('t')} s: move_to names {mt!r}, not another actor of the scene")
+            elif "move_to" in beat and beat.get("actor") not in (sc.get("actors") or {}):
+                out.append(f"{sid}: beat at {beat.get('t')} s: only an actor moves ({beat.get('actor')!r} is a part)")
             out += [f"{sid}: {p}" for p in verbs.check_beat(beat, names)]
             if beat.get("verb"):
                 used.add(beat["verb"])
@@ -541,25 +543,34 @@ def _approach(plan, sc, beats):
     """Beats with `move_to: <actor>` get the place where the mover touches that actor (fractions of the stage):
     edge to edge along the way it comes, or, when their parts bind, at the gap of the bind on a level or
     upright axis. Sizes come from the sprites, so the place fits every format."""
-    actors = sc.get("actors") or {}
     if not any(isinstance(b.get("move_to"), str) for b in beats):
         return beats
     L = layout()
     x0, y0, x1, y1 = L["stage"]
     sw, sh = (x1 - x0) or 1, (y1 - y0) or 1
+    todo = [i for i, b in enumerate(beats) if isinstance(b.get("move_to"), str)]
     out = list(beats)
-    for i in sorted(range(len(out)), key=lambda i: float(out[i].get("t", 0))):
-        b = out[i]
+    for _ in range(2):              # twice: a target that itself moves to an actor is placed by the first pass
+        out = _approach_once(plan, sc, beats, out, todo, L, (x0, y0, sw, sh))
+    return out
+
+
+def _approach_once(plan, sc, beats, done, todo, L, stage):
+    actors = sc.get("actors") or {}
+    x0, y0, sw, sh = stage
+    out = list(done)
+    for i in sorted(todo, key=lambda i: float(beats[i].get("t", 0))):
+        b = beats[i]
         me, tg = b.get("actor"), b.get("move_to")
-        if not isinstance(tg, str) or me not in actors or tg not in actors:
+        if me not in actors or tg not in actors or me == tg:
             continue
-        bt = float(b.get("t", 0))
+        bt, end = float(b.get("t", 0)), float(b.get("t", 0)) + float(b.get("dur", 1.0))
         mx, my = _actor_state(actors[me], out, me, bt)[:2]
-        tx, ty = _actor_state(actors[tg], out, tg, bt + float(b.get("dur", 1.0)))[:2]
+        tx, ty = _actor_state(actors[tg], out, tg, end)[:2]
         mx, my, tx, ty = x0 + mx * sw, y0 + my * sh, x0 + tx * sw, y0 + ty * sh
         km = int(actors[me].get("scale", L["sprite_scale"]))
         kt = int(actors[tg].get("scale", L["sprite_scale"]))
-        bind = model.bind_between(plan, sc, me, tg) if plan else None
+        bind = model.bind_between(plan, sc, me, tg, out, end) if plan else None
         if bind:
             d = model._axis(mx - tx, my - ty)                      # level or upright, on the target's line
             ua = model.unit(km)
@@ -599,11 +610,12 @@ def _touch(plan):
         actors = sc.get("actors") or {}
         try:
             hits = _hits(sc)
+            beats = _expand(sc, plan)
         except KeyError:                  # an unknown verb: reported by the beat checks
             continue
         for th, _, att, tg in hits:
-            if att not in actors or tg not in actors:
-                continue
+            if att not in actors or tg not in actors or model.bind_between(plan, sc, att, tg, beats, th):
+                continue                  # bound things touch through their parts, across the gap of the bind
             st = _positions(sc, th, plan)
             (ax, ay, _, ka), (tx, ty, _, kt) = st[att][:4], st[tg][:4]
             if not (st[att][8] and st[tg][8]):
