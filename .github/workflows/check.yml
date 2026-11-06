@@ -11,3 +11,7 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Sprite library (palette, metadata, credits, license)
         run: python tools/validate_sprites.py
+      - name: Setup check plan (the test of the tool)
+        run: |
+          python pixsci.py check skills/setup/smoke/explainer.yaml
+          python pixsci.py board skills/setup/smoke/explainer.yaml out/ci -f landscape,vertical,square,banner
