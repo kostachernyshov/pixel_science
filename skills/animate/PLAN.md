@@ -121,10 +121,11 @@ no room for labels, a destroyed actor that comes back, `after:` out of order, or
 `steps`: up to 4 of `{sprite, label, anim, scale}` with arrows. A process: step 1 leads to step 2.
 
 ### summary
-`title`, `items` (up to 4 sprites with labels), `text` (1 or 2 lines). The last frame; it holds still.
+`title`, `items` (up to 4 sprites with labels, or none for a text-only frame), `text` (1 or 2 lines). The last frame; it holds still.
 
 ### custom
-`module` (path to a .py file), `function` (default `draw`). The function gets
+`module` (path to a .py file), `function` (default `draw`), `title` (drawn by the tool, as in other scenes;
+the function does not draw it). The function gets
 `(img, t, scene, ctx)`; `ctx["layout"]` has the frame size, stage, and caption place. Read
 `frame.W` and `frame.H`, never 480 and 270. With subtitles, the stage ends above their box. `ctx["dur"]` is
 the scene length; time events with `words.cue` (see Timing). Colors are palette indices or `(r, g, b)`.

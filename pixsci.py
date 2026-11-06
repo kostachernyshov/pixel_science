@@ -123,7 +123,7 @@ def cmd_sheet(a):
 
 def cmd_verbs(a):
     from pixel_kit import verbs, fx
-    pos, packs_, _ = _args([x if x != "-p" else "-f" for x in a])
+    pos, packs_, _, _ = _args([x if x != "-p" else "-f" for x in a])
     verbs.use(packs_)
     for name, v in sorted(verbs.all().items(), key=lambda kv: (kv[1]["pack"] != "core", kv[1]["pack"], kv[0])):
         tgt = " target" if v.get("target") else ""
