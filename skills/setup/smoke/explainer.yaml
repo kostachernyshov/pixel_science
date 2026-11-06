@@ -14,6 +14,7 @@ model:
     cell: {parts: {mhc1: {label: MHC-I, color: YELLOW}}}
   relations:
     signal: {kind: bind, a: tcr, b: mhc1, source: "1: setup check"}
+    drawn:  {kind: change, a: t, b: cell, after: signal, source: "1: setup check"}
 scenes:
   - id: S01
     type: title
@@ -41,6 +42,8 @@ scenes:
     type: custom
     title: "By hand"
     module: scene.py
+    beats:
+      - {word: "hand", shows: drawn}                               # times the code and shows the relation
   - id: S05
     type: summary
     title: "Ready"

@@ -281,16 +281,25 @@ def reach(name, k, d, off=0):
     return ex * d[0] + ey * d[1] - (abs(d[1]) * off * d[0] + abs(d[0]) * off * d[1])
 
 
-def bind_range(plan, pa, pb, u, d):
+def bind_range(plan, pa, pb, u, d, mols=(False, False)):
     """(lo, hi): the gaps between the two membranes at which parts pa and pb bind along axis d: room for both
-    heads, and on a level axis for both labels between the bodies, but within the reach of the stalks."""
+    heads, and on a level axis for both labels between the bodies, but within the reach of the stalks.
+    mols: which of the two sit on a molecule (no stalk, no head: one stalk and one head span the gap)."""
     P = parts(plan)
-    lo = (HEAD + 2) * u
-    hi = (2 * REACH + HEAD) * u
+    stalked = [p for p, m in zip((pa, pb), mols) if not m]
+    if not stalked:
+        return 0, 2 * u                 # two molecules: edge to edge
+    n = len(stalked)
+    lo = (HEAD * n // 2 + 2) * u
+    hi = (n * REACH + HEAD * n // 2) * u
     if d[0] and frame.H >= 160:         # labels on their stalks, if the stalks can reach that far
-        room = HEAD * u + 2 * (max(_label_w(P, pa), _label_w(P, pb)) + 2)
+        room = HEAD * n // 2 * u + n * (max(_label_w(P, p) for p in stalked) + 2)
         lo = room if room <= hi else lo   # else they sit by the heads, one above and one below (_label_box)
     return lo, hi
+
+
+def is_molecule(sprite):
+    return S.meta()[sprite].get("body") == "molecule"
 
 
 def bind_between(plan, sc, me, tg, beats, t):
@@ -358,7 +367,9 @@ def layout_parts(plan, sc, t, state, beats):
                     target = min(others, key=lambda o: math.hypot(state[o][0] - px, state[o][1] - py))
             d = _axis(state[target][0] - px, state[target][1] - py) if target else (1, 0)
             off = (rows.index(sl[p]) - (len(rows) - 1) / 2) * (ROWS + 3) * u
-            out[(p, name)] = {"d": d, "u": u, "off": fit_off(a["sprite"], k, d, off), "_at": (a["sprite"], k, px, py)}
+            mol = is_molecule(a["sprite"])          # its site is drawn in the sprite: no stalk
+            out[(p, name)] = {"d": d, "u": u, "off": fit_off(a["sprite"], k, d, off), "mol": mol,
+                              "_at": (a["sprite"], k, px, py)}
     near = {}                       # partners share a row: the offset that fits on every body of the slot
     for (p, name), g in out.items():
         o = near.get(sl[p])
@@ -388,10 +399,13 @@ def _label_box(lab, g, bx, by, sx, sy, length):
     from .font import text_w, LINE
     d, u = g["d"], g["u"]
     w = text_w(str(lab))
-    hx, hy = sx + d[0] * 3 * u, sy + d[1] * 3 * u
+    h = 0 if g.get("mol") else 3 * u                        # a molecule's site is its edge
+    hx, hy = sx + d[0] * h, sy + d[1] * h
     if d[0]:
         on_stalk = length >= w + 2                           # bound: on its own stalk (the room rule keeps it there)
         cx = (bx + sx) / 2 if on_stalk else hx
+        if g.get("mol"):                                     # no stalk: over its own body, out of the gap
+            on_stalk, cx = True, bx - d[0] * (w / 2 + 2)
         # the outer side of its row; one row and by the head: partners face opposite ways, so one above, one below
         side = (-1 if g["off"] <= 0 else 1) if on_stalk or g["off"] else -d[0]
         top = hy + side * (ROWS * u / 2 + 1) - (LINE if side < 0 else 0)
@@ -421,12 +435,13 @@ def stalks(plan, si, sc, t, state, beats):
     for (p, name), g in geo.items():
         bx, by = g["base"]
         d, u = g["d"], g["u"]
-        free = STALK * u
+        free = 0 if g["mol"] else STALK * u
         length = free
-        if (p, name) in ext:
+        if (p, name) in ext and not g["mol"]:
             e, gp = ext[(p, name)]
             gap = (gp["base"][0] - bx) * d[0] + (gp["base"][1] - by) * d[1]
-            want = max(free, (gap - HEAD * u) / 2)
+            # two heads meet in the middle; a molecule's site is its edge, so the head goes all the way to it
+            want = max(free, gap - HEAD * u / 2 if gp["mol"] else (gap - HEAD * u) / 2)
             length = free + (want - free) * e
         sx, sy = bx + d[0] * length, by + d[1] * length
         lab = P[p][1].get("label")
@@ -452,12 +467,15 @@ def draw(img, plan, si, sc, t, state, beats):
         d, u = g["d"], g["u"]
         col = _palette(P[p][1].get("color", "LGREY"), 6)
         _, role, prof = site(plan, p)
-        w = max(1, u // 2 + 1)
-        x0, x1 = sorted((bx, sx))
-        y0, y1 = sorted((by, sy))
-        dr.rectangle([x0 - w // 2, y0 - w // 2, x1 + w // 2, y1 + w // 2], fill=C(col))
-        _head(dr, sx, sy, d, u, prof, role, col)
-        hx, hy = sx + d[0] * 3 * u, sy + d[1] * 3 * u
+        if g["mol"]:                    # the site is drawn in the sprite; verbs aim at the edge
+            hx, hy = bx, by
+        else:
+            w = max(1, u // 2 + 1)
+            x0, x1 = sorted((bx, sx))
+            y0, y1 = sorted((by, sy))
+            dr.rectangle([x0 - w // 2, y0 - w // 2, x1 + w // 2, y1 + w // 2], fill=C(col))
+            _head(dr, sx, sy, d, u, prof, role, col)
+            hx, hy = sx + d[0] * 3 * u, sy + d[1] * 3 * u
         heads[p] = heads.get(p) or (hx, hy, ROWS * u / 2)
         heads[f"{p}@{name}"] = (hx, hy, ROWS * u / 2)
         cov = covered.get((p, name))
@@ -518,7 +536,8 @@ def _crowded(st, others=()):
     heads = []
     for p, name, g, _, (sx, sy), _, _ in st:
         d, u = g["d"], g["u"]
-        hx, hy, h = sx + d[0] * 3 * u, sy + d[1] * 3 * u, ROWS * u / 2
+        a = 0 if g.get("mol") else 3 * u
+        hx, hy, h = sx + d[0] * a, sy + d[1] * a, ROWS * u / 2
         heads.append((p, name, (hx - h, hy - h, hx + h, hy + h)))
     out = []
     for i, (p, name, _, _, _, _, box) in enumerate(st):
@@ -546,6 +565,15 @@ def check(plan, positions=None, stage=None):
     for i, sc in enumerate(plan["scenes"]):
         actors = sc.get("actors") or {}
         for b in sc.get("beats") or []:
+            if "shows" in b:                 # a custom scene: the code draws the relation, timed by this beat
+                if sc.get("type") != "custom":
+                    out.append(f"{sc.get('id')}: beat at {b.get('t')} s: shows: is for custom scenes "
+                               f"(an action scene shows a relation with a verb)")
+                elif b["shows"] not in rels:
+                    out.append(f"{sc.get('id')}: beat at {b.get('t')} s: shows: {b['shows']!r} is not a relation in model")
+                else:
+                    uses.append((i, sc, b, b["shows"], rels[b["shows"]]))
+                continue
             n, r = match(plan, b, actors)
             if n:
                 uses.append((i, sc, b, n, r))
@@ -602,7 +630,7 @@ def check(plan, positions=None, stage=None):
             f = first.get(r["after"])
             if not f or f > (i, bt):
                 out.append(f"{sid}: beat at {bt} s shows {n} before {r['after']} (causality: after)")
-        if r["kind"] in ("bind", "occupy"):
+        if r["kind"] in ("bind", "occupy") and "shows" not in b:
             for x in ([r["a"], r["b"]] if r["kind"] == "bind" else [r["b"]]):
                 ow = owner(plan, sc, x, bt)
                 a = (sc.get("actors") or {}).get(ow)
@@ -616,10 +644,13 @@ def check(plan, positions=None, stage=None):
     used = {u[3] for u in uses}
     for n in rels:
         if n not in used:
-            out.append(f"model relation {n}: no beat shows it (a verb with this relation kind)")
+            out.append(f"model relation {n}: no beat shows it (a verb with this relation kind, "
+                       f"or shows: {n} in a custom scene)")
+    notes = [f"warning: {sc.get('id')}: relation {n} is shown by custom code; its order and source are "
+             f"checked, its drawing is not" for i, sc, b, n, r in uses if "shows" in b]
     if positions and not out:
         for i, sc, b, n, r in uses:
-            if r["kind"] != "bind":
+            if r["kind"] != "bind" or "shows" in b:
                 continue
             bt = float(b.get("t", 0))
             state = positions(i, sc, bt + SNAP)
@@ -630,7 +661,7 @@ def check(plan, positions=None, stage=None):
                 continue
             d, u = ga["d"], ga["u"]
             gap = (gb["base"][0] - ga["base"][0]) * d[0] + (gb["base"][1] - ga["base"][1]) * d[1]
-            lo, hi = bind_range(plan, r["a"], r["b"], u, d)
+            lo, hi = bind_range(plan, r["a"], r["b"], u, d, (ga["mol"], gb["mol"]))
             oa, ob = owner(plan, sc, r["a"], bt), owner(plan, sc, r["b"], bt)
             fix = f": move {ob} with move_to: {oa}"
             if stage and lo <= hi and ob in state:          # where the partner's owner may stand on the axis
@@ -652,4 +683,4 @@ def check(plan, positions=None, stage=None):
                 out += [f"{sc.get('id')}: beat at {bt} s: {x} (contact): move the things apart, make them larger, or show fewer parts"
                         for x in _crowded(stalks(plan, i, sc, bt + SNAP, state, sc.get("beats") or []),
                                          _actor_labels(sc, state))]
-    return out
+    return out + notes

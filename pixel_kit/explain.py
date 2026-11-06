@@ -247,6 +247,8 @@ def check(plan):
                 out.append(f"{sid}: {key} has more than 4 entries (they do not fit a vertical frame)")
         names = set(sc.get("actors") or {}) | set(model.parts(plan))
         for beat in sc.get("beats") or []:
+            if "shows" in beat and "actor" not in beat:
+                continue                  # a relation drawn by custom code (model.check)
             if beat.get("actor") not in names:
                 out.append(f"{sid}: beat at {beat.get('t')} s names an unknown actor {beat.get('actor')!r}")
             mt = beat.get("move_to")
@@ -574,8 +576,9 @@ def _approach_once(plan, sc, beats, done, todo, L, stage):
         if bind:
             d = model._axis(mx - tx, my - ty)                      # level or upright, on the target's line
             ua = model.unit(km)
-            lo, hi = model.bind_range(plan, bind[1], bind[2], ua, d)
-            gap = min(hi, max(lo + 2, (HEAD_GAP) * ua))
+            mols = (model.is_molecule(actors[me]["sprite"]), model.is_molecule(actors[tg]["sprite"]))
+            lo, hi = model.bind_range(plan, bind[1], bind[2], ua, d, mols)
+            gap = min(hi, max(lo + 2, HEAD_GAP * ua * (2 - sum(mols)) // 2))
         else:
             dist = math.hypot(mx - tx, my - ty) or 1.0
             d, gap = ((mx - tx) / dist, (my - ty) / dist), 0
@@ -770,7 +773,8 @@ def p_custom(plan, sc, t, dur, ctx):
     img = _bg(sc, t)
     L = layout()
     _heading(img, L, sc.get("title"))     # the same heading as the other scene types
-    fn(img, t, sc, dict(ctx, plan=plan, layout=L, dur=dur))
+    shows = {b["shows"]: float(b.get("t", 0)) for b in sc.get("beats") or [] if "shows" in b}
+    fn(img, t, sc, dict(ctx, plan=plan, layout=L, dur=dur, shows=shows))
     _caption(img, L, sc, t)
     return img
 
