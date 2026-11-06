@@ -12,6 +12,7 @@ Local tool, agent skill, and sprite library for pixel-art science explainer vide
 - Voice, word times, and subtitles (`--voice`, `subtitles: true`): docs/tool.md, Voice and subtitles. Their packages stay in `requirements-voice.txt`, never in `requirements.txt`.
 - Effects: a beat names a verb (`pixsci.py verbs`). A verb is YAML in a pack; a primitive is Python in the core. Terms: `GLOSSARY.md`.
 - A verb is missing: add it to the pack with `skills/add-verb/SKILL.md` and go on. A new primitive in the core needs the maintainer's "yes" first.
+- Do not add entities without need. A new field, file, option, or test only when nothing that exists can do the job. First look for what already does it: the setup check plan (`skills/setup/smoke/explainer.yaml`) is also the test of the tool, so a fix adds its case to that plan, not a new test file.
 
 ## Ideas, bugs, and pull requests
 

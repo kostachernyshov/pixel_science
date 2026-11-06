@@ -40,7 +40,8 @@ sits above the bottom 20 % (apps cover it with buttons). In `banner`, there is n
 - With `--voice`, a scene lasts as long as its spoken audio (0.25 s before the words, 0.6 s after); `dur` can make it longer, not shorter.
 - Story before the summary: 20 to 45 s. The summary holds 8 s (`dur` sets more).
 - A beat can start on a word of its scene instead of a time: `{word: "attacks", dt: -0.3, actor: t, verb: hit}`
-  (`n: 2`: the second time the word is said; a word matches by its start, so "attack" finds "attacks").
+  (`n: 2`: the second time the word is said). The same word wins: "B" finds "B", not "because". Only when
+  the scene does not say the word itself, its start is enough: "attack" finds "attacks".
   With `--voice`, the time is when the word is heard (`OUTDIR/voice/<scene>.words.json`); without it, estimated.
   A `custom` scene asks for the same time with `words.cue(ctx["plan"], scene, "attacks")`.
 - In `voiceover.md`, `[PD-L1|pee dee el one]` shows the first form (subtitles) and speaks the second (voice).
@@ -86,6 +87,7 @@ actors:
   cell: {sprite: epithelial, at: [0.72, 0.5], badge: badge_mhc_self, label: Healthy}
 beats:                                                          # t: seconds from the scene start
   - {t: 0.3, actor: nk, move_to: [0.45, 0.5], dur: 1.6}         # move with easing
+  - {t: 0.3, actor: nk, move_to: cell, dur: 1.6}                # or move until it touches an actor
   - {t: 1.9, actor: nk, anim: alert}                            # change animation
   - {t: 2.2, actor: nk, verb: alert}                            # a verb: an action with effects
   - {t: 2.6, actor: nk, verb: hit, target: cell}                # a verb with a target; hit: soft|normal|heavy|false
@@ -96,6 +98,11 @@ beats:                                                          # t: seconds fro
 
 Actor fields: `sprite`, `at`, `anim`, `scale` (default 2), `flip`, `badge` (a sprite of group `badge`
 drawn above), `label`, `color`, `hidden`. Keep x between 0.1 and 0.9: the vertical frame is narrow.
+
+`move_to: <actor>` moves until the two sprites touch, edge to edge, on the side the mover comes from; the
+tool knows both sizes, so this fits every format. When parts of the two actors bind (Model and parts), it
+stops at the gap of the bind instead: room for both heads and labels, within reach of the stalks.
+Use it whenever an actor must reach another one (a syringe, a hit, a bind): numbers only guess.
 
 **Verbs.** A beat with `verb:` plays an action: effects with color and light, and for some verbs a hit
 (the attacker pulls back, the picture stops on contact, the frame shakes, the target is pushed back).
@@ -112,7 +119,11 @@ facing the partner; partners get a matching lock and key. A verb with `relation:
 `apoptosis`) must match a relation: `{actor: pdl1, verb: bind, target: pd1}` closes a bind and it stays
 closed in later scenes; `{actor: drug, verb: bind, target: pdl1}` puts the drug on PD-L1, which lets go of
 PD-1. `pixsci check` fails on a relation not in the model, a part not shown, parts too far apart or with
-no room for labels, a destroyed actor that comes back, `after:` out of order, or a source with no quote.
+no room for labels (it names the place that fixes it), labels that cover each other, a head or an actor
+label, a destroyed actor that comes back, `after:` out of order, or a source with no quote. A verb with a hit
+(`hit`, `secrete`, `block`) fails the check when the two actors do not touch at the moment of contact.
+Bound parts on a level line put their labels on their stalks; on an upright line (one cell above the other),
+beside the stalks, one left and one right.
 
 ### fact
 `sprite`, `anim`, `text` (1 to 3 short lines). One idea, typed letter by letter.
