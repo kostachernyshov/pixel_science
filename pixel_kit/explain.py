@@ -247,6 +247,8 @@ def check(plan):
                 out.append(f"{sid}: {key} has more than 4 entries (they do not fit a vertical frame)")
         names = set(sc.get("actors") or {}) | set(model.parts(plan))
         for beat in sc.get("beats") or []:
+            if "shows" in beat and "actor" not in beat:
+                continue                  # a relation drawn by custom code (model.check)
             if beat.get("actor") not in names:
                 out.append(f"{sid}: beat at {beat.get('t')} s names an unknown actor {beat.get('actor')!r}")
             mt = beat.get("move_to")
@@ -565,8 +567,8 @@ def _approach_once(plan, sc, beats, done, todo, L, stage):
         if me not in actors or tg not in actors or me == tg:
             continue
         bt, end = float(b.get("t", 0)), float(b.get("t", 0)) + float(b.get("dur", 1.0))
-        mx, my = _actor_state(actors[me], out, me, bt)[:2]
-        tx, ty = _actor_state(actors[tg], out, tg, end)[:2]
+        mx, my, _, _, mf = _actor_state(actors[me], out, me, bt)[:5]
+        tx, ty, _, _, tf = _actor_state(actors[tg], out, tg, end)[:5]
         mx, my, tx, ty = x0 + mx * sw, y0 + my * sh, x0 + tx * sw, y0 + ty * sh
         km = int(actors[me].get("scale", L["sprite_scale"]))
         kt = int(actors[tg].get("scale", L["sprite_scale"]))
@@ -574,12 +576,14 @@ def _approach_once(plan, sc, beats, done, todo, L, stage):
         if bind:
             d = model._axis(mx - tx, my - ty)                      # level or upright, on the target's line
             ua = model.unit(km)
-            lo, hi = model.bind_range(plan, bind[1], bind[2], ua, d)
-            gap = min(hi, max(lo + 2, (HEAD_GAP) * ua))
+            mols = (model.is_molecule(actors[me]["sprite"]), model.is_molecule(actors[tg]["sprite"]))
+            lo, hi = model.bind_range(plan, bind[1], bind[2], ua, d, mols)
+            gap = min(hi, max(lo + 2, HEAD_GAP * ua * (2 - sum(mols)) // 2))
         else:
             dist = math.hypot(mx - tx, my - ty) or 1.0
             d, gap = ((mx - tx) / dist, (my - ty) / dist), 0
-        far = model.reach(actors[tg]["sprite"], kt, d) + gap + model.reach(actors[me]["sprite"], km, (-d[0], -d[1]))
+        far = (model.reach(actors[tg]["sprite"], kt, d, flip=tf) + gap
+               + model.reach(actors[me]["sprite"], km, (-d[0], -d[1]), flip=mf))
         nx, ny = tx + d[0] * far, ty + d[1] * far
         out[i] = dict(b, move_to=[round((nx - x0) / sw, 4), round((ny - y0) / sh, 4)])
     return out
@@ -622,7 +626,8 @@ def _touch(plan):
                 continue
             dist = math.hypot(tx - ax, ty - ay) or 1.0
             d = ((tx - ax) / dist, (ty - ay) / dist)
-            gap = dist - model.reach(actors[att]["sprite"], ka, d) - model.reach(actors[tg]["sprite"], kt, (-d[0], -d[1]))
+            gap = (dist - model.reach(actors[att]["sprite"], ka, d, flip=st[att][6])
+                   - model.reach(actors[tg]["sprite"], kt, (-d[0], -d[1]), flip=st[tg][6]))
             if gap > 2:
                 out.append(f"{sc.get('id')}: hit at {th:.2f} s: {att} does not touch {tg} ({gap:.0f} px apart) "
                            f"(contact): move it with move_to: {tg}")
@@ -770,7 +775,11 @@ def p_custom(plan, sc, t, dur, ctx):
     img = _bg(sc, t)
     L = layout()
     _heading(img, L, sc.get("title"))     # the same heading as the other scene types
-    fn(img, t, sc, dict(ctx, plan=plan, layout=L, dur=dur))
+    shows = {}                            # relation: the first time the scene shows it
+    for b in sc.get("beats") or []:
+        if "shows" in b:
+            shows[b["shows"]] = min(shows.get(b["shows"], 1e9), float(b.get("t", 0)))
+    fn(img, t, sc, dict(ctx, plan=plan, layout=L, dur=dur, shows=shows))
     _caption(img, L, sc, t)
     return img
 
