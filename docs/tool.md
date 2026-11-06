@@ -57,9 +57,10 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
   (`pixel_kit/fx.py`), with a light layer over the colors and hit mechanics (windup, freeze, shake, push).
   `pixsci.py verbs out/verbs.png` lists and draws them. Why: `docs/adr/0001-verbs-and-primitives.md`.
 - The frame is small (480x270 for 16:9) and scaled x4 with nearest neighbor: sharp pixels at any size.
-- Text: Unifont for small text (labels, scale 1); Medeo Pixel for large text (captions, sub-titles, fact
-  lines: scale 2 and more), in the same line box. Medeo Pixel has Latin and Cyrillic.
-  `PIXEL_BIG_FONT=unifont` brings back Unifont for large text.
+- Text: Medeo Pixel on a grid 2 times finer than the frame (one text pixel is half a frame pixel), so
+  text keeps its size (16 px line at scale 1) with finer letters. Sizes stay in frame pixels. Text is drawn
+  over the picture of the frame (over sprites). Medeo Pixel has Latin and Cyrillic.
+  `PIXEL_TEXT_FONT=unifont` brings back Unifont 16 px. How it works: `pixel_kit/font.py`, top.
 
 ## Layout
 

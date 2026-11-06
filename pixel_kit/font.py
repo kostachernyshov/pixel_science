@@ -1,9 +1,16 @@
-# Text in the frame: Unifont 16 px (pixel font, Latin and Cyrillic) and a title font 5x7.
-# Large text (scale >= 2) uses Medeo Pixel (OFL 1.1, fonts/LICENSE_medeo.txt): a finer pixel face,
-# cap height 19 px at its native size. PIXEL_BIG_FONT=unifont turns it off.
+# Text in the frame: Medeo Pixel (OFL 1.1, fonts/LICENSE_medeo.txt), Latin and Cyrillic, and a title font 5x7.
 # Rule: text in the frame is English, 2-3 words, large, on screen for >= 2 s.
+#
+# Fine grid: the text grid is FINE (2) times finer than the frame grid. One text pixel is half a frame
+# pixel, so Medeo (cap height 19 font pixels) at scale 1 is as tall as Unifont 16 px was (cap 10).
+# Sizes and positions stay in frame pixels: LINE * scale per line, text_w() in frame pixels.
+# How: while a frame is drawn (capture()), text() does not draw on the image; it records the text,
+# and the Timeline composes it over the frame at FINE x size (compose()). Text is drawn over sprites.
+# Outside capture() (sheets, tools), text() draws Unifont 16 px on the image, as before.
+# PIXEL_TEXT_FONT=unifont: Unifont everywhere (old look).
 
 import os
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from .palette import C, BLACK, LGREY
 
@@ -11,14 +18,18 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FONT_PATH = os.environ.get("PIXEL_FONT", os.path.join(ROOT, "fonts", "unifont.otf"))
 FONT = ImageFont.truetype(FONT_PATH, 16)
 LINE = 16
+FINE = 2
+FACE = os.environ.get("PIXEL_TEXT_FONT", "medeo")
 
 # Medeo Pixel: one font pixel is 38 units (1000 per em). The face is drawn 8 times larger and
 # read at the center of each cell, so every glyph lands on the grid exactly (no hinting errors).
 MEDEO_PATH = os.path.join(ROOT, "fonts", "MedeoPixel.ttf")
-BIG_FONT = os.environ.get("PIXEL_BIG_FONT", "medeo")
 _SS = 8
 _MEDEO = None
-_MEDEO_BASE = 14  # baseline row in a 16-row Unifont box; Medeo keeps the same box at scale 2
+_BOX, _BASE = LINE * FINE, 14 * FINE   # Medeo line box in fine pixels; baseline where Unifont has it
+
+_text_cache = {}
+_layer = None                           # list of recorded text while a frame is drawn, else None
 
 
 def _medeo():
@@ -28,41 +39,59 @@ def _medeo():
     return _MEDEO
 
 
-def _use_medeo(scale):
-    return scale >= 2 and BIG_FONT == "medeo"
-
-
-def medeo_mask(s, scale=1, box=32, base=28):
-    """Mask of s in Medeo Pixel at a whole scale, `box` rows high, baseline at row `base`."""
+def medeo_mask(s, scale=1, box=_BOX, base=_BASE):
+    """Mask of s in Medeo Pixel at a whole scale, `box` rows high, baseline at row `base` (font pixels)."""
     key = ("medeo", s, scale, box, base)
     if key not in _text_cache:
         F = _medeo()
-        w = int(round(F.getlength(s) / _SS))
-        big = Image.new("L", (max(w, 1) * _SS, box * _SS), 0)
+        w = max(1, int(round(F.getlength(s) / _SS)))
+        big = Image.new("L", (w * _SS, box * _SS), 0)
         d = ImageDraw.Draw(big)
         d.fontmode = "1"
         d.text((0, base * _SS), s, font=F, fill=255, anchor="ls")
         # NEAREST reads the center of each _SS x _SS cell
-        m = big.resize((max(w, 1), box), Image.NEAREST, box=(0, 0, max(w, 1) * _SS, box * _SS))
+        m = big.resize((w, box), Image.NEAREST, box=(0, 0, w * _SS, box * _SS))
         if scale > 1:
             m = m.resize((m.width * scale, m.height * scale), Image.NEAREST)
         _text_cache[key] = m
     return _text_cache[key]
 
 
-def medeo_w(s, scale=1):
-    return int(round(_medeo().getlength(s) / _SS)) * scale
+def _fine():
+    return FACE == "medeo" and _layer is not None
 
 
-_text_cache = {}
+def capture():
+    """Start recording text for one frame (the Timeline calls it)."""
+    global _layer
+    _layer = []
+
+
+def release():
+    """Stop recording; returns the recorded text."""
+    global _layer
+    out, _layer = _layer or [], None
+    return out
+
+
+def compose(arr, layer, fade=None):
+    """arr (H x W x 3, frame pixels) -> FINE x larger, with the recorded text drawn on it.
+    fade: a frame-size bool mask (True: dissolved to the fade color): text there is not drawn."""
+    big = np.repeat(np.repeat(arr, FINE, axis=0), FINE, axis=1)
+    if not layer:
+        return big
+    img = Image.fromarray(big)
+    for x, y, m, col in layer:
+        img.paste(C(col), (x, y), m)
+    out = np.array(img)
+    if fade is not None and fade.any():
+        f = np.repeat(np.repeat(fade, FINE, axis=0), FINE, axis=1)
+        out[f] = big[f]
+    return out
 
 
 def text_mask(s, scale=1):
-    if _use_medeo(scale):
-        # same box as Unifont at this scale: LINE*scale rows, baseline at 14*scale
-        k = scale // 2
-        box, base = LINE * scale // k, _MEDEO_BASE * scale // k
-        return medeo_mask(s, k, box, base)
+    """Unifont mask of s (frame pixels)."""
     key = (s, scale)
     if key not in _text_cache:
         w = int(FONT.getlength(s)) + 1
@@ -78,7 +107,24 @@ def text_mask(s, scale=1):
 
 def text(img, x, y, s, col, scale=1, align="l", shadow=None, outline=False):
     """align: l / c / r. shadow: color of a 1 px drop shadow (None: no shadow);
-    outline=True: an outline in the shadow color on all sides (labels over a scene)."""
+    outline=True: an outline in the shadow color on all sides (labels over a scene).
+    Returns the width in frame pixels."""
+    if _fine():
+        m = medeo_mask(s, scale)
+        x, y = int(x * FINE), int(y * FINE)
+        if align == "c":
+            x -= m.width // 2
+        elif align == "r":
+            x -= m.width
+        k = scale                   # shadow and outline: one font pixel
+        if outline:
+            shadow = BLACK if shadow is None else shadow
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
+                _layer.append((x + dx * k, y + dy * k, m, shadow))
+        elif shadow is not None:
+            _layer.append((x + k, y + k, m, shadow))
+        _layer.append((x, y, m, col))
+        return -(-m.width // FINE)
     m = text_mask(s, scale)
     if align == "c":
         x -= m.width // 2
@@ -96,8 +142,9 @@ def text(img, x, y, s, col, scale=1, align="l", shadow=None, outline=False):
 
 
 def text_w(s, scale=1):
-    if _use_medeo(scale):
-        return medeo_w(s, scale // 2)
+    """Width in frame pixels: Medeo on the fine grid (rounded up), or Unifont."""
+    if FACE == "medeo":
+        return -(-int(round(_medeo().getlength(s) / _SS)) * scale // FINE)
     return int(FONT.getlength(s)) * scale
 
 

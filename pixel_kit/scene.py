@@ -1,4 +1,6 @@
 # Scene timeline and output: frame (frame.W x frame.H) -> x4 nearest -> mp4 (ffmpeg), gif, or PNG.
+# Text is on a grid FINE (2) times finer than the frame (font.py): Timeline.frame() returns the frame
+# at FINE x size with the text on it, and the output scales it by SCALE / FINE.
 #
 #   from pixel_kit.scene import Timeline
 #   tl = Timeline([(0.0, 3.0, scene_title), (3.0, 9.5, scene_design), ...])
@@ -14,8 +16,9 @@ import numpy as np
 from PIL import Image
 from .palette import PAPER, C
 
-from . import frame
+from . import frame, font
 SCALE, FPS = frame.SCALE, 30
+FINE = font.FINE
 
 
 def ffmpeg_exe():
@@ -35,21 +38,27 @@ BAYER = np.array([[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]])
 _bayer_cache = {}
 
 
+def dither_mask(h, w, a):
+    """Pixels a Bayer dissolve covers at amount a (0: none, 1: all)."""
+    if (h, w) not in _bayer_cache:
+        _bayer_cache[(h, w)] = np.tile(BAYER, (h // 4 + 1, w // 4 + 1))[:h, :w]
+    return _bayer_cache[(h, w)] < a * 16
+
+
 def dither_to(arr, a, col=PAPER):
     """Dissolve to one color with a Bayer matrix (a=0: none, a=1: all col). arr is HxWx3."""
     if a <= 0:
         return arr
-    h, w = arr.shape[:2]
-    if (h, w) not in _bayer_cache:
-        _bayer_cache[(h, w)] = np.tile(BAYER, (h // 4 + 1, w // 4 + 1))[:h, :w]
-    arr[_bayer_cache[(h, w)] < a * 16] = C(col)
+    arr[dither_mask(*arr.shape[:2], a)] = C(col)
     return arr
 
 
 def upscale(arr, scale=SCALE, scan=None):
-    """x4 nearest. scan=True darkens each 4th row by 20 % (CRT scanlines, dark theme only)."""
+    """A Timeline frame (FINE x the frame size) to `scale` x the frame size, nearest.
+    scan=True darkens each 4th row by 20 % (CRT scanlines, dark theme only)."""
     scan = SCANLINES if scan is None else scan
-    big = np.repeat(np.repeat(arr, scale, axis=0), scale, axis=1)
+    k = max(1, scale // FINE)
+    big = np.repeat(np.repeat(arr, k, axis=0), k, axis=1)
     if scan and scale == SCALE:
         mask = np.ones((big.shape[0], 1, 1), np.float32)
         mask[3::SCALE] = 0.80
@@ -72,10 +81,31 @@ class Timeline:
         return self.scenes[-1][1]
 
     def frame(self, T):
-        arr = self._frame(T)
-        return self.overlay(arr, T) if self.overlay else arr
+        """The frame at time T, FINE x the frame size, with its text."""
+        font.capture()
+        try:
+            arr, a = self._frame(T)
+        finally:
+            layer = font.release()
+        fade = dither_mask(*arr.shape[:2], a) if a > 0 else None
+        if self.overlay:
+            font.capture()
+            try:
+                arr = self.overlay(arr, T)
+            finally:
+                over = font.release()
+            # the overlay (subtitles) is not dissolved, and its box covers the scene text
+            big = font.compose(arr, layer, fade)
+            if over:
+                img = Image.fromarray(big)
+                for x, y, m, col in over:
+                    img.paste(C(col), (x, y), m)
+                big = np.array(img)
+            return big
+        return font.compose(arr, layer, fade)
 
     def _frame(self, T):
+        """(frame pixels with the dissolve, dissolve amount)."""
         last_end = self.scenes[-1][1]
         for i, sc in enumerate(self.scenes):
             a, b, fn = sc[:3]
@@ -89,8 +119,8 @@ class Timeline:
                     fade = 1 - (T - a) / self.fade
                 if b - T < self.fade and b != last_end and fade_out:
                     fade = max(fade, 1 - (b - T) / self.fade)
-                return dither_to(arr, fade, self.fade_col)
-        return np.full((frame.H, frame.W, 3), C(self.fade_col), np.uint8)
+                return dither_to(arr, fade, self.fade_col), fade
+        return np.full((frame.H, frame.W, 3), C(self.fade_col), np.uint8), 0.0
 
     def render(self, out, dur=None, progress=True):
         dur = dur or self.duration
@@ -117,7 +147,7 @@ class Timeline:
         # One palette for the whole loop, from frames across the video (not only the first frame:
         # the title frame has few colors, and later charts became grey).
         sample = [self.frame(t) for t in np.arange(0, dur, 0.5)]
-        mosaic = Image.fromarray(np.concatenate(sample, axis=0))
+        mosaic = Image.fromarray(np.concatenate(sample, axis=0))  # FINE x frames: same colors
         pal = mosaic.quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
         frames = [f.quantize(palette=pal, dither=Image.Dither.NONE) for f in frames]
         # GIF stores delays in 1/100 s: spread the rounding, so that the loop has the length of the video
@@ -140,7 +170,7 @@ class Timeline:
         from .font import text
         from .palette import INK
         lab_h = 20 if labels else 0
-        tiles = [Image.fromarray(self.frame(t)).resize((frame.W * 2, frame.H * 2), Image.NEAREST) for t in times]
+        tiles = [Image.fromarray(upscale(self.frame(t), scale=2)) for t in times]
         rows = (len(tiles) + cols - 1) // cols
         sheet = Image.new("RGB", (cols * (frame.W * 2 + gap) + gap, rows * (frame.H * 2 + gap + lab_h) + gap), (220, 212, 206))
         for i, im in enumerate(tiles):
