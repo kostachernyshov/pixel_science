@@ -69,7 +69,13 @@ pixsci.py              command line: doctor, formats, sheet, verbs, check, board
 fonts/                 unifont.otf, MedeoPixel.ttf (from npm medeo-font 1.0.0, WOFF to TTF) and their licenses
 pixel_kit/             the core: frame, explain, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
 packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
+packs/earth/           shared water, weather, and soil sprites; the same pack structure
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
 skills/                agent skills: setup, storyboard, animate, add-verb (linked from .claude/skills and .agents/skills)
 .claude-plugin/        plugin.json and marketplace.json: the repo installs as a Claude plugin
 ```
+
+For choosing base sprites and their meaningful states, see
+[`packs/biology/bible.md`](../packs/biology/bible.md) and
+[`packs/earth/bible.md`](../packs/earth/bible.md). A new environment style reuses these
+sprite files; it does not need another sprite library.

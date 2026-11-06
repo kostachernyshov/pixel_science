@@ -83,3 +83,67 @@ Voice only in v0.1. Music and 8-bit sound effects later, as a pack.
 6. Videos: anti-PD-L1 mechanism, Higgs boson. The Missing-self demo is removed.
 
 Next: mycorrhiza, the Chicxulub impact energy; then external packs, TTS, sound. The repo goes public after 3 to 5 videos and one outside sprite that passes the checks.
+
+## Reusable assets and styles: 2026-11-05 decisions
+
+Agreed with Kosta while discussing #26 (asset library) and #6 (styles). These decisions
+update the style priorities above; they are a direction for the work, not a claim that
+the style cascade or additional packs are implemented.
+
+- **Reuse first.** Start with existing drawings, sprite frames, packs, and motion. Add
+  a new drawing or abstraction only when an actual example needs it.
+- **Coverage.** First expand molecules, cells, laboratory equipment, organisms and
+  plants, and water/weather. Laboratory mechanisms and everyday natural processes
+  have equal priority. Geology, other physics, and astronomy follow later.
+- **Detail.** Match the existing `tumor_pdl1`, `stem`, and `patient_a` sprites and the
+  Cancer Wars character overview: distinct silhouettes, a few functional features,
+  and readable states. Faces are optional. The same assets serve stills and video.
+- **One base library.** Each sprite has one drawing and one set of animation frames
+  in its domain pack, shared by all styles and light/dark environments. Its identity
+  and meaningful colors remain recognizable. Adding a style must not require a new
+  sprite collection. This supersedes the per-style sprite cascade above for this work.
+- **Styles own environments.** Put the style's visual language in assembled environments,
+  backgrounds, lighting, labels, and framing. Use the base sprite unchanged by default.
+  If a demonstrated readability or harmony problem needs a slight palette adjustment,
+  apply a small color mapping at draw time, preserving meaningful distinctions; keep
+  the source PNG and animation frames shared. Do not produce per-style sprite files.
+- **First comparison.** Use approved atlas directions 03 Moss & Vermilion Woodcut,
+  09 Porcelain Solarpunk, and 17 Sepia Clockwork Draft on two identical subjects:
+  a ligand binding a membrane receptor, and the water cycle.
+- **Continuous explanation.** Keep the complete mechanism visible where useful,
+  particularly for the water cycle. Guide attention with movement and highlighting;
+  use readable silhouettes and compose each format independently. Add an enlarged
+  detail only when the explanation needs it.
+- **Color and motion.** Keep each object's colors consistent within a video. Use
+  shape and labels as well as color. Begin with a static drawing; add sprite frames
+  for meaningful changes such as filling, binding, or growth. Reuse ordinary motion.
+- **Order.** Expand the shared base assets and check them on light and dark backgrounds.
+  Develop styled environments separately, reusing those same assets. Style selection
+  does not gate the base library. Validate complete examples in four formats before
+  expanding widely. Production sprites and metadata belong in the existing pack
+  structure; generated comparisons remain in `out/`.
+
+First comparison prepared on 2026-11-05 in `out/style-showcase/preview.html`. After
+Kosta clarified that the base library is shared, the study was corrected to use one
+`base/assets/` folder and identical sprite pixels across all three environments.
+The visual comparison remains a local study rather than an installed style pack.
+
+Base-asset batch #42 ([PR #44](https://github.com/kostachernyshov/pixel_science/pull/44))
+adds 30 biology sprites and 8 earth sprites in the production
+pack structure. All original 70 sheets and metadata entries are unchanged. Validation
+prints `108 sprites: VALID`; all 38 additions rebuild byte-for-byte. All 47 new
+animation frames load through the existing sprite interface, and a mixed-pack smoke
+plan passes `check` and renders storyboards in four formats. Light/dark review sheets
+and state comparisons are in ignored `out/base-assets/`. The renderer's unrelated
+text-only-summary crash is tracked separately in #43. Independent Standards and
+Spec reviews found no actionable issues. Kosta approved the visual direction and
+asked to continue; PR #44 remains open, not merged.
+
+Two silent integration controls are in ignored `out/library-controls/`: a 27 s
+water cycle and a 20 s ligand/receptor binding study. Both keep a fixed camera,
+reuse pack sprites and existing mechanism profiles, and render in all four formats.
+The eight exports were checked for dimensions, duration, frame count, and a stable
+final hold. A light/dark comparison uses identical sprite sources without recoloring.
+These are local visual checks, not narrated educational releases or installed
+environment styles. Environment-style integration and the remaining #26 roadmap
+stay open.
