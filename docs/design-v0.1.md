@@ -92,6 +92,12 @@ the style cascade or additional packs are implemented.
 
 - **Reuse first.** Start with existing drawings, sprite frames, packs, and motion. Add
   a new drawing or abstraction only when an actual example needs it.
+- **Shared palette (2026-11-07).** Kosta selected AAP-64 for future project art,
+  shared across all subjects rather than fitted separately to each sprite. Existing
+  PICO-8 code art keeps its indices; new PNG entries declare AAP-64 in the existing
+  sprite metadata. Kosta selected a 128 px starting canvas for the receptor and
+  requested simpler meaningful forms instead of dense surface detail. Smaller
+  props need not fill that canvas; there is no mandatory square size for all assets.
 - **Coverage.** First expand molecules, cells, laboratory equipment, organisms and
   plants, and water/weather. Laboratory mechanisms and everyday natural processes
   have equal priority. Geology, other physics, and astronomy follow later.
@@ -147,3 +153,81 @@ final hold. A light/dark comparison uses identical sprite sources without recolo
 These are local visual checks, not narrated educational releases or installed
 environment styles. Environment-style integration and the remaining #26 roadmap
 stay open.
+
+### Art direction correction — 2026-11-06
+
+Kosta rejected the integration controls for their visual quality. Their technical
+checks do not constitute artistic acceptance. The next step is one convincing
+concept frame, followed by a short fidelity test against that frame, before more
+formats or full videos. Use the existing RAG2/sarcoma animation as a reference for
+continuous staging and action synchronized to narration, the approved style atlas
+for composition/light/form, and 8bit Engineering for explanatory object interaction.
+Reference observations and a first unapproved concept are in ignored
+`out/art-direction/`. No renderer feature or sprite redesign is agreed by this study.
+
+Following Kosta's requested sunny-to-rainy sequence, a nine-frame concept-art
+storyboard is prepared in ignored `videos/water-cycle-woodcut/storyboard.md`
+(44 s, 95-word narration draft). It keeps a thin stream before rain, delays the
+runoff response, and finishes with the fuller stream entering the lake. The proposed
+first implementation is only a short cloud-shadow/rain/stream-response fidelity
+test using a cached master landscape and small changing regions. Kosta subsequently
+accepted the storyboard with “действуй”. The first 8 s landscape fidelity test is
+rendered under that video folder: fixed master art, cloud shadow, rain and delayed
+stream widening. Render/encode measured 1.682 s for 240 frames at 1920×1080 on this
+machine; the moving result still awaits artistic review. The core and production
+sprite packs were not changed. The storyboard records the custom-scene model-check
+limitation and separates the art-only check from causal validation.
+
+Kosta accepted that moving test and requested the full story. On 2026-11-07 the
+complete 44 s landscape version was rendered in labeled and clean forms, with a
+reusable clean final PNG, in `videos/water-cycle-woodcut/out/story/`. It reuses the
+same two art sources and implements cloud formation/travel, sunlight, schematic
+vapor marks, rain, delayed stream filling, clearing and a 3 s final hold. Both
+exports are 1920×1080, 30 fps, 1320 frames, without audio; the accepted narration
+text is preserved separately. Measured render/encode times were approximately
+7.65 s and 7.38 s. Alternate aspect ratios and spoken delivery remain separate
+from this accepted-composition visual version. Core code and production packs
+remain unchanged by the scene study.
+
+### Ligand/receptor visual correction — 2026-11-07
+
+Kosta rejected the original binding control's art and its depiction of a protein
+ligand as a cell-like body carrying another binding head. A new concept in ignored
+`videos/ligand-receptor/concept.md` depicts two folded molecular surfaces, with the
+ligand's binding region integral to its own body and the receptor continuous through
+the membrane. The CDK4/p16 sheet is an explicit reference for readable functional
+regions, not a substitute for membrane-receptor biology. The requested sequence is
+concept review, then sourced story/storyboard, then video. Only the first concept
+has been prepared; its direction is not yet accepted. The old control is not a
+scientifically or artistically approved reference.
+
+Kosta liked the new molecular art and selected a ligand-triggered intracellular
+response for the next storyboard. The scientific example is EGF/EGFR, but Kosta
+explicitly requested a broadly reusable schematic receptor rather than an EGFR-only
+drawing. The revised five-beat, 10-second story and asset contract are in ignored
+`videos/ligand-receptor/storyboard.md`: two instances each of a shared protein
+ligand and membrane receptor, intrinsic contact masks, a reusable bilayer, receptor
+pairing, asymmetric kinase contact and a tail phosphate mark. Named biology belongs
+to the scene; reuse must preserve the visible mechanism. The flattened concept is
+not yet an exported sprite kit. Kosta liked the direction and asked to remove the
+excess duration. The revised cut keeps binding, pairing, kinase activation, tail
+phosphorylation and a two-second final hold. It reuses five endpoints from the
+existing concept sheet without new generation. Source-asset preparation and the
+first complete 10-second render remain to be done; no core or pack changes were made.
+
+Kosta accepted the 10-second cut by asking for animation with pixel-science:animate.
+The full silent version was rendered in four formats plus clean landscape under
+`videos/ligand-receptor/out/`. Its first four-format render/encode measured 5.608 s,
+excluding art preparation. At Kosta's subsequent request, the reusable library
+exports were converted to the main 16 PICO-8 colors and binary transparency and
+saved directly in the existing `packs/biology/sprites/` directory:
+`protein_folded.png`, `membrane_receptor.png`, `membrane.png`. They use the existing
+`sprites.json` and `CREDITS.csv`; the extra art folder, prompts and sidecars were
+removed. The old `protein.png` is preserved. These compact library exports differ
+in color/detail from the accepted movie; the movie files were not overwritten.
+Kosta subsequently selected AAP-64 and 128 px receptor art with fewer meaningful
+forms. The same three PNG entries now use explicit AAP-64 metadata; old code art
+keeps its PICO-8 indices. Palette validation supports both declared palettes, and
+the existing cast sheet fits larger sources. The shared receptor was redrawn with
+broad lobes, a short neck and one inner region. No extra sprite folders or prompt
+files were added. Prior movie exports remain preserved.

@@ -99,3 +99,6 @@ seed,seed.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.
 vesicle,vesicle.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
 virus,virus.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
 zebrafish,zebrafish.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+protein_folded,protein_folded.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,Shared molecular art; AAP-64 palette
+membrane_receptor,membrane_receptor.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,Simplified shared receptor; 128 px canvas; AAP-64; three broad folds and intrinsic binding surface
+membrane,membrane.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,Shared molecular art; AAP-64 palette

@@ -8,7 +8,7 @@ does not require new biology PNGs.
 
 | Need | Base sprites | Reuse guidance |
 |---|---|---|
-| Molecules | `protein`, `rna`, `lipid`, `plasmid`, `dna_fragment`, `peptide_self`, `peptide_mutant`, `proteasome`, `vesicle` | `protein` is schematic, not a particular protein structure. Use model parts and labels for a specific binding mechanism. |
+| Molecules | `protein`, `protein_folded`, `membrane_receptor`, `membrane`, `rna`, `lipid`, `plasmid`, `dna_fragment`, `peptide_self`, `peptide_mutant`, `proteasome`, `vesicle` | Protein and receptor shapes are reusable symbols, not solved structures. Functional sites are intrinsic regions of each molecule. |
 | Cell machinery | `nucleus`, `mitochondrion`, `chloroplast`, `ribosome` | Internal features identify the organelle; pixel counts do not encode quantities. |
 | Microorganisms | `bacterium`, `virus` | A generic rod-shaped bacterium and an enveloped viral particle; not all bacteria/viruses have these shapes. |
 | Laboratory | `pipette`, `microscope`, `centrifuge`, `pcr_machine`, `gel` | Existing `tube`, `plate`, `dish`, `syringe`, `sequencer`, and vials remain shared. The centrifuge is drawn open to expose its rotor. |
@@ -31,8 +31,11 @@ parts, not a new sprite drawing.
   `peptide_self`. Neither represents a specific peptide sequence.
 
 Everything else added in this set starts with a single `idle` frame. Existing cells
-keep their original animation sets. All additions use the PICO-8 base palette,
+keep their original animation sets. The original code-drawn additions use the PICO-8 base palette,
 binary transparency, the existing outline/build pass, and pack metadata/credits.
+New PNG art follows AAP-64 and size guidance in `CONTRIBUTING.md`. The shared
+`membrane_receptor`, `protein_folded` and `membrane` use explicit AAP-64 entries;
+the receptor is a simplified single-pass symbol, not an EGFR structural portrait.
 
 ## Scientific references
 

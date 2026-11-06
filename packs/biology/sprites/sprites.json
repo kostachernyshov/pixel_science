@@ -3046,5 +3046,73 @@
    }
   },
   "source": "code"
+ },
+ "protein_folded": {
+  "file": "protein_folded.png",
+  "group": "prop",
+  "cell": [
+   36,
+   36
+  ],
+  "anchor": [
+   18.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64",
+  "body": "molecule"
+ },
+ "membrane_receptor": {
+  "file": "membrane_receptor.png",
+  "group": "prop",
+  "cell": [
+   128,
+   128
+  ],
+  "anchor": [
+   62,
+   68
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64",
+  "body": "molecule"
+ },
+ "membrane": {
+  "file": "membrane.png",
+  "group": "prop",
+  "cell": [
+   64,
+   20
+  ],
+  "anchor": [
+   32.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
  }
 }

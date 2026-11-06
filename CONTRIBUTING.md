@@ -12,7 +12,7 @@ folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.
 ## Add a sprite
 
 1. **License.** Your own drawing, or a file under CC0-1.0 or CC-BY-4.0. No NC, no ND, no BY-SA, no "free for personal use".
-2. **Style.** Colors only from the PICO-8 palette (`pixel_kit/palette.py`), no half-transparent pixels, a 1 px black outline, body about 24 to 40 px for a cell, 12 to 20 px for a molecule.
+2. **Style.** New PNG art uses the shared AAP-64 palette by Adigun A. Polack (`pixel_kit/palette.py`), declared as `"palette": "AAP-64"` in its existing sprite entry. Existing PICO-8 sprites keep their colors and indices; an omitted palette means PICO-8. Use binary transparency and a crisp dark outline. For detailed receptor/protein art, start with a 128 px canvas and a few meaningful forms; simpler props stay smaller. Rectangular cells are allowed. The old 24–40 px cell / 12–20 px molecule bodies are legacy scale guidance, not a source-size limit.
 3. **Sheet.** One PNG: one row for each animation, one column for each frame, all cells one size, transparent background. Each sprite needs `idle`; cells also want `move`, `hit`, `death` (apoptosis: shrink and break up).
 4. **Metadata.** Add an entry to the pack's `sprites/sprites.json`:
    ```json
@@ -22,9 +22,11 @@ folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.
    ```
    Groups: `hero` (immune cells), `villain` (tumor cells, pathogens), `civilian` (body cells), `people`, `prop`, `badge` (molecules shown above a cell).
    A free molecule that binds by its own surface (a ligand, an antibody) adds `"body": "molecule"`: the tool then draws
-   no stalk and no head on its parts, so draw the contact site (a notch or a bump) on the sprite's right edge, as one
-   piece with the body. In a scene, the molecule on the right of its partner gets `flip: true`: the tool measures the
-   edge of the sprite as drawn. Cells need no key: the tool draws their parts on stalks out of the membrane.
+   no stalk and no head on its parts, so draw the contact site (a notch or a bump) as one piece with the body, on the
+   side that faces the partner and on the straight line through the anchor: the tool finds the site there, along a
+   level or upright line. A free molecule faces right (in a scene, the one on the right of its partner gets
+   `flip: true`); a membrane receptor faces up, out of the cell. Cells need no key: the tool draws their parts on
+   stalks out of the membrane.
 5. **Credits.** Add a row to the pack's `sprites/CREDITS.csv`: sprite, file, author, license, source URL, notes.
 6. **Check.** `python tools/validate_sprites.py` prints `VALID`. Look at the cast sheet: `python pixsci.py sheet out/sheet.png`.
 

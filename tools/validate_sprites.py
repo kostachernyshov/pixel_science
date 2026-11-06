@@ -10,7 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 from PIL import Image
-from pixel_kit.palette import P
+from pixel_kit.palette import SPRITE_PALETTES
 from pixel_kit import packs
 LICENSES = {"CC0-1.0", "CC-BY-4.0"}
 GROUPS = {"hero", "villain", "civilian", "people", "prop", "badge"}
@@ -41,8 +41,11 @@ def check_pack(SPR):
     files = {m.get("file") for m in meta.values()}
     for f in sorted(pngs - files):
         out.append(f"{f}: PNG without an entry in sprites.json")
-    pal = {tuple(c) for c in P}
     for name, m in meta.items():
+        palette_name = m.get("palette", "PICO-8")
+        if palette_name not in SPRITE_PALETTES:
+            out.append(f"{name}: unknown palette {palette_name!r}")
+        pal = set(SPRITE_PALETTES.get(palette_name, ()))
         for key in ("file", "group", "cell", "anchor", "anims"):
             if key not in m:
                 out.append(f"{name}: no {key!r}")
