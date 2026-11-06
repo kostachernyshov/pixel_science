@@ -117,7 +117,7 @@ A verb is missing? Add it to the pack, then go on with the scene: [add-verb](../
 `parts: [tcr, pd1]` on an actor (or on a beat, to change them) shows parts on stalks out of its membrane,
 facing the partner; partners get a matching lock and key. A part on a sprite marked `"body": "molecule"` (a ligand, an
 antibody) has no stalk and no head: its site is the sprite's own edge, and the partner's head reaches it.
-Its site is drawn on the right: when the molecule stands to the right of its partner, give it `flip: true`. A verb with `relation:` (`bind`, `secrete`,
+Its site is drawn on the right (a membrane receptor's on top): when the molecule stands to the right of its partner, give it `flip: true`. A verb with `relation:` (`bind`, `secrete`,
 `apoptosis`) must match a relation: `{actor: pdl1, verb: bind, target: pd1}` closes a bind and it stays
 closed in later scenes; `{actor: drug, verb: bind, target: pdl1}` puts the drug on PD-L1, which lets go of
 PD-1. `pixsci check` fails on a relation not in the model, a part not shown, parts too far apart or with

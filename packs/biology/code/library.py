@@ -9,6 +9,7 @@ from . import cast as K
 from . import props as PR
 from . import people as PP
 from . import office as OF
+from . import basics as BS
 
 A = K.MHC_ANGLES
 
@@ -281,4 +282,17 @@ def build():
     register("sequencer", {"idle": anim([F(PR.sequencer()), F(PR.sequencer(False))], fps=2),
                            "off": anim([F(PR.sequencer(False))], fps=1)}, "prop")
     register("datasheet", one(PR.datasheet()), "prop")
+    # Shared base assets: keep one drawing and one animation set across all styles.
+    for name in ("protein", "rna", "lipid", "plasmid", "dna_fragment", "proteasome", "vesicle",
+                 "nucleus", "mitochondrion", "ribosome", "chloroplast", "bacterium", "virus",
+                 "pipette", "microscope", "centrifuge", "pcr_machine",
+                 "heart", "lungs", "liver", "brain", "zebrafish", "fruit_fly", "nematode",
+                 "leaf", "flower"):
+        register(name, one(getattr(BS, name)()), "prop")
+    register("peptide_self", one(BS.peptide()), "prop")
+    register("peptide_mutant", one(BS.peptide(mutant=True)), "prop")
+    register("seed", {"idle": anim([F(BS.seed())], fps=1),
+                      "germinate": anim([F(BS.seed(k)) for k in range(4)], fps=2, loop=False)}, "prop")
+    register("gel", {"idle": anim([F(BS.gel())], fps=1),
+                     "run": anim([F(BS.gel(k/3)) for k in range(4)], fps=2, loop=False)}, "prop")
     return SPRITES

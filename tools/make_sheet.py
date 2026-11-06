@@ -36,8 +36,8 @@ def build(out):
             d.rectangle([x0 + 2, y, x0 + TW - 4, y + TH], outline=C(LGREY))
             k = K if g != "people" else 3
             im = S.frame(n, "idle", 0, scale=k)
-            if im.height > 92:
-                im = S.frame(n, "idle", 0, scale=k - 1)
+            # Large source sprites still fit the same existing catalogue cells.
+            im.thumbnail((TW - 12, 88), Image.Resampling.NEAREST)
             img.paste(im, (x0 + (TW - 2 - im.width) // 2, y + 46 - im.height // 2), im)
             text(img, x0 + TW // 2 - 1, y + TH - 20, n.upper().replace("_", " ")[:13], INK, align="c")
         y += TH + 10

@@ -1,5 +1,5 @@
-# Palette: PICO-8 (lospec.com/palette-list/pico-8). No transparency, no anti-aliasing.
-# Indices 0-15: the main 16 colors. Sprites use only these.
+# Legacy drawing palette: PICO-8 (lospec.com/palette-list/pico-8).
+# Indices 0-15 are the main 16 colors; new PNG art uses named AAP-64 below.
 # Indices 16-31: the PICO-8 "secret" colors. Only charts and color scales use them.
 # Index 32: PAPER, the background. Sprites do not use it.
 # Meaning of colors in charts: see STYLE.md (blue = better outcome, orange = worse, neutral = no direction).
@@ -14,6 +14,21 @@ P = [(0, 0, 0), (29, 43, 83), (126, 37, 83), (0, 135, 81), (171, 82, 54), (95, 8
      # 32: the background only (off-palette: whiter and cooler than PICO-8 white)
      (251, 250, 247)]
 BLACK, NAVY, PLUM, DGREEN, BROWN, DGREY, LGREY, WHITE, RED, ORANGE, YELLOW, GREEN, BLUE, LAV, PINK, PEACH = range(16)
+
+# Shared palette for new PNG art. Keep P and its indices stable for legacy code art
+# and charts. AAP-64 by Adigun A. Polack: https://lospec.com/palette-list/aap-64
+AAP64 = tuple(tuple(bytes.fromhex(c)) for c in """
+060608 141013 3b1725 73172d b4202a df3e23 fa6a0a f9a31b
+ffd541 fffc40 d6f264 9cdb43 59c135 14a02e 1a7a3e 24523b
+122020 143464 285cc4 249fde 20d6c7 a6fcdb ffffff fef3c0
+fad6b8 f5a097 e86a73 bc4a9b 793a80 403353 242234 221c1a
+322b28 71413b bb7547 dba463 f4d29c dae0ea b3b9d1 8b93af
+6d758d 4a5462 333941 422433 5b3138 8e5252 ba756a e9b5a3
+e3e6ff b9bffb 849be4 588dbe 477d85 23674e 328464 5daf8d
+92dcba cdf7e2 e4d2aa c7b08b a08662 796755 5a4e44 423934
+""".split())
+SPRITE_PALETTES = {"PICO-8": tuple(P), "AAP-64": AAP64}
+
 (XBROWN, XNAVY, XPLUM, XTEAL, XRUST, XMAUVE, XTAUPE, XLEMON, XCRIMSON, XORANGE, XLIME,
  XGREEN, XBLUE, XPURPLE, XSALMON, XAPRICOT) = range(16, 32)
 NAMES = ["BLACK", "NAVY", "PLUM", "DGREEN", "BROWN", "DGREY", "LGREY", "WHITE",

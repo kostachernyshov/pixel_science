@@ -1,0 +1,9 @@
+sprite,file,author,license,source,notes
+cloud,cloud.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
+ice,ice.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
+river,river.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
+snowflake,snowflake.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
+soil,soil.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
+sun,sun.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
+water_drop,water_drop.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
+water_pool,water_pool.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles

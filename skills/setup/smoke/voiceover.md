@@ -12,8 +12,12 @@ The T cell finds the cancer cell and binds it.
 
 ## S04
 
-A scene drawn by hand.
+The ligand comes and docks on the receptor.
 
 ## S05
+
+A scene drawn by hand.
+
+## S06
 
 One plan, four formats.

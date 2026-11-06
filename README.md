@@ -101,7 +101,9 @@ something, a drug blocks a receptor), the agent adds it with `add-verb` and goes
 
 ## What is inside
 
-- 70 sprites in one style in the `biology` pack: immune cells, tumor cells, body cells, molecules, lab props, people.
+- 108 shared base sprites: 100 in `biology` (cells, molecules, organelles, labs, organs,
+  organisms, plants, people) and 8 in `earth` (water, weather, soil). One sprite source
+  is reused across light/dark environments and visual styles.
 - Actions with light and hit effects, one plan for all four formats, a synthetic voice (Qwen3-TTS) with word-timed
   subtitles.
 - The tool `pixsci.py`, which the skills run. To run it by hand or to see how it works: [docs/tool.md](docs/tool.md).

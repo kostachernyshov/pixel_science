@@ -382,6 +382,8 @@ def layout_parts(plan, sc, t, state, beats):
             fl = bool(state[name][6])
             out[(p, name)] = {"d": d, "u": u, "off": fit_off(a["sprite"], k, d, off, fl), "mol": mol,
                               "_at": (a["sprite"], k, px, py, fl)}
+            if mol:                                 # its label goes above the body
+                out[(p, name)]["top"] = py - reach(a["sprite"], k, (0, -1), 0, fl)
     near = {}                       # partners share a row: the offset that fits on every body of the slot
     for (p, name), g in out.items():
         o = near.get(sl[p])
@@ -411,9 +413,11 @@ def head_at(g, sx, sy):
     return sx + g["d"][0] * a, sy + g["d"][1] * a
 
 
-def _label_box(lab, g, bx, by, sx, sy, length):
+def _label_box(lab, g, bx, by, sx, sy, length, back=False):
     """(left, top, right, bottom) of a part's label. Level axis: above or below the head (the outer side of its
-    row), on its own stalk when bound and long enough. Upright axis: beside the stalk, so that it needs no gap."""
+    row), on its own stalk when bound and long enough; a molecule's label above its body. Upright axis: beside
+    the stalk, so that it needs no gap. back: the partner is a molecule, so a label by the head runs back along
+    the stalk, off the molecule's body."""
     from .font import text_w, LINE
     d, u = g["d"], g["u"]
     w = text_w(str(lab))
@@ -421,11 +425,13 @@ def _label_box(lab, g, bx, by, sx, sy, length):
     if d[0]:
         on_stalk = length >= w + 2                           # bound: on its own stalk (the room rule keeps it there)
         cx = (bx + sx) / 2 if on_stalk else hx
-        if g["mol"]:                                         # no stalk: over its own body, out of the gap
-            on_stalk, cx = True, bx - d[0] * (w / 2 + 2)
+        if back and not on_stalk:
+            cx = hx - d[0] * w / 2
         # the outer side of its row; one row and by the head: partners face opposite ways, so one above, one below
         side = (-1 if g["off"] <= 0 else 1) if on_stalk or g["off"] else -d[0]
         top = hy + side * (ROWS * u / 2 + 1) - (LINE if side < 0 else 0)
+        if g["mol"]:                                         # no stalk: above its own body, out of the gap
+            cx, top = bx - d[0] * (w / 2 + 2), max(1, g["top"] - LINE - 1)   # in the frame
     else:                                                  # partners face opposite ways: labels on opposite sides
         cx = hx + d[1] * (ROWS * u / 2 + 4 + w / 2)
         top = (by + sy) / 2 - LINE / 2
@@ -453,16 +459,16 @@ def stalks(plan, si, sc, t, state, beats):
         bx, by = g["base"]
         d, u = g["d"], g["u"]
         free = 0 if g["mol"] else STALK * u
-        length = free
+        length, back = free, False
         if (p, name) in ext and not g["mol"]:
             e, gp = ext[(p, name)]
             gap = (gp["base"][0] - bx) * d[0] + (gp["base"][1] - by) * d[1]
             # two heads meet in the middle; a molecule's site is its edge, so the head goes all the way to it
             want = max(free, gap - HEAD * u / 2 if gp["mol"] else (gap - HEAD * u) / 2)
-            length = free + (want - free) * e
+            length, back = free + (want - free) * e, gp["mol"]
         sx, sy = bx + d[0] * length, by + d[1] * length
         lab = P[p][1].get("label")
-        box = _label_box(lab, g, bx, by, sx, sy, length) if lab and frame.H >= 160 else None
+        box = _label_box(lab, g, bx, by, sx, sy, length, back) if lab and frame.H >= 160 else None
         out.append((p, name, g, (bx, by), (sx, sy), length, box))
     return out
 

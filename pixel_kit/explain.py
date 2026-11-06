@@ -578,7 +578,7 @@ def _approach_once(plan, sc, beats, done, todo, L, stage):
             ua = model.unit(km)
             mols = (model.is_molecule(actors[me]["sprite"]), model.is_molecule(actors[tg]["sprite"]))
             lo, hi = model.bind_range(plan, bind[1], bind[2], ua, d, mols)
-            gap = min(hi, max(lo + 2, HEAD_GAP * ua * (2 - sum(mols)) // 2))
+            gap = max(lo, min(hi - 1, max(lo + 2, HEAD_GAP * ua * (2 - sum(mols)) // 2)))  # inside, not on, the ends
         else:
             dist = math.hypot(mx - tx, my - ty) or 1.0
             d, gap = ((mx - tx) / dist, (my - ty) / dist), 0

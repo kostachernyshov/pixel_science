@@ -1,4 +1,4 @@
 name: biology
-version: 0.1.0
-description: Cells and molecules of the immune system and cancer, lab props, people.
+version: 0.2.0
+description: Shared base sprites for cells, molecules, organelles, lab equipment, organs, organisms, and plants.
 license: CC0-1.0 (sprites), MIT (code)

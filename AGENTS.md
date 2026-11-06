@@ -5,6 +5,7 @@ Local tool, agent skill, and sprite library for pixel-art science explainer vide
 - Read `docs/tool.md` (commands, voice, how it works, layout) and, for sprites or scene types, `CONTRIBUTING.md`.
 - Making a video: skill `skills/animate/SKILL.md`; plan format `skills/animate/PLAN.md`. Sprites live in packs (`packs/<name>/`).
 - Finding what to show (form, emotion, key frames, voice-over): skill `skills/storyboard/SKILL.md`, before `animate`.
+- Adding, importing, or redrawing a reusable sprite: read `skills/add-sprite/SKILL.md`.
 - Setting up a machine: skill `skills/setup/SKILL.md` (`pixsci.py doctor` says what is missing). The repo is also a Claude plugin (`.claude-plugin/`): skills find the tool through `${CLAUDE_PLUGIN_ROOT}`, or the repo root in a clone; keep both working.
 - Run commands with `.venv/bin/python` from the repo root. Before a commit: `tools/validate_sprites.py` prints `VALID`.
 - Layout code reads `frame.W` and `frame.H` at draw time; never use fixed 480x270 sizes.
