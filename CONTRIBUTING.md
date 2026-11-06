@@ -23,8 +23,8 @@ folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.
    Groups: `hero` (immune cells), `villain` (tumor cells, pathogens), `civilian` (body cells), `people`, `prop`, `badge` (molecules shown above a cell).
    A free molecule that binds by its own surface (a ligand, an antibody) adds `"body": "molecule"`: the tool then draws
    no stalk and no head on its parts, so draw the contact site (a notch or a bump) as one piece with the body, on the
-   side that faces the partner and on the straight line through the anchor: the tool finds the site there, along a
-   level or upright line. A free molecule faces right (in a scene, the one on the right of its partner gets
+   side that faces the partner and on the straight line through the anchor (with several parts, on that part's row):
+   the tool finds the site there, along a level or upright line. A free molecule faces right (in a scene, the one on the right of its partner gets
    `flip: true`); a membrane receptor faces up, out of the cell. Cells need no key: the tool draws their parts on
    stalks out of the membrane.
 5. **Credits.** Add a row to the pack's `sprites/CREDITS.csv`: sprite, file, author, license, source URL, notes.

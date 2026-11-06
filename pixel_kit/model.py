@@ -431,7 +431,7 @@ def _label_box(lab, g, bx, by, sx, sy, length, back=False):
         side = (-1 if g["off"] <= 0 else 1) if on_stalk or g["off"] else -d[0]
         top = hy + side * (ROWS * u / 2 + 1) - (LINE if side < 0 else 0)
         if g["mol"]:                                         # no stalk: above its own body, out of the gap
-            cx, top = bx - d[0] * (w / 2 + 2), g["top"] - LINE - 1
+            cx, top = bx - d[0] * (w / 2 + 2), max(1, g["top"] - LINE - 1)   # in the frame
     else:                                                  # partners face opposite ways: labels on opposite sides
         cx = hx + d[1] * (ROWS * u / 2 + 4 + w / 2)
         top = (by + sy) / 2 - LINE / 2
