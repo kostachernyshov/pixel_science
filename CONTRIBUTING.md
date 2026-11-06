@@ -23,7 +23,8 @@ folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.
    Groups: `hero` (immune cells), `villain` (tumor cells, pathogens), `civilian` (body cells), `people`, `prop`, `badge` (molecules shown above a cell).
    A free molecule that binds by its own surface (a ligand, an antibody) adds `"body": "molecule"`: the tool then draws
    no stalk and no head on its parts, so draw the contact site (a notch or a bump) on the sprite's right edge, as one
-   piece with the body. Cells need no key: the tool draws their parts on stalks out of the membrane.
+   piece with the body. In a scene, the molecule on the right of its partner gets `flip: true`: the tool measures the
+   edge of the sprite as drawn. Cells need no key: the tool draws their parts on stalks out of the membrane.
 5. **Credits.** Add a row to the pack's `sprites/CREDITS.csv`: sprite, file, author, license, source URL, notes.
 6. **Check.** `python tools/validate_sprites.py` prints `VALID`. Look at the cast sheet: `python pixsci.py sheet out/sheet.png`.
 

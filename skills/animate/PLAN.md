@@ -116,7 +116,8 @@ A verb is missing? Add it to the pack, then go on with the scene: [add-verb](../
 `pixel_kit/model.py`). Actors are things of the model by name (or `thing: t`, for a second T cell).
 `parts: [tcr, pd1]` on an actor (or on a beat, to change them) shows parts on stalks out of its membrane,
 facing the partner; partners get a matching lock and key. A part on a sprite marked `"body": "molecule"` (a ligand, an
-antibody) has no stalk and no head: its site is the sprite's own edge, and the partner's head reaches it. A verb with `relation:` (`bind`, `secrete`,
+antibody) has no stalk and no head: its site is the sprite's own edge, and the partner's head reaches it.
+Its site is drawn on the right: when the molecule stands to the right of its partner, give it `flip: true`. A verb with `relation:` (`bind`, `secrete`,
 `apoptosis`) must match a relation: `{actor: pdl1, verb: bind, target: pd1}` closes a bind and it stays
 closed in later scenes; `{actor: drug, verb: bind, target: pdl1}` puts the drug on PD-L1, which lets go of
 PD-1. `pixsci check` fails on a relation not in the model, a part not shown, parts too far apart or with
@@ -142,7 +143,8 @@ the function does not draw it). The function gets
 `frame.W` and `frame.H`, never 480 and 270. With subtitles, the stage ends above their box. `ctx["dur"]` is
 the scene length; time events with `words.cue` (see Timing). Colors are palette indices or `(r, g, b)`.
 A custom scene that draws a relation of the model says so with a beat: `{word: rain, shows: rain_falls}`.
-The code reads its time from `ctx["shows"]["rain_falls"]` (seconds in the scene) and draws it then; `check`
+The code reads its time from `ctx["shows"]["rain_falls"]` (seconds in the scene, the first time if it is
+shown twice) and draws it then; `check`
 counts the relation as shown and checks its source and `after:` order, and says that the drawing is not
 checked. `shows:` is for custom scenes only; an action scene shows a relation with a verb.
 A custom scene is a candidate for a new scene type.

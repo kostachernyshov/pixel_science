@@ -149,8 +149,12 @@ def _events(plan):
     for i, sc in enumerate(plan["scenes"]):
         actors = sc.get("actors") or {}
         for b in sorted(sc.get("beats") or [], key=lambda b: float(b.get("t", 0))):
-            n, r = match(plan, b, actors)
-            if not n:
+            if "shows" in b:              # drawn by custom code: still part of the story (a destroyed thing stays gone)
+                n = b["shows"] if sc.get("type") == "custom" else None
+                r = get(plan)[1].get(n) if n else None
+            else:
+                n, r = match(plan, b, actors)
+            if not n or not r:
                 continue
             t = float(b.get("t", 0))
             out.append((i, t, r["kind"], n, b))
@@ -195,6 +199,10 @@ def world(plan):
             if j != i:
                 continue
             r = rels[n]
+            if "shows" in b:              # custom code: no actors to bind; a destroyed thing stays gone
+                if kind == "destroy":
+                    dead.add(r["b"])
+                continue
             if kind == "bind":
                 bound[(n, owner(plan, sc, r["a"], t), owner(plan, sc, r["b"], t))] = t
             elif kind == "occupy":
@@ -233,10 +241,12 @@ def scene_state(plan, si, sc, t):
 # ---------------------------------------------------------------- drawing
 
 @functools.lru_cache(maxsize=4096)
-def _ray(name, anim_k, d, off):
+def _ray(name, anim_k, d, off, flip=False):
     """Steps from the sprite's anchor (shifted by off across d) to its last opaque pixel along d, or None."""
-    im = S.frame(name, "idle", 0, False, anim_k)
+    im = S.frame(name, "idle", 0, flip, anim_k)
     ax, ay = S.meta()[name]["anchor"]
+    if flip:
+        ax = S.meta()[name]["cell"][0] - ax
     nx, ny = abs(d[1]), abs(d[0])
     x, y, last = ax * anim_k + nx * off, ay * anim_k + ny * off, None
     for s in range(0, max(im.size)):
@@ -248,18 +258,19 @@ def _ray(name, anim_k, d, off):
     return last
 
 
-def fit_off(name, anim_k, d, off):
+def fit_off(name, anim_k, d, off, flip=False):
     """The offset nearest to off at which a row still meets the body (a row past the side of a small body
     moves in)."""
-    while _ray(name, anim_k, d, off) is None and abs(off) >= 1:
+    while _ray(name, anim_k, d, off, flip) is None and abs(off) >= 1:
         off -= math.copysign(1, off)
     return off
 
 
-def _edge(name, anim_k, px, py, d, off):
-    """The membrane point of the sprite from its anchor along direction d, shifted by off across it."""
+def _edge(name, anim_k, px, py, d, off, flip=False):
+    """The membrane point of the sprite (as drawn, flipped or not) from its anchor along direction d, shifted by
+    off across it."""
     nx, ny = abs(d[1]), abs(d[0])          # a fixed side axis: partners on both bodies share their offset
-    last = _ray(name, anim_k, d, off)
+    last = _ray(name, anim_k, d, off, flip)
     s = (last + 1) if last is not None else max(S.frame(name, "idle", 0, False, anim_k).size) * 0.4
     return px + nx * off + d[0] * s, py + ny * off + d[1] * s
 
@@ -275,13 +286,13 @@ def unit(k):
     return 1 if k <= 1 else max(2, k - 1)
 
 
-def reach(name, k, d, off=0):
+def reach(name, k, d, off=0, flip=False):
     """Distance from the sprite's anchor to its edge along direction d (any unit vector), off across it."""
-    ex, ey = _edge(name, k, 0, 0, d, off)
+    ex, ey = _edge(name, k, 0, 0, d, off, flip)
     return ex * d[0] + ey * d[1] - (abs(d[1]) * off * d[0] + abs(d[0]) * off * d[1])
 
 
-def bind_range(plan, pa, pb, u, d, mols=(False, False)):
+def bind_range(plan, pa, pb, u, d, mols=(False, False), labels=True):
     """(lo, hi): the gaps between the two membranes at which parts pa and pb bind along axis d: room for both
     heads, and on a level axis for both labels between the bodies, but within the reach of the stalks.
     mols: which of the two sit on a molecule (no stalk, no head: one stalk and one head span the gap)."""
@@ -292,7 +303,7 @@ def bind_range(plan, pa, pb, u, d, mols=(False, False)):
     n = len(stalked)
     lo = (HEAD * n // 2 + 2) * u
     hi = (n * REACH + HEAD * n // 2) * u
-    if d[0] and frame.H >= 160:         # labels on their stalks, if the stalks can reach that far
+    if labels and d[0] and frame.H >= 160:     # labels on their stalks, if the stalks can reach that far
         room = HEAD * n // 2 * u + n * (max(_label_w(P, p) for p in stalked) + 2)
         lo = room if room <= hi else lo   # else they sit by the heads, one above and one below (_label_box)
     return lo, hi
@@ -368,16 +379,17 @@ def layout_parts(plan, sc, t, state, beats):
             d = _axis(state[target][0] - px, state[target][1] - py) if target else (1, 0)
             off = (rows.index(sl[p]) - (len(rows) - 1) / 2) * (ROWS + 3) * u
             mol = is_molecule(a["sprite"])          # its site is drawn in the sprite: no stalk
-            out[(p, name)] = {"d": d, "u": u, "off": fit_off(a["sprite"], k, d, off), "mol": mol,
-                              "_at": (a["sprite"], k, px, py)}
+            fl = bool(state[name][6])
+            out[(p, name)] = {"d": d, "u": u, "off": fit_off(a["sprite"], k, d, off, fl), "mol": mol,
+                              "_at": (a["sprite"], k, px, py, fl)}
     near = {}                       # partners share a row: the offset that fits on every body of the slot
     for (p, name), g in out.items():
         o = near.get(sl[p])
         near[sl[p]] = g["off"] if o is None or abs(g["off"]) < abs(o) else o
     for (p, name), g in out.items():
-        sprite, k, px, py = g.pop("_at")
+        sprite, k, px, py, fl = g.pop("_at")
         g["off"] = near[sl[p]]
-        g["base"] = _edge(sprite, k, px, py, g["d"], g["off"])
+        g["base"] = _edge(sprite, k, px, py, g["d"], g["off"], fl)
     return out
 
 
@@ -393,18 +405,23 @@ def scene_rows(plan, sc, beats):
     return sorted({sl[p] for p in ps if p in P})
 
 
+def head_at(g, sx, sy):
+    """The center of a part's head from its stalk tip; a molecule's site is its edge (no head)."""
+    a = 0 if g["mol"] else 3 * g["u"]
+    return sx + g["d"][0] * a, sy + g["d"][1] * a
+
+
 def _label_box(lab, g, bx, by, sx, sy, length):
     """(left, top, right, bottom) of a part's label. Level axis: above or below the head (the outer side of its
     row), on its own stalk when bound and long enough. Upright axis: beside the stalk, so that it needs no gap."""
     from .font import text_w, LINE
     d, u = g["d"], g["u"]
     w = text_w(str(lab))
-    h = 0 if g.get("mol") else 3 * u                        # a molecule's site is its edge
-    hx, hy = sx + d[0] * h, sy + d[1] * h
+    hx, hy = head_at(g, sx, sy)
     if d[0]:
         on_stalk = length >= w + 2                           # bound: on its own stalk (the room rule keeps it there)
         cx = (bx + sx) / 2 if on_stalk else hx
-        if g.get("mol"):                                     # no stalk: over its own body, out of the gap
+        if g["mol"]:                                         # no stalk: over its own body, out of the gap
             on_stalk, cx = True, bx - d[0] * (w / 2 + 2)
         # the outer side of its row; one row and by the head: partners face opposite ways, so one above, one below
         side = (-1 if g["off"] <= 0 else 1) if on_stalk or g["off"] else -d[0]
@@ -467,19 +484,17 @@ def draw(img, plan, si, sc, t, state, beats):
         d, u = g["d"], g["u"]
         col = _palette(P[p][1].get("color", "LGREY"), 6)
         _, role, prof = site(plan, p)
-        if g["mol"]:                    # the site is drawn in the sprite; verbs aim at the edge
-            hx, hy = bx, by
-        else:
+        hx, hy = head_at(g, sx, sy)
+        if not g["mol"]:                # a molecule's site is drawn in its sprite; verbs aim at the edge
             w = max(1, u // 2 + 1)
             x0, x1 = sorted((bx, sx))
             y0, y1 = sorted((by, sy))
             dr.rectangle([x0 - w // 2, y0 - w // 2, x1 + w // 2, y1 + w // 2], fill=C(col))
             _head(dr, sx, sy, d, u, prof, role, col)
-            hx, hy = sx + d[0] * 3 * u, sy + d[1] * 3 * u
         heads[p] = heads.get(p) or (hx, hy, ROWS * u / 2)
         heads[f"{p}@{name}"] = (hx, hy, ROWS * u / 2)
         cov = covered.get((p, name))
-        if cov and t - cov[1] >= GLIDE * 0.8:              # the agent's head takes the partner's place
+        if cov and t - cov[1] >= GLIDE * 0.8 and not g["mol"]:   # the agent's head takes the partner's place
             acol = _palette(cov[2].get("color", "BLUE"), 12)
             _head(dr, sx + d[0] * HEAD * u, sy + d[1] * HEAD * u, (-d[0], -d[1]), u, prof,
                   "a" if role == "b" else "b", acol)
@@ -502,7 +517,7 @@ def agent_place(plan, si, sc, t, state, beats):
         if not g or agent not in state:
             continue
         d, u = g["d"], g["u"]
-        reach = (STALK + HEAD + 1) * u + state[agent][2] * 0.6
+        reach = (0 if g["mol"] else (STALK + HEAD + 1) * u) + state[agent][2] * 0.6   # on a molecule: at its edge
         tx, ty = g["base"][0] + d[0] * reach, g["base"][1] + d[1] * reach
         k = ease(clamp((t - on) / GLIDE))
         state[agent][0] += (tx - state[agent][0]) * k
@@ -536,8 +551,7 @@ def _crowded(st, others=()):
     heads = []
     for p, name, g, _, (sx, sy), _, _ in st:
         d, u = g["d"], g["u"]
-        a = 0 if g.get("mol") else 3 * u
-        hx, hy, h = sx + d[0] * a, sy + d[1] * a, ROWS * u / 2
+        (hx, hy), h = head_at(g, sx, sy), ROWS * u / 2
         heads.append((p, name, (hx - h, hy - h, hx + h, hy + h)))
     out = []
     for i, (p, name, _, _, _, _, box) in enumerate(st):
@@ -571,6 +585,9 @@ def check(plan, positions=None, stage=None):
                                f"(an action scene shows a relation with a verb)")
                 elif b["shows"] not in rels:
                     out.append(f"{sc.get('id')}: beat at {b.get('t')} s: shows: {b['shows']!r} is not a relation in model")
+                elif b.get("verb") or b.get("actor") or b.get("target"):
+                    out.append(f"{sc.get('id')}: beat at {b.get('t')} s: a shows: beat has only a word (or t) "
+                               f"and the relation; the custom code draws it")
                 else:
                     uses.append((i, sc, b, b["shows"], rels[b["shows"]]))
                 continue
@@ -670,7 +687,8 @@ def check(plan, positions=None, stage=None):
                 ends = sorted(state[ob][ax] + (g - gap) * d[ax] for g in (lo + 1, hi - 1))
                 f0, f1 = ((e - a0) / ((a1 - a0) or 1) for e in ends)
                 fix = f": place {ob} at {'xy'[ax]} {f0:.2f} to {f1:.2f}, or move it with move_to: {oa}"
-            if gb["d"] != (-d[0], -d[1]) or gap < (HEAD + 2) * u:
+            if gb["d"] != (-d[0], -d[1]) or gap < bind_range(plan, r["a"], r["b"], u, d, (ga["mol"], gb["mol"]),
+                                                            labels=False)[0]:
                 out.append(f"{sc.get('id')}: beat at {bt} s: {r['a']} and {r['b']} do not face each other across a gap "
                            f"(contact){fix}")
             elif gap < lo:
