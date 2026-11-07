@@ -16,7 +16,7 @@
 # -f limits the formats (default: the plan's "formats", else all four).
 # --voice (board, render, frames): time scenes and word beats to the voice in OUTDIR/voice/; render puts it in the mp4.
 
-import os, sys
+import contextlib, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
@@ -42,12 +42,41 @@ def _args(a):
     return pos, fmts, gif, vo
 
 
+@contextlib.contextmanager
+def _quiet(log):
+    """Sends stderr (progress bars and warnings of torch and Hugging Face) to the file log, one run per file;
+    stdout stays. An agent reads only the short result, not thousands of progress lines."""
+    if sys.stderr:
+        sys.stderr.flush()
+    f = open(log, "w")
+    keep = os.dup(2)
+    os.dup2(f.fileno(), 2)
+    try:
+        yield
+    except BaseException as e:
+        stop = not (isinstance(e, SystemExit) and e.code in (None, 0))
+        raise
+    else:
+        stop = False
+    finally:
+        if sys.stderr:
+            sys.stderr.flush()
+        os.dup2(keep, 2)
+        os.close(keep)
+        f.close()
+        if stop and os.path.getsize(log):
+            print(f"voice: stopped; details in {log}", file=sys.stderr)
+
+
 def _voice(plan, outdir):
-    """Speaks the voice-over (only scenes that changed) and times the scenes to it. Returns {scene: wav}."""
+    """Speaks the voice-over (only scenes that changed) and times the scenes to it. Returns {scene: wav}.
+    Model output goes to OUTDIR/voice/log.txt."""
     from pixel_kit import voice, words
     texts = {k: words.spoken(v) for k, v in explain.voiceover(plan).items()}
-    paths = voice.attach(plan, texts, outdir)
-    n = words.align(plan, explain.voiceover(plan), paths, outdir)
+    os.makedirs(os.path.join(outdir, "voice"), exist_ok=True)
+    with _quiet(os.path.join(outdir, "voice", "log.txt")):
+        paths = voice.attach(plan, texts, outdir)
+        n = words.align(plan, explain.voiceover(plan), paths, outdir)
     if n:
         print(f"word times: {n} scenes aligned")
     plan.pop("_words", None)          # words and beats are timed again, now to the audio
