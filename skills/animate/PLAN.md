@@ -47,6 +47,24 @@ sits above the bottom 20 % (apps cover it with buttons). In `banner`, there is n
 - In `voiceover.md`, `[PD-L1|pee dee el one]` shows the first form (subtitles) and speaks the second (voice).
   Write numbers, units, and gene or protein names this way.
 
+## Timeline
+
+`timeline:` at the top of the plan puts a strip at the bottom of the stage: a scale of time, a "now" cursor,
+and marks. It is a layer over any set: it stays through the scenes and does not dissolve. Title and summary
+scenes, and a scene with `timeline: false`, hide it. Beats (with `word:` or `t:`, no actor) move the cursor
+and add marks:
+
+```yaml
+timeline: {from: 1980, to: 2000, unit: year, now: 1998}    # any unit: year, day, hour, million year
+beats:
+  - {word: "back", timeline: 1982}                          # the cursor goes there
+  - {word: "donor", mark: 1982, label: DONOR, color: unfavorable}   # a mark stays
+```
+
+A jump of more than a quarter of the scale rewinds (`<<` or `>>` while the cursor moves) and leaves its span
+on the line with a label ("16 YEARS") until the cursor moves again. Values are in the scale; a year or a
+date on screen is in a source.
+
 ## Subtitles
 
 `subtitles: true` shows the voice-over word for word in a box at the bottom of every scene: each word types in
