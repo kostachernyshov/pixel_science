@@ -127,11 +127,15 @@ drawn above), `label`, `color`, `hidden`, `in` (a zone of the set), `ghost` (tru
 `marks`. Keep x between 0.1 and 0.9: the vertical frame is narrow.
 
 - **Ghost.** Any sprite has a ghost: a pale see-through silhouette with an outline, made by the tool. A beat
-  `ghost: true` fades the actor to its ghost (a hidden actor appears as one); `ghost: false` brings it back.
-  A destroyed actor cannot come back, but its ghost can stay or appear: a character who died stays in the set.
-- **Marks** on the body: a spot, a plaster, a glowing organ. Each mark has `at:` (fractions of the sprite,
-  0 to 1, mirrored with `flip`) and a `sprite:` (it takes the actor's scale) or a `color:` (a dot; `size:` in
-  sprite pixels, default 2). A beat with `marks:` gives the list from its word on: list all marks that stay.
+  `ghost: true` fades the actor to its ghost in 1 s (a hidden actor appears as one); `ghost: false` brings it
+  back. Only the sprite becomes a ghost: its marks and badge stay, its parts are not drawn. A destroyed actor
+  cannot come back (`ghost: false` or `show: true` fails the check), but its ghost can stay or appear: a
+  character who died stays in the set. Put `ghost: true` on the word of the verb that destroys it
+  (`apoptosis`): the actor then stays as a ghost; the verb does not hide it.
+- **Marks** on the body: a spot, a plaster, an organ. Each mark has `at:` (fractions of the sprite, 0 to 1,
+  mirrored with `flip`) and a `sprite:` (it takes the actor's scale; `anim:` starts when the mark appears, for
+  example `kidney` with `anim: glow`) or a `color:` (a dot; `size:` in sprite pixels, default 2). A beat with
+  `marks:` gives the list from its word on: list all marks that stay. Not `mark:`, a point on the timeline.
 
 **Set.** `set:` builds the set of the storyboard once; the next scenes go on in it with `continue: true`.
 An actor with `in: <zone>` stands in that zone: its `at:` and `move_to: [x, y]` are fractions of the zone,

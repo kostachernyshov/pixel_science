@@ -101,9 +101,10 @@ def idle(img, name, t, x, y, seed=0, flip=False, scale=1, blink_every=2.3):
     return draw(img, name, "idle", t + seed * 0.17, x, y, flip, scale)
 
 
-def ghost(rgba, k=1):
+def ghost(rgba, k=1, origin=(0, 0)):
     """The ghost of drawn sprites (an RGBA array, transparent around them): a pale silhouette, half see-through
-    (a checker of LGREY on the grid of sprite pixels, k frame pixels each), with a DGREY outline k pixels wide.
+    (a checker of LGREY on the grid of sprite pixels, k frame pixels each, from origin: the corner of the sprite),
+    with a DGREY outline k pixels wide.
     Any sprite has one; no ghost frames are drawn by hand."""
     import numpy as np
     from .palette import C, LGREY, DGREY
@@ -116,6 +117,7 @@ def ghost(rgba, k=1):
         inner = e
     yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
     out = np.zeros_like(rgba)
-    out[inner & ((xx // max(1, k) + yy // max(1, k)) % 2 == 0)] = (*C(LGREY), 255)
+    k1 = max(1, k)
+    out[inner & (((xx - origin[0]) // k1 + (yy - origin[1]) // k1) % 2 == 0)] = (*C(LGREY), 255)
     out[a & ~inner] = (*C(DGREY), 255)
     return out
