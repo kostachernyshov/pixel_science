@@ -57,6 +57,27 @@ scenes:
     beats:
       - {word: "hand", shows: drawn}                               # times the code and shows the relation
   - id: S06
+    type: action
+    title: "Two panels"
+    set: {type: panels, panels: [{title: LEFT, counter: "0 OF 1"}, {title: RIGHT, counter: "0 OF 1"}]}  # a set
+    actors:
+      nk:  {sprite: nk, in: all, at: [0.25, 0.5]}                 # the same actor in each panel
+      one: {sprite: tumor, in: B, at: [0.7, 0.5]}                 # at: a fraction of its zone
+  - id: S07
+    type: action
+    continue: true                                                # the set and the actors go on, no dissolve
+    beats:
+      - {word: "goes", actor: one, verb: vanish}
+      - {word: "counts", panel: B, counter: "1 OF 1"}             # a counter changes on its word
+  - id: S08
+    type: action
+    title: "In and out"
+    set: {type: border, at: 0.5, top: OUTSIDE, bottom: INSIDE, line: membrane}   # the line comes from the pack
+    actors:
+      rec: {sprite: membrane_receptor, in: border, at: [0.6, 0]}  # stands on the line
+      out: {sprite: nk, in: top, at: [0.2, 0.5]}
+      in:  {sprite: proteasome, in: bottom, at: [0.3, 0.5]}
+  - id: S09
     type: summary
     title: "Ready"
     text: "One plan, four formats."

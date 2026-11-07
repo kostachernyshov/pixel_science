@@ -19,13 +19,13 @@ Use these forms as ideas, not as templates. Always add one form that is not in t
 
 ## Catalogue
 
-Set: what stays on screen for the whole video. What changes: what comes and goes inside it. A ready scene is a scene type of `animate` (PLAN.md): when one shows a set, the Set cell names it (`ready: <type>`).
+Set: what stays on screen for the whole video. What changes: what comes and goes inside it. A ready scene is a scene type of `animate` (PLAN.md) or an action scene with a `set:`: when one shows a set, the Set cell names it (`ready: ...`).
 
 | Form | Fits | Set | What changes | Example |
 |---|---|---|---|---|
-| Levels | An experiment with 2 to 4 conditions. | Game LEVELs; a HUD shows the one variable. | One variable changes per level. | NK cells and MHC-I (Ljunggren and Kärre, 1985). |
-| Split screen | One difference between two groups. | Two panels with the same layout, for the whole video. | The same beats in both; only one thing is different. | A normal mouse and a knockout mouse. |
-| Inside and outside | A process that crosses a border (a membrane, a wall, the skin). | A cell in section, or a border across the frame. | Molecules and cells cross the border and act on each side. | CDK4 and p16 in the cell cycle. |
+| Levels | An experiment with 2 to 4 conditions. | Game LEVELs; a HUD shows the one variable (`ready: set: panels`, one panel a level). | One variable changes per level. | NK cells and MHC-I (Ljunggren and Kärre, 1985). |
+| Split screen | One difference between two groups. | Two panels with the same layout, for the whole video (`ready: set: panels`). | The same beats in both; only one thing is different. | A normal mouse and a knockout mouse. |
+| Inside and outside | A process that crosses a border (a membrane, a wall, the skin). | A cell in section, or a border across the frame (`ready: set: border`). | Molecules and cells cross the border and act on each side. | CDK4 and p16 in the cell cycle. |
 | Timeline | A history with dates, or a result that takes years. | A timeline at the bottom with years and a "now" cursor. | Marks appear on their words; the cursor jumps back and forward (<< >>). | Melanoma in a donor kidney, 16 years after the donor was treated (MacKie et al., 2003). |
 | Wrong guess | A result against common sense. | The hero and the dish. | The hero bets on the obvious answer. The dish shows the other answer. | Antibiotics do not kill a cold virus. |
 | Man in a hole | A discovery that fixes a problem. | A health bar. | The bar falls. A new tool arrives. The bar ends above the start. | Insulin saves a diabetic dog. |

@@ -20,4 +20,16 @@ A scene drawn by hand.
 
 ## S06
 
+Two panels, one set.
+
+## S07
+
+One cell goes, and the counter counts it.
+
+## S08
+
+A border with a part in it.
+
+## S09
+
 One plan, four formats.

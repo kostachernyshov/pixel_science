@@ -65,6 +65,7 @@ each a palette index or `[r, g, b]`; `fade_color: [r, g, b]` is the color of the
 | `title` | Short heading at the top left (not in `banner`). |
 | `bg` | `paper` (default), `plain`, `tissue`, `epithelium`, `bloodstream`, `lymph_node`, `tme`, `dishes`. |
 | `fade` | `false`: no dissolve into this scene (one continuous shot). |
+| `continue` | `true`: an action scene goes on from the action scene before (Set, under action). |
 | `key` | 0..1: where in the scene the storyboard takes its frame (default 0.75). |
 
 Colors by name: `favorable` (blue), `unfavorable` (orange), `neutral` (grey), with `2` and `3` shades,
@@ -97,7 +98,38 @@ beats:                                                          # t: seconds fro
 ```
 
 Actor fields: `sprite`, `at`, `anim`, `scale` (default 2), `flip`, `badge` (a sprite of group `badge`
-drawn above), `label`, `color`, `hidden`. Keep x between 0.1 and 0.9: the vertical frame is narrow.
+drawn above), `label`, `color`, `hidden`, `in` (a zone of the set). Keep x between 0.1 and 0.9: the vertical frame is narrow.
+
+**Set.** `set:` builds the set of the storyboard once; the next scenes go on in it with `continue: true`.
+An actor with `in: <zone>` stands in that zone: its `at:` and `move_to: [x, y]` are fractions of the zone,
+and its sprite and label stay inside it. The actors in zones share one scale: the largest at which each
+fits its zone (smaller in the banner or in small panels), so that sizes still compare.
+
+```yaml
+set: {type: panels, panels: [{title: CONTROL, counter: "0 OF 15"}, {title: MHC LOW, counter: "0 OF 15"}]}
+actors:
+  nk:   {sprite: nk, in: all, at: [0.2, 0.5]}       # in every panel; no parts; a target of its verbs is in: all too
+  cell: {sprite: tumor, in: B, at: [0.7, 0.5]}      # zones A, B, C, D (or name: in a panel)
+beats:
+  - {word: "seven", panel: B, counter: "7 OF 15"}   # a counter changes on its word; the number is in a source
+```
+
+```yaml
+set: {type: border, at: 0.45, top: OUTSIDE, bottom: INSIDE, line: membrane}   # zones top, bottom, border
+actors:
+  rec: {sprite: membrane_receptor, in: border, at: [0.6, 0]}    # stands on the line
+```
+
+- `panels`: 2 to 4 frames with a title and a counter each: side by side (also 2 or 3 in the square), stacked
+  in the vertical frame, 2 x 2 for 4 in the square. The banner shows frames and counters, no titles.
+  `check` fails when a title and its counter do not fit their panel in a format of the plan.
+- `border`: a line across the stage at `at` (0.2 to 0.8 of its height) between two zones: the outside and the
+  inside of a cell, air and water, above and below the ground. `line:` names a look from a pack (`pack.yaml`,
+  `borders:`; biology has `membrane`).
+- `continue: true` (an action scene after an action scene): no dissolve; the set, the background, the title,
+  the counters, and the actors go on as they are at the end of the scene before (place, zone, flip, badge,
+  parts, shown or hidden; a destroyed actor stays hidden).
+  The scene's own `actors:` add actors or change fields of the ones that go on.
 
 `move_to: <actor>` moves until the two sprites touch, edge to edge, on the side the mover comes from; the
 tool knows both sizes, so this fits every format. When parts of the two actors bind (Model and parts), it
