@@ -9,6 +9,7 @@ Terms of pixel_science. Use these words in code, docs, issues, and plans.
 | **Plan** | `explainer.yaml`: the scenes of one video. | script, config |
 | **Scene** | One part of a plan with one type (`title`, `action`, ...) and one voice-over block. | shot |
 | **Set** | The composition that the viewer learns once and that stays to the end of a video (two panels, a cell in section, a timeline). The story happens inside it. Chosen in `storyboard` (`Set:`). | running device, background |
+| **Zone** | A part of a set where actors stand (`in: B`, `in: top`); their `at:` is a fraction of it. | region, area |
 | **Candidate** | A custom scene or a new character that came out well, kept next to the video in `videos/<slug>/candidates/<name>/`. It goes into the library only when the person asks. | draft |
 | **Actor** | A sprite on the stage of an `action` scene, with a name in the plan. | character, object |
 | **Beat** | One timed line of an `action` scene: an actor moves, changes animation, or does a verb. | event, keyframe |

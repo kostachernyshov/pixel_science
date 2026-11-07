@@ -4,7 +4,8 @@ Thank you for helping. The library stays useful only if every piece has one styl
 
 ## Packs
 
-Sprites live in packs: `packs/<name>/` with `pack.yaml` (name, version, description, license),
+Sprites live in packs: `packs/<name>/` with `pack.yaml` (name, version, description, license; optional
+`borders:`, the look of the line of a border set, see PLAN.md),
 `sprites/` (PNG sheets, `sprites.json`, `CREDITS.csv`), and `code/` (a package whose `library.py` has
 `build()` for sprites drawn in code). A plan picks its packs with `packs: [biology]`. Packs in other
 folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.

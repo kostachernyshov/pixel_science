@@ -2,3 +2,6 @@ name: biology
 version: 0.2.0
 description: Shared base sprites for cells, molecules, organelles, lab equipment, organs, organisms, and plants.
 license: CC0-1.0 (sprites), MIT (code)
+# Lines of a border set (pixel_kit/sets.py): bands from the top, beads on the outer bands.
+borders:
+  membrane: {bands: [[200, 132, 160], [244, 222, 210], [236, 206, 196], [236, 206, 196], [244, 222, 210], [200, 132, 160]], beads: {color: [176, 92, 132], step: 5}}

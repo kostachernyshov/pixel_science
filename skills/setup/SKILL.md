@@ -41,7 +41,7 @@ install it only when the person wants it.
    "VENV/bin/python" "ROOT/pixsci.py" check  "ROOT/skills/setup/smoke/explainer.yaml"
    "VENV/bin/python" "ROOT/pixsci.py" render "ROOT/skills/setup/smoke/explainer.yaml" pixsci-check
    ```
-   It renders `pixsci-check/setup-check-landscape.mp4` (about 25 s, a few seconds of work). With the voice installed, also
+   It renders `pixsci-check/setup-check-landscape.mp4` (about 37 s, a few seconds of work). With the voice installed, also
    run `voice` and `render ... --voice` on the same plan once: this downloads the models now instead of in the
    middle of the first real video. The download takes minutes; its progress is in `pixsci-check/voice/log.txt`.
 6. **Summary.** Tell the person in a few lines: where `VENV` is, what `doctor` printed, the path of the check video,
