@@ -3074,12 +3074,12 @@
   "file": "membrane_receptor.png",
   "group": "prop",
   "cell": [
-   128,
-   128
+   64,
+   64
   ],
   "anchor": [
-   62,
-   68
+   32,
+   39
   ],
   "anims": {
    "idle": {
