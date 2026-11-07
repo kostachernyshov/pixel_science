@@ -24,22 +24,22 @@ Each frame works at one level of detail (organism, cell, molecule...). What is d
 2. **Sources.** 1 to 5 reliable sources (review, textbook, original paper). Each claim of the voice-over follows from them. Mark a hypothesis as a hypothesis.
 3. **Core.** Write the result as one sentence: "AND ..., BUT ..., THEREFORE ...". If it does not come, the topic is not clear yet: read more, do not draw. Then write the final frame in one line: what the viewer sees at the end.
 4. **Form.** Read [FORMS.md](FORMS.md) and [EMOTIONS.md](EMOTIONS.md). Write 2 to 3 forms, one line each: how we tell it, how we show the result, the main emotion. At least one form is not in the catalogue. Recommend one.
-5. **Running device.** Choose one device that stays to the end and shows the viewer where they are: levels, a HUD value, two panels, a counter, a map. Choose one main emotion (and at most one support emotion).
+5. **Set.** Choose one set: the composition that the viewer learns once and that stays to the end (levels, two panels, a cell in section, a timeline, a map; the Set column of [FORMS.md](FORMS.md)). It also shows the viewer where they are. The story happens inside it: characters, captions, and counters come and go; the set stays. A new set costs the viewer time: more than 3 set changes in a video need a reason. If no ready scene (a scene type of `animate`) shows the set, mark it `custom` with the reason (`animate` writes one custom scene for it). Choose one main emotion (and at most one support emotion).
 6. **Key frames.** Write 6 to 12 frames, one for each meaning chunk, plus the frame of the turn. Budget: 2.5 words a second, 20 to 60 s in total.
-   - The hook is in the first 3 s: a question or a strange fact, no greeting.
-   - The turn is at 60 to 70 % of the time. Expectation first, then the turn.
+   - The hook is in the first 3 s: a question or a strange fact, no greeting. The set appears with it.
+   - The turn is at 60 to 70 % of the time. Expectation first, then the turn. The turn changes one thing in the set, not the set.
    - Link the chunks by *but* or *therefore*, never *and then*.
    - One term once, with an image. One line of the story at a time.
    - The result reads with the sound off: one caption word or one HUD value.
-   - The end is the answer and the final frame from step 3.
+   - The end is the answer and the final frame from step 3: the set in its final state.
 7. **Model.** If the story is a mechanism (who acts on whom), write `model:`: 2 to 4 things with their parts, and 3 to 6 relations (`bind`, `occupy`, `transfer`, `change`, `destroy`), each with `source: "<number>: <short quote>"`. Only what this story needs; no list of everything that binds. `animate` copies the block into the plan, and `pixsci check` holds the video to it. Format: `pixel_kit/model.py`.
-8. **Check each frame.** Under a frame with a metaphor or a simplification, write what it claims and what it does not claim. The frame stays true to the science even where the voice simplifies. This line is for the storyboard only; it is not shown in the video.
+8. **Check each frame.** Ask: what stays on screen from the frame before? If nothing stays, the set changes: count it. Under a frame with a metaphor or a simplification, write what it claims and what it does not claim. The frame stays true to the science even where the voice simplifies. This line is for the storyboard only; it is not shown in the video.
 9. **Show.** Write `storyboard.md` (format below). If the harness can publish artifacts, publish one page made from it: each frame is a card with a rough sketch on the left (inline SVG: boxes, circles, arrows, labels; who stands where and what happens) and the voice-over and caption on the right. Else show the file as text. Direct mode: ask "Accept the storyboard? yes / changes".
 10. **Hand over.** After "yes" (or at once from `explain`), go to `animate`. It takes the topic, sources, voice-over, and scenes from `storyboard.md`.
 
 ## Long topic: a series
 
-If the topic needs more than 60 s or more than one mechanism, first write a series plan in `videos/<series>/series.md`: one line and one question for each video, and one running device for the whole series. Show it (direct mode: ask for acceptance). Then make the storyboard of one video at a time.
+If the topic needs more than 60 s or more than one mechanism, first write a series plan in `videos/<series>/series.md`: one line and one question for each video, and one set for the whole series. Show it (direct mode: ask for acceptance). Then make the storyboard of one video at a time.
 
 ## storyboard.md
 
@@ -48,7 +48,7 @@ If the topic needs more than 60 s or more than one mechanism, first write a seri
 Guess: <only from explain; one line each>
 Core: AND ..., BUT ..., THEREFORE ...
 Form: <name>: <one line>
-Device: <running device>
+Set: <set> (ready: <type> | custom: <reason>); changes: N (<reason if more than 3>)
 Emotion: <main> (+ <support>)
 Length: ~N s, N words
 Sources:
@@ -64,7 +64,10 @@ model:          # only for a mechanism
 |---|---|
 | **F01 0–3 s** hook. <picture in one line> | "<voice-over>" <br> CAPTION: <1–3 words> |
 | **F02 3–8 s** <picture> <br><sub>claims: ...; not: ...</sub> | "<voice-over>" <br> CAPTION: ... |
+| **F05 20–26 s** Set: <new set> (ready: <type> \| custom: <reason>). <picture> | "<voice-over>" <br> CAPTION: ... |
 ```
+
+Write `Set:` in a frame only where the set changes.
 
 ## Rules
 
@@ -75,7 +78,8 @@ model:          # only for a mechanism
 
 ## Done when
 
-- The core sentence, the final frame, the form, the device, and the emotion each have one line.
+- The core sentence, the final frame, the form, the set, and the emotion each have one line.
+- More than 3 set changes have a reason.
 - Each frame has time, picture, voice-over, and caption; each metaphor has its claims line.
 - The total time is in the budget, and the last frame shows the answer.
 - Direct mode: the person accepted the storyboard. From `explain`: the guesses are listed.

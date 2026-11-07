@@ -8,6 +8,8 @@ Terms of pixel_science. Use these words in code, docs, issues, and plans.
 | **Pack** | A folder in `packs/` that gives a topic its sprites, verbs, and color roles (`packs/biology/`). | plugin, module |
 | **Plan** | `explainer.yaml`: the scenes of one video. | script, config |
 | **Scene** | One part of a plan with one type (`title`, `action`, ...) and one voice-over block. | shot |
+| **Set** | The composition that the viewer learns once and that stays to the end of a video (two panels, a cell in section, a timeline). The story happens inside it. Chosen in `storyboard` (`Set:`). | running device, background |
+| **Candidate** | A custom scene or a new character that came out well, kept next to the video in `videos/<slug>/candidates/<name>/`. It goes into the library only when the person asks. | draft |
 | **Actor** | A sprite on the stage of an `action` scene, with a name in the plan. | character, object |
 | **Beat** | One timed line of an `action` scene: an actor moves, changes animation, or does a verb. | event, keyframe |
 | **Verb** | An action that a beat names (`secrete`, `block`, `hit`). Data in a pack's `verbs.yaml`: primitives, color roles, hit, show or hide. | effect, fx |
