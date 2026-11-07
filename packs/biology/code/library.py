@@ -216,7 +216,6 @@ def build():
             "sick": anim([F(g(sick=True)), F(g(sick=True), 0, 1)], fps=2),
             "gown": anim([F(g(gown=True)), F(g(gown=True), 0, -1)], fps=2),
             "gown_sick": anim([F(g(gown=True, sick=True)), F(g(gown=True, sick=True), 0, 1)], fps=2),
-            "ghost": anim([F(g(ghost=True))], fps=1),
         }, "people")
     register("kidney", {
         "idle": anim([F(PP.kidney())], fps=1),

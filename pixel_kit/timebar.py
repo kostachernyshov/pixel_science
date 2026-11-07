@@ -164,6 +164,11 @@ def _number(v):
 def check(plan, colors=()):
     """Problems of the timeline and of its beats. colors: the color names a mark may have."""
     out, tl = [], plan.get("timeline")
+    for sc in plan["scenes"]:
+        for b in sc.get("beats") or []:
+            if isinstance(b.get("mark"), list):
+                return [f"{sc.get('id')}: beat at {b.get('t')} s: mark: is a point on the timeline (a number); "
+                        f"marks on an actor's body are marks: (a list)"]
     used = any("timeline" in b or "mark" in b for sc in plan["scenes"] for b in sc.get("beats") or [])
     if tl is None:
         return ["a beat moves the timeline or adds a mark, but the plan has no timeline: {from, to, unit}"] if used else []

@@ -13,7 +13,7 @@ Use these forms as ideas, not as templates. Always add one form that is not in t
 
 ## Inside the set
 
-- **Memory.** A character that dies stays as a shadow to the end of the set. Marks stay on the body. A shadow is drawn by the set (a custom scene), not by an actor: in the plan, a destroyed actor does not come back.
+- **Memory.** A character that dies stays as a ghost to the end of the set; one who comes appears as a ghost first. Marks stay on the body. In the plan: `ghost:` and `marks:` on the actor (PLAN.md, action).
 - **A detail as a metaphor.** One object carries the idea: a scan with a spot, spots on a body, a case folder.
 - **Life.** Cells look for a target, run, and divide. A character at rest moves a little; it does not stand still.
 

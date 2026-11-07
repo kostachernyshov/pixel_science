@@ -473,9 +473,9 @@ def stalks(plan, si, sc, t, state, beats):
     return out
 
 
-def draw(img, plan, si, sc, t, state, beats):
+def draw(img, plan, si, sc, t, state, beats, skip=()):
     """Parts on stalks, bound pairs joined, occupying agents on their part. Returns {name: (x, y, r)} of the
-    part heads, so verbs can use parts as actor or target."""
+    part heads, so verbs can use parts as actor or target. skip: actors whose parts are not drawn (ghosts)."""
     things, rels = get(plan)
     P = parts(plan)
     if not P:
@@ -491,6 +491,10 @@ def draw(img, plan, si, sc, t, state, beats):
         col = _palette(P[p][1].get("color", "LGREY"), 6)
         _, role, prof = site(plan, p)
         hx, hy = head_at(g, sx, sy)
+        if name in skip:
+            heads[p] = heads.get(p) or (hx, hy, ROWS * u / 2)
+            heads[f"{p}@{name}"] = (hx, hy, ROWS * u / 2)
+            continue
         if not g["mol"]:                # a molecule's site is drawn in its sprite; verbs aim at the edge
             w = max(1, u // 2 + 1)
             x0, x1 = sorted((bx, sx))
@@ -660,10 +664,27 @@ def check(plan, positions=None, stage=None):
                 if not a or x not in shown_parts(a, sc.get("beats") or [], ow, bt):
                     out.append(f"{sid}: beat at {bt} s: {x} is not shown on its owner (add it to the actor's parts:)")
     dead_by_scene = [w["dead"] for w in world(plan)]
+    ev = _events(plan)
     for i, sc in enumerate(plan["scenes"]):
+        killed = {}                       # destroyed in this scene: actor -> time
+        for j, t, kind, n, b in ev:
+            if j == i and kind == "destroy":
+                killed.setdefault(b.get("target") or b.get("actor"), t)
         for name, a in (sc.get("actors") or {}).items():
-            if name in dead_by_scene[i] and not a.get("hidden"):
-                out.append(f"{sc.get('id')}: actor {name!r} was destroyed in an earlier scene and cannot come back")
+            gone = -1e9 if name in dead_by_scene[i] else killed.get(name)
+            if gone is None:
+                continue
+            ghost = bool(a.get("ghost"))
+            back = gone < 0 and not a.get("hidden") and not ghost
+            for b in sorted((b for b in sc.get("beats") or [] if b.get("actor") == name), key=lambda b: float(b.get("t", 0))):
+                late = float(b.get("t", 0)) > gone
+                if "ghost" in b:
+                    back |= late and b["ghost"] is False
+                    ghost = bool(b["ghost"])
+                back |= late and b.get("show") is True and not ghost
+            if back:
+                out.append(f"{sc.get('id')}: actor {name!r} was destroyed and cannot come back "
+                           f"(a ghost of it can stay or appear: ghost: true)")
     used = {u[3] for u in uses}
     for n in rels:
         if n not in used:

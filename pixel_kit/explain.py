@@ -212,6 +212,9 @@ def _sprites(sc):
         yield a.get("sprite"), a.get("anim", "idle")
         if a.get("badge"):
             yield a["badge"], "idle"
+    for m in _all_marks(sc):
+        if isinstance(m.get("sprite"), str):
+            yield m["sprite"], m.get("anim", "idle")
     for b in sc.get("beats") or []:
         if b.get("anim") and b.get("actor") in (sc.get("actors") or {}):
             yield sc["actors"][b["actor"]].get("sprite"), b["anim"]
@@ -257,6 +260,7 @@ def check(plan):
                 out.append(f"{sid}: {key} has more than 4 entries (they do not fit a vertical frame)")
         names = set(sc.get("actors") or {}) | set(model.parts(plan))
         out += _check_set(plan, sc, sid)
+        out += [f"{sid}: {p}" for p in _check_marks(sc)]
         for beat in sc.get("beats") or []:
             if "shows" in beat and "actor" not in beat:
                 continue                  # a relation drawn by custom code (model.check)
@@ -272,6 +276,11 @@ def check(plan):
             elif "move_to" in beat and beat.get("actor") not in (sc.get("actors") or {}):
                 out.append(f"{sid}: beat at {beat.get('t')} s: only an actor moves ({beat.get('actor')!r} is a part)")
             out += [f"{sid}: {p}" for p in verbs.check_beat(beat, names)]
+            for k in ("ghost", "marks"):
+                if k in beat and beat.get("actor") in names and beat.get("actor") not in (sc.get("actors") or {}):
+                    out.append(f"{sid}: beat at {beat.get('t')} s: {k}: is for an actor ({beat.get('actor')!r} is a part)")
+            if "ghost" in beat and not isinstance(beat["ghost"], bool):
+                out.append(f"{sid}: beat at {beat.get('t')} s: ghost: is true (the actor fades to a ghost) or false (it comes back)")
             if beat.get("verb"):
                 used.add(beat["verb"])
         cap = sc.get("caption")
@@ -634,7 +643,7 @@ def _copies(sc, a, L):
 
 def carry(plan):
     """Scenes with continue: true go on from the scene before: its set, background, title, and actors as they are at
-    its end (place, zone, flip, badge, shown). Their own actors add to these or change them.
+    its end (place, zone, flip, badge, ghost, marks, shown). Their own actors add to these or change them.
     Runs for the current format (an end place found by move_to depends on it), after prepare()."""
     times, prev = None, None
     for i, sc in enumerate(plan["scenes"]):
@@ -655,8 +664,10 @@ def carry(plan):
             out = {}
             for name, a in (prev.get("actors") or {}).items():
                 x, y, _, _, flip, badge, shown = _actor_state(a, beats, name, a1 - a0)
+                ghost = _ghost(a, beats, name, a1 - a0)[1] == "ghost"
                 c = {k: v for k, v in a.items() if k != "anim"}
-                c.update(at=[round(x, 4), round(y, 4)], flip=flip, badge=badge, hidden=not shown or name in dead)
+                c.update(at=[round(x, 4), round(y, 4)], flip=flip, badge=badge, ghost=ghost,
+                         marks=_marks(a, beats, name, a1 - a0)[0], hidden=not shown or (name in dead and not ghost))
                 if "parts" in a or any(b.get("actor") == name and "parts" in b for b in beats):
                     c["parts"] = model.shown_parts(a, beats, name)
                 out[name] = c
@@ -688,7 +699,68 @@ def _actor_state(a, beats, name, t):
             badge = b["badge"]
         if "show" in b:
             shown = bool(b["show"])
+        if "ghost" in b:                   # a hidden actor appears as a ghost
+            shown = True
     return x, y, anim, t - a_t0, flip, badge, shown
+
+
+GHOST_S = 1.0          # s: an actor fades to its ghost, or a ghost comes back
+
+
+def _ghost(a, beats, name, t):
+    """(look before, look now, progress 0..1) of an actor; a look is real, ghost, or none (hidden).
+    A beat ghost: true fades the actor to its ghost (or a hidden actor appears as one); ghost: false brings it back."""
+    look = "ghost" if a.get("ghost") else "real"
+    prev, u, t0 = look, 1.0, 0.0
+    for b in sorted((b for b in beats if b.get("actor") == name and "ghost" in b), key=lambda b: float(b.get("t", 0))):
+        bt = float(b.get("t", 0))
+        if t < bt:
+            break
+        u_then = min(1.0, (bt - t0) / GHOST_S) if prev != look else 1.0
+        seen = look if u_then >= 0.5 else prev          # a fade that still runs: start from what is on screen
+        prev = seen if _actor_state(a, beats, name, bt - 1e-6)[6] else "none"
+        look, u, t0 = "ghost" if b["ghost"] else "real", min(1.0, (t - bt) / GHOST_S), bt
+    return prev, look, u
+
+
+def _marks(a, beats, name, t):
+    """(marks on the actor's body at time t, the time they were given): its marks:, then the list of the last
+    beat with marks:."""
+    out, t0 = a.get("marks") or [], 0.0
+    for b in sorted((b for b in beats if b.get("actor") == name and "marks" in b), key=lambda b: float(b.get("t", 0))):
+        if float(b.get("t", 0)) <= t:
+            out, t0 = b["marks"] or [], float(b.get("t", 0))
+    return out, t0
+
+
+def _all_marks(sc):
+    lists = [a.get("marks") for a in (sc.get("actors") or {}).values()] + [b.get("marks") for b in sc.get("beats") or []]
+    for ms in lists:
+        yield from (m for m in ms if isinstance(m, dict)) if isinstance(ms, list) else ()
+
+
+def _check_marks(sc):
+    """Problems of marks on actors' bodies."""
+    out = []
+    lists = [(f"actor {n}", a["marks"]) for n, a in (sc.get("actors") or {}).items() if "marks" in a]
+    lists += [(f"beat at {b.get('t')} s", b["marks"]) for b in sc.get("beats") or [] if "marks" in b]
+    for who, ms in lists:
+        if ms is None:
+            continue
+        if not isinstance(ms, list):
+            out.append(f"{who}: marks: is a list of {{at: [x, y], sprite: ...}} or {{at: [x, y], color: ...}}")
+            continue
+        for m in ms:
+            at = m.get("at") if isinstance(m, dict) else None
+            if not (isinstance(at, list) and len(at) == 2 and all(isinstance(v, (int, float)) and 0 <= v <= 1 for v in at)):
+                out.append(f"{who}: a mark needs at: [x, y], fractions of the sprite (0 to 1): {m!r}")
+            elif bool(m.get("sprite")) == bool(m.get("color")) or not isinstance(m.get("sprite") or m.get("color"), str):
+                out.append(f"{who}: a mark has a sprite: or a color: (a dot), one of them, a name: {m!r}")
+            elif not (isinstance(m.get("size", 2), int) and not isinstance(m.get("size", 2), bool) and m.get("size", 2) > 0):
+                out.append(f"{who}: mark size: is a whole number of sprite pixels: {m!r}")
+            elif m.get("color") and m["color"] not in COLOR_NAMES:
+                out.append(f"{who}: mark color {m['color']!r} is unknown; use one of {', '.join(COLOR_NAMES)}")
+    return out
 
 
 HEAD_GAP = model.HEAD + 2 * model.STALK + 4      # units: a bind placed by move_to shows both stalks
@@ -755,8 +827,11 @@ def _expand(sc, plan=None):
         bt = float(b.get("t", 0))
         for key, when, val in (("show", bt, True), ("hide", bt + verbs.duration(b["verb"]), False)):
             who = v.get(key)
-            if who:
-                out.append({"t": when, "actor": b.get(who) if who == "target" else b["actor"], "show": val})
+            name = b.get(who) if who == "target" else b.get("actor")
+            if not who or (not val and any(g.get("actor") == name and g.get("ghost") is True
+                                           and bt <= float(g.get("t", 0)) <= when for g in sc.get("beats") or [])):
+                continue                  # a ghost: true beat during the verb: the actor stays, as a ghost
+            out.append({"t": when, "actor": name, "show": val})
     return out
 
 
@@ -857,10 +932,13 @@ def p_action(plan, sc, T, dur, ctx):
         px, py, r, k, anim, at, flip, badge, shown = state[name]
         if not shown:
             continue
+        look, marks = _ghost(a, beats, name, t), _marks(a, beats, name, t)
         for dx, dy in [(0, 0)] + copies.get(name, []):
             _draw_actor(img, a, L, int(px + dx), int(py + dy), k, anim, at, flip, badge, i,
-                        bottom=_box(sc, a, L)[3] + dy if a.get("in") and a["in"] != "border" else None)
-    heads = model.draw(img, plan, si, sc, t, state, beats)
+                        bottom=_box(sc, a, L)[3] + dy if a.get("in") and a["in"] != "border" else None,
+                        look=look, marks=marks, t=t)
+    pale = {n for n, a in actors.items() if _ghost(a, beats, n, t)[1] == "ghost"}
+    heads = model.draw(img, plan, si, sc, t, state, beats, skip=pale)
     where = {n: tuple(v[:3]) for n, v in state.items()}
     where.update({n: v for n, v in heads.items() if n not in where})
     cv = fx.Canvas(img, base)
@@ -884,17 +962,71 @@ def p_action(plan, sc, T, dur, ctx):
     return img
 
 
-def _draw_actor(img, a, L, px, py, k, anim, at, flip, badge, i, bottom=None):
-    _sprite(img, a["sprite"], anim, at, px, py, k, seed=i, flip=flip)
+def _draw_actor(img, a, L, px, py, k, anim, at, flip, badge, i, bottom=None, look=("real", "real", 1.0),
+                marks=((), 0.0), t=0.0):
+    """An actor, the marks on its body, its badge, and its label. look: (before, now, progress) from _ghost:
+    a change of look dissolves (Bayer) from the one before to the one now. Only the sprite becomes a ghost:
+    marks and the badge stay as they are on it."""
+    prev, now, u = look
+    if now == "real" and (u >= 1 or prev == "real"):
+        _sprite(img, a["sprite"], anim, at, px, py, k, seed=i, flip=flip)
+    else:
+        _ghost_sprite(img, a, px, py, k, anim, at, flip, i, prev, now, u)
+    if prev == "none" and u < 0.5:              # it appears: marks, badge, and label come with the second half
+        return
+    _extras(img, a, px, py, k, flip, badge, marks, t)
     sh = S.meta()[a["sprite"]]["cell"][1] * k
-    if badge:
-        bh = S.meta()[badge]["cell"][1] * k
-        S.draw(img, badge, "idle", 0, px, max(bh // 2 + 1, py - sh // 2 - bh // 2 + 2), scale=k)
     if a.get("label") and not L["banner"]:
         y = py + sh // 2 + 2
         if bottom is not None:                      # in a zone: the label stays inside it
             y = min(y, int(bottom) - LINE)
         text(img, px, y, a["label"], color(a.get("color", "ink"))[0], align="c")
+
+
+def _origin(name, px, py, k, flip):
+    """The top left corner of the sprite's cell in the frame."""
+    m = S.meta()[name]
+    (cw, _), (ax, ay) = m["cell"], m["anchor"]
+    return int(round(px - (cw - ax if flip else ax) * k)), int(round(py - ay * k))
+
+
+def _ghost_sprite(img, a, px, py, k, anim, at, flip, i, prev, now, u):
+    """The sprite in a look (real, ghost, none) or dissolving from one to the other; work on its box only."""
+    import numpy as np
+    from PIL import Image
+    from .scene import dither_mask
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    _sprite(lay, a["sprite"], anim, at, px, py, k, seed=i, flip=flip)
+    box = lay.getbbox()
+    if not box:
+        return
+    arr = np.array(lay.crop(box))
+    ox, oy = _origin(a["sprite"], px, py, k, flip)
+    looks = {"real": arr, "ghost": S.ghost(arr, k, (ox - box[0], oy - box[1])), "none": np.zeros_like(arr)}
+    mix = np.where(dither_mask(*arr.shape[:2], u)[..., None], looks[now], looks[prev]) if u < 1 else looks[now]
+    over = Image.fromarray(mix.astype(np.uint8))
+    img.paste(over, box[:2], over)
+
+
+def _extras(img, a, px, py, k, flip, badge, marks, t):
+    """The marks on the body (at: fractions of the sprite's cell, mirrored with it) and the badge above it.
+    marks: (list, the time it was given): a mark's animation starts when the mark appears."""
+    ms, t0 = marks
+    m = S.meta()[a["sprite"]]
+    cw, ch = m["cell"]
+    x0, y0 = _origin(a["sprite"], px, py, k, flip)
+    for mk in ms:
+        fx_, fy_ = mk["at"]
+        mx, my = x0 + (1 - fx_ if flip else fx_) * cw * k, y0 + fy_ * ch * k
+        if mk.get("sprite"):
+            S.draw(img, mk["sprite"], mk.get("anim", "idle"), t - t0, mx, my, scale=k, flip=flip)
+        else:
+            n = int(mk.get("size", 2)) * k
+            a0, b0 = int(mx - n / 2), int(my - n / 2)
+            ImageDraw.Draw(img).rectangle([a0, b0, a0 + n - 1, b0 + n - 1], fill=C(color(mk["color"])[0]))
+    if badge:
+        sh, bh = ch * k, S.meta()[badge]["cell"][1] * k
+        S.draw(img, badge, "idle", 0, px, max(bh // 2 + 1, py - sh // 2 - bh // 2 + 2), scale=k)
 
 
 def p_summary(plan, sc, t, dur, ctx):
