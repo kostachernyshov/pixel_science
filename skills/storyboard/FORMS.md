@@ -15,7 +15,7 @@ Use these forms as ideas, not as templates. Always add one form that is not in t
 
 - **Memory.** A character that dies stays as a ghost to the end of the set; one who comes appears as a ghost first. Marks stay on the body. In the plan: `ghost:` and `marks:` on the actor (PLAN.md, action).
 - **A detail as a metaphor.** One object carries the idea: a scan with a spot, spots on a body, a case folder.
-- **Life.** Cells look for a target, run, and divide. A character at rest moves a little; it does not stand still.
+- **Life.** Cells look for a target, run, and divide. A character at rest moves a little; it does not stand still. In the plan: `wander:`, `hunt:`, `divide:` (PLAN.md, action).
 
 ## Catalogue
 

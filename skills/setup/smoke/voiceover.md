@@ -40,4 +40,8 @@ The ghost stays.
 
 ## S11
 
+One cell divides, the killer hunts two cells in turn, and one walks around.
+
+## S12
+
 One plan, four formats.

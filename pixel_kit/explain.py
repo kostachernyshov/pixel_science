@@ -906,12 +906,16 @@ def p_action(plan, sc, T, dur, ctx):
     _heading(img, L, sc.get("title"))
     actors = sc.get("actors") or {}
     state, frac = {}, {}
-    for name, a in actors.items():
+    for i, (name, a) in enumerate(actors.items()):
         fx_, fy_, anim, at, flip, badge, shown = _actor_state(a, beats, name, t)
         frac[name] = (fx_, fy_)
         k = _scale(sc, a, L)
         cw, ch = S.meta()[a["sprite"]]["cell"]
         state[name] = [*_place(sc, a, L, fx_, fy_, k), max(cw, ch) * k / 2, k, anim, at, flip, badge, shown]
+        if not a.get("still"):                         # a little motion at rest: actors do not stand like stones
+            g = ctx.setdefault("t0", durations(plan)[ctx.get("si", 0)][0]) + t + i * 1.37
+            state[name][0] += round(k * math.sin(g * 2.03))
+            state[name][1] += round(k * 0.6 * math.sin(g * 2.71 + 1.1))
     for th, p, att, tg in hits:                        # windup of the attacker, push of the target
         if att in state and tg in state:
             dx, dy = state[tg][0] - state[att][0], state[tg][1] - state[att][1]
@@ -1103,9 +1107,125 @@ def prepare(plan):
     TIMEBAR = bool(plan.get("timeline"))
     if "_words" in plan:
         return plan.get("_word_problems", [])
+    for sc in plan["scenes"]:                 # the plan's own beats (behave() adds plain beats to a copy)
+        if "_src_beats" in sc:
+            sc["beats"] = list(sc["_src_beats"])
     WD.attach(plan, voiceover(plan), plan.get("_outdir"))
     plan["_word_problems"] = WD.resolve_beats(plan)
+    plan["_word_problems"] += behave(plan)
     return plan["_word_problems"]
+
+
+# ---------------------------------------------------------------- behaviors: beats that make beats
+
+BEHAVIORS = ("wander", "hunt", "divide")
+WANDER_STEP = 1.5        # s: one walk of wander
+HUNT_MOVE = 1.2          # s: hunt goes to each target in this time
+APART = 0.12             # fraction of the zone between a cell and its daughter
+
+
+def behave(plan):
+    """Beats with wander:, hunt:, or divide: become plain beats (move_to, verb, anim, show, flip), so check sees
+    what plays: the targets of a hunt and who is destroyed. Runs in prepare(), after the words are placed.
+    The plan's beats stay in sc["_src_beats"]. Returns problems of these beats."""
+    out, times = [], durations(plan)
+    for sc, (a, b) in zip(plan["scenes"], times):
+        src = sc.setdefault("_src_beats", list(sc.get("beats") or []))
+        if not any(k in x for x in src for k in BEHAVIORS):
+            continue
+        actors, sid = sc.get("actors") or {}, sc.get("id")
+        plain = [x for x in src if not any(k in x for k in BEHAVIORS)]
+        made = []
+        for x in sorted((x for x in src if any(k in x for k in BEHAVIORS)), key=lambda x: float(x.get("t", 0))):
+            me, t0 = x.get("actor"), float(x.get("t", 0))
+            where = f"{sid}: beat at {x.get('t')} s"
+            if sc.get("type") != "action" or me not in actors:
+                out.append(f"{where}: {', '.join(k for k in BEHAVIORS if k in x)} is for an actor of an action scene")
+                continue
+            if sum(k in x for k in BEHAVIORS) > 1:
+                out.append(f"{where}: one of {', '.join(BEHAVIORS)} in a beat")
+                continue
+            now = plain + made
+            if "hunt" in x:
+                tgs = x["hunt"] if isinstance(x["hunt"], list) else [x["hunt"]]
+                bad = [g for g in tgs if g not in actors or g == me]
+                if bad or not tgs or not x.get("verb"):
+                    out.append(f"{where}: hunt: names other actors of the scene, in order, and verb: what it does "
+                               f"to each (then: what each does after it)" + (f"; not actors: {bad}" if bad else ""))
+                    continue
+                t, d = t0, float(x.get("dur", HUNT_MOVE))
+                for g in tgs:
+                    made.append({"t": round(t, 3), "actor": me, "move_to": g, "dur": d})
+                    hit = {"hit": x["hit"]} if "hit" in x else {}
+                    made.append({"t": round(t + d, 3), "actor": me, "verb": x["verb"], "target": g, **hit})
+                    t += d + _verb_s(x["verb"])
+                    if x.get("then"):
+                        made.append({"t": round(t, 3), "actor": g, "verb": x["then"]})
+                if t > b - a:
+                    out.append(f"{where}: the hunt ends at {t:.1f} s, after the scene ({b - a:.1f} s): start it "
+                               f"on an earlier word, give fewer targets or a shorter dur:, or give the scene dur:")
+            elif "wander" in x:
+                if x["wander"] is not True:
+                    out.append(f"{where}: wander: true (the actor walks in its zone until its next beat)")
+                    continue
+                later = [float(y.get("t", 0)) for y in src if y.get("actor") == me and float(y.get("t", 0)) > t0]
+                made += _wander(plan, sc, me, actors[me], now, t0, min(later + [b - a]), float(x.get("dur", WANDER_STEP)))
+            else:
+                d = x["divide"]
+                if d not in actors or d == me or not actors[d].get("hidden") or actors[d].get("in") != actors[me].get("in"):
+                    out.append(f"{where}: divide: names the daughter: another actor of the scene with hidden: true, "
+                               f"in the same zone")
+                    continue
+                made += _divide(sc, me, d, actors, now, t0, float(x.get("apart", APART)))
+                end = max(float(y["t"]) + float(y.get("dur", 0)) for y in made)
+                if end > b - a:
+                    out.append(f"{where}: the division ends at {end:.1f} s, after the scene ({b - a:.1f} s): "
+                               f"start it on an earlier word, or give the scene dur:")
+        sc["beats"] = plain + made
+    return out
+
+
+def _verb_s(name):
+    try:
+        return verbs.duration(name)
+    except KeyError:              # an unknown verb: check reports it
+        return 0.5
+
+
+def _wander(plan, sc, me, a, beats, t0, t1, step):
+    """Walks from point to point inside the actor's zone (fractions) from t0 to t1; faces where it goes."""
+    import random, zlib
+    rnd = random.Random(zlib.crc32(f"{plan.get('seed', 0)}/{sc.get('id')}/{me}/{t0}".encode()))
+    x, y, _, _, flip, _, _ = _actor_state(a, beats, me, t0)
+    out, t = [], t0
+    while t1 - t > 0.4:
+        d = min(step, t1 - t - 0.1)
+        nx = rnd.uniform(0.15, 0.85)
+        ny = y if a.get("in") == "border" else rnd.uniform(0.25, 0.75)
+        if (nx < x) != flip:
+            flip = nx < x
+            out.append({"t": round(t, 3), "actor": me, "flip": flip})
+        out.append({"t": round(t, 3), "actor": me, "move_to": [round(nx, 3), round(ny, 3)], "dur": round(d, 3)})
+        x, y, t = nx, ny, t + d + 0.1
+    return out
+
+
+def _divide(sc, me, d, actors, beats, t0, apart):
+    """The cell plays its divide animation (if its sprite has one); the daughter appears at its place with
+    its marks and badge, and the two move apart."""
+    a = actors[me]
+    x, y, anim, _, _, badge, _ = _actor_state(a, beats, me, t0)
+    out, t = [], t0
+    if "divide" in S.meta().get(a.get("sprite"), {}).get("anims", {}):
+        t = t0 + S.duration(a["sprite"], "divide")
+        out += [{"t": round(t0, 3), "actor": me, "anim": "divide"}, {"t": round(t, 3), "actor": me, "anim": anim}]
+    ms = _marks(a, beats, me, t0)[0]
+    actors[d].update(at=[round(x, 4), round(y, 4)], **({"marks": ms} if ms else {}), **({"badge": badge} if badge else {}))
+    h = apart / 2
+    out += [{"t": round(t, 3), "actor": d, "show": True},
+            {"t": round(t, 3), "actor": me, "move_to": [round(max(0.08, x - h), 4), round(y, 4)], "dur": 0.6},
+            {"t": round(t, 3), "actor": d, "move_to": [round(min(0.92, x + h), 4), round(y, 4)], "dur": 0.6}]
+    return out
 
 
 def _sub_lines(ws, maxw):

@@ -15,6 +15,7 @@ Terms of pixel_science. Use these words in code, docs, issues, and plans.
 | **Actor** | A sprite on the stage of an `action` scene, with a name in the plan. | character, object |
 | **Ghost** | An actor's look after `ghost: true`: a pale see-through silhouette of its sprite with an outline, made by the tool for any sprite. A destroyed actor may stay as a ghost. | shadow, memory |
 | **Mark** | A sprite or a dot on an actor's body (`marks:`), at fractions of the sprite. Not the timeline's `mark:`, a point on the strip. | spot, sticker |
+| **Behavior** | A beat that makes beats: `wander`, `hunt`, `divide`. It becomes plain beats (move, verb, show) before check, so check sees what plays. | AI, routine |
 | **Beat** | One timed line of an `action` scene: an actor moves, changes animation, or does a verb. | event, keyframe |
 | **Verb** | An action that a beat names (`secrete`, `block`, `hit`). Data in a pack's `verbs.yaml`: primitives, color roles, hit, show or hide. | effect, fx |
 | **Primitive** | A function of motion in `pixel_kit/fx.py` with no topic (`jet`, `burst`, `ring`, `shell`, `sparks`, `dissolve`, `trail`, `glow`, `sign`). Only verbs use primitives. | effect, particle |

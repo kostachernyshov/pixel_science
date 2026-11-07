@@ -99,6 +99,20 @@ scenes:
     beats:
       - {word: "stays", actor: two, flip: true}
   - id: S11
+    type: action
+    title: "Life"
+    actors:
+      nk:  {sprite: nk, at: [0.12, 0.3], anim: move}
+      c1:  {sprite: tumor, at: [0.45, 0.25], still: true}       # still: no motion at rest
+      c2:  {sprite: tumor, at: [0.75, 0.3]}
+      c3:  {sprite: tumor, at: [0.7, 0.75], marks: [{at: [0.5, 0.5], color: favorable}]}
+      c4:  {sprite: tumor, hidden: true}                         # the daughter of c3: divide: places it
+      t:   {sprite: killer_t, at: [0.2, 0.75]}
+    beats:
+      - {word: "hunts", actor: nk, hunt: [c1, c2], verb: hit, then: vanish}   # to each in turn
+      - {word: "walks", actor: t, wander: true}                  # in its zone, until its next beat
+      - {word: "divides", actor: c3, divide: c4}                 # c4 appears beside it, with its marks
+  - id: S12
     type: summary
     title: "Ready"
     text: "One plan, four formats."
