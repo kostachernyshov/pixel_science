@@ -271,9 +271,10 @@ def check(plan):
             for ch in (sc.get("title") or "").upper():
                 if ch not in TITLE_GLYPHS:
                     out.append(f"{sid}: title character {ch!r} is not in the title font (A-Z, 0-9, - ! . ? :)")
-        if typ == "custom" and not str(sc.get("why") or "").strip():
-            out.append(f"{sid}: a custom scene says why: no ready scene shows this set, or the frame is key "
-                       f"(hook, turn, end) and a ready scene shows it worse")
+        why = sc.get("why")
+        if typ == "custom" and not (isinstance(why, str) and why.strip()):
+            out.append(f"{sid}: a custom scene needs why: (one line: no scene type shows this set, or the frame "
+                       f"is key (hook, turn, end) and a scene type shows it worse)")
         if typ == "fact" and len(sc.get("text") or []) > 3:
             out.append(f"{sid}: a fact has 3 lines of text or fewer")
     # text must fit in each format
