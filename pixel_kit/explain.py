@@ -227,7 +227,7 @@ def _sprites(sc):
 def check(plan):
     """Rules of the skill. Returns a list of problems (empty: all pass)."""
     out = list(prepare(plan))
-    carry(plan)
+    out += carry(plan)
     out += timebar.check(plan, colors=list(COLOR_NAMES))
     if not plan.get("sources"):
         out.append("sources: list at least one source for the science in the video")
@@ -335,7 +335,21 @@ def check(plan):
     limit = float(plan.get("max_s", 60))
     if story_end > limit:
         out.append(f"length before the summary {story_end:.0f} s: keep it at 20-45 s ({limit:.0f} s at most, max_s)")
-    return out
+    return [_made_by(plan, p) for p in out]
+
+
+def _made_by(plan, p):
+    """A problem at a time of a beat that a behavior made gets the behavior's beat, which the author can find."""
+    m = re.match(r"(\S+): .*?\bat ([0-9.]+) s", p)
+    if not m or "(made by" in p or re.match(r"\S+: (wander|hunt|divide) at", p):
+        return p
+    sc = next((s for s in plan["scenes"] if s.get("id") == m.group(1)), None)
+    T = float(m.group(2).rstrip("."))
+    made = [b for b in (sc or {}).get("beats") or [] if "_from" in b and -0.01 <= T - float(b.get("t", 0)) < 1.5
+            and ("verb" in b or "hit at" not in p)]
+    if not made:
+        return p
+    return f"{p} (made by the {max(made, key=lambda b: float(b.get('t', 0)))['_from']})"
 
 
 def _check_set(plan, sc, sid):
@@ -644,13 +658,13 @@ def _copies(sc, a, L):
 def carry(plan):
     """Scenes with continue: true go on from the scene before: its set, background, title, and actors as they are at
     its end (place, zone, flip, badge, ghost, marks, shown). Their own actors add to these or change them.
-    Runs for the current format (an end place found by move_to depends on it), after prepare()."""
-    times, prev = None, None
+    Then the behaviors of each scene become plain beats (_behave). Runs for the current format (an end place
+    found by move_to depends on it), after prepare(). Returns problems of the behaviors."""
+    times, prev, problems = durations(plan), None, []
     for i, sc in enumerate(plan["scenes"]):
         sc.setdefault("_own", dict(sc.get("actors") or {}))
         sc.setdefault("_own_keys", sorted(sc))
         if sc.get("continue") and prev is not None and prev.get("type") == sc.get("type") == "action":
-            times = times or durations(plan)
             a0, a1 = times[i - 1]
             beats = _expand(prev, plan)
             for k in ("set", "bg", "title"):
@@ -660,6 +674,7 @@ def carry(plan):
             if "set" not in sc["_own_keys"] and st and st.get("type") == "panels":    # counters go on too
                 end = sets.counters(st, beats, a1 - a0)
                 sc["set"] = dict(st, panels=[dict(p, counter=end.get(n)) for n, p in sets.panels(st)])
+            plan.pop("_world", None)              # the scenes before this one have their plain beats now
             dead = model.world(plan)[i]["dead"] if plan.get("model") else set()
             out = {}
             for name, a in (prev.get("actors") or {}).items():
@@ -674,7 +689,10 @@ def carry(plan):
             for name, a in sc["_own"].items():
                 out[name] = dict(out.get(name, {}), **a)
             sc["actors"] = out
+        problems += _behave(plan, sc, times[i][1] - times[i][0])
         prev = sc
+    plan.pop("_world", None)
+    return problems
 
 
 def _actor_state(a, beats, name, t):
@@ -705,6 +723,20 @@ def _actor_state(a, beats, name, t):
 
 
 GHOST_S = 1.0          # s: an actor fades to its ghost, or a ghost comes back
+
+
+def _at_rest(beats, name, t, near=0.4):
+    """1 when no move of the actor, and no verb by it or on it, runs at time t; 0 while one runs; between the
+    two in the near s around it (the motion at rest fades out and in)."""
+    f = 1.0
+    for b in beats:
+        if name not in (b.get("actor"), b.get("target")):
+            continue
+        bt = float(b.get("t", 0))
+        d = float(b.get("dur", 1.0)) if "move_to" in b else (_verb_s(b["verb"]) if b.get("verb") else None)
+        if d is not None:
+            f = min(f, clamp(max(bt - t, t - bt - d, 0.0) / near))
+    return f
 
 
 def _ghost(a, beats, name, t):
@@ -912,10 +944,13 @@ def p_action(plan, sc, T, dur, ctx):
         k = _scale(sc, a, L)
         cw, ch = S.meta()[a["sprite"]]["cell"]
         state[name] = [*_place(sc, a, L, fx_, fy_, k), max(cw, ch) * k / 2, k, anim, at, flip, badge, shown]
-        if not a.get("still"):                         # a little motion at rest: actors do not stand like stones
-            g = ctx.setdefault("t0", durations(plan)[ctx.get("si", 0)][0]) + t + i * 1.37
-            state[name][0] += round(k * math.sin(g * 2.03))
-            state[name][1] += round(k * 0.6 * math.sin(g * 2.71 + 1.1))
+        rest = 0.0 if a.get("still") else _at_rest(beats, name, t)
+        if rest:                                        # a little motion at rest: actors do not stand like stones
+            if "t0" not in ctx:
+                ctx["t0"] = durations(plan)[ctx.get("si", 0)][0]
+            g = ctx["t0"] + t + i * 1.37
+            state[name][0] += round(rest * k * math.sin(g * 2.03))
+            state[name][1] += round(rest * k * 0.6 * math.sin(g * 2.71 + 1.1))
     for th, p, att, tg in hits:                        # windup of the attacker, push of the target
         if att in state and tg in state:
             dx, dy = state[tg][0] - state[att][0], state[tg][1] - state[att][1]
@@ -1107,12 +1142,11 @@ def prepare(plan):
     TIMEBAR = bool(plan.get("timeline"))
     if "_words" in plan:
         return plan.get("_word_problems", [])
-    for sc in plan["scenes"]:                 # the plan's own beats (behave() adds plain beats to a copy)
+    for sc in plan["scenes"]:                 # the plan's own beats (_behave() makes plain beats in a copy)
         if "_src_beats" in sc:
             sc["beats"] = list(sc["_src_beats"])
     WD.attach(plan, voiceover(plan), plan.get("_outdir"))
     plan["_word_problems"] = WD.resolve_beats(plan)
-    plan["_word_problems"] += behave(plan)
     return plan["_word_problems"]
 
 
@@ -1124,64 +1158,94 @@ HUNT_MOVE = 1.2          # s: hunt goes to each target in this time
 APART = 0.12             # fraction of the zone between a cell and its daughter
 
 
-def behave(plan):
-    """Beats with wander:, hunt:, or divide: become plain beats (move_to, verb, anim, show, flip), so check sees
-    what plays: the targets of a hunt and who is destroyed. Runs in prepare(), after the words are placed.
-    The plan's beats stay in sc["_src_beats"]. Returns problems of these beats."""
-    out, times = [], durations(plan)
-    for sc, (a, b) in zip(plan["scenes"], times):
-        src = sc.setdefault("_src_beats", list(sc.get("beats") or []))
-        if not any(k in x for x in src for k in BEHAVIORS):
+def _behave(plan, sc, dur):
+    """Beats with wander:, hunt:, or divide: of one scene become plain beats (move_to, verb, anim, show, flip,
+    badge, marks), so check sees what plays: the targets of a hunt and who is destroyed. Runs in carry(), for the
+    current format, after the actors of a continue scene are carried. The plan's beats stay in sc["_src_beats"];
+    each made beat has _from: the beat that made it. Returns problems of these beats."""
+    src = sc.setdefault("_src_beats", list(sc.get("beats") or []))
+    if not any(k in x for x in src for k in BEHAVIORS):
+        return []
+    actors, sid, out = sc.get("actors") or {}, sc.get("id"), []
+    plain = [x for x in src if not any(k in x for k in BEHAVIORS)]
+    made = []
+    todo = sorted((x for x in src if any(k in x for k in BEHAVIORS)),
+                  key=lambda x: ("wander" in x, float(x.get("t", 0))))      # wander last: it stops at the others
+    for x in todo:
+        me, t0 = x.get("actor"), float(x.get("t", 0))
+        kind = next(k for k in BEHAVIORS if k in x)
+        where = f"{sid}: {kind} at {t0:.2f} s" + (f" (word {x['word']!r})" if "word" in x else "")
+        tag = {"_from": where.split(": ", 1)[1]}
+        step = x.get("dur", WANDER_STEP if kind == "wander" else HUNT_MOVE)
+        if sc.get("type") != "action" or me not in actors:
+            what = "a part, not an actor" if me in model.parts(plan) else "not an actor of the scene"
+            out.append(f"{where}: {kind}: is for an actor of an action scene ({me!r} is {what})")
             continue
-        actors, sid = sc.get("actors") or {}, sc.get("id")
-        plain = [x for x in src if not any(k in x for k in BEHAVIORS)]
-        made = []
-        for x in sorted((x for x in src if any(k in x for k in BEHAVIORS)), key=lambda x: float(x.get("t", 0))):
-            me, t0 = x.get("actor"), float(x.get("t", 0))
-            where = f"{sid}: beat at {x.get('t')} s"
-            if sc.get("type") != "action" or me not in actors:
-                out.append(f"{where}: {', '.join(k for k in BEHAVIORS if k in x)} is for an actor of an action scene")
+        if sum(k in x for k in BEHAVIORS) > 1:
+            out.append(f"{where}: one of {', '.join(BEHAVIORS)} in a beat")
+            continue
+        if not (isinstance(step, (int, float)) and not isinstance(step, bool) and step >= 0.2):
+            out.append(f"{where}: dur: is a number of seconds, 0.2 or more")
+            continue
+        now = _approach(plan, sc, plain + made)
+        if kind == "hunt":
+            tgs = x["hunt"] if isinstance(x["hunt"], list) else [x["hunt"]]
+            bad = [g for g in tgs if not isinstance(g, str) or g not in actors or g == me]
+            bad += [g for i, g in enumerate(tgs) if g in tgs[:i] and g not in bad]
+            if bad or not tgs or not x.get("verb"):
+                out.append(f"{where}: hunt: names other actors of the scene, each once, in order, and verb: what it "
+                           f"does to each (then: what each does after it)" + (f"; not right: {bad}" if bad else ""))
                 continue
-            if sum(k in x for k in BEHAVIORS) > 1:
-                out.append(f"{where}: one of {', '.join(BEHAVIORS)} in a beat")
+            far = [g for g in tgs if actors[g].get("in") != actors[me].get("in")]
+            if far:
+                out.append(f"{where}: hunt: the targets are in the hunter's zone (in: {actors[me].get('in')}); "
+                           f"not: {', '.join(far)}")
                 continue
-            now = plain + made
-            if "hunt" in x:
-                tgs = x["hunt"] if isinstance(x["hunt"], list) else [x["hunt"]]
-                bad = [g for g in tgs if g not in actors or g == me]
-                if bad or not tgs or not x.get("verb"):
-                    out.append(f"{where}: hunt: names other actors of the scene, in order, and verb: what it does "
-                               f"to each (then: what each does after it)" + (f"; not actors: {bad}" if bad else ""))
-                    continue
-                t, d = t0, float(x.get("dur", HUNT_MOVE))
-                for g in tgs:
-                    made.append({"t": round(t, 3), "actor": me, "move_to": g, "dur": d})
-                    hit = {"hit": x["hit"]} if "hit" in x else {}
-                    made.append({"t": round(t + d, 3), "actor": me, "verb": x["verb"], "target": g, **hit})
-                    t += d + _verb_s(x["verb"])
-                    if x.get("then"):
-                        made.append({"t": round(t, 3), "actor": g, "verb": x["then"]})
-                if t > b - a:
-                    out.append(f"{where}: the hunt ends at {t:.1f} s, after the scene ({b - a:.1f} s): start it "
-                               f"on an earlier word, give fewer targets or a shorter dur:, or give the scene dur:")
-            elif "wander" in x:
-                if x["wander"] is not True:
-                    out.append(f"{where}: wander: true (the actor walks in its zone until its next beat)")
-                    continue
-                later = [float(y.get("t", 0)) for y in src if y.get("actor") == me and float(y.get("t", 0)) > t0]
-                made += _wander(plan, sc, me, actors[me], now, t0, min(later + [b - a]), float(x.get("dur", WANDER_STEP)))
-            else:
-                d = x["divide"]
-                if d not in actors or d == me or not actors[d].get("hidden") or actors[d].get("in") != actors[me].get("in"):
-                    out.append(f"{where}: divide: names the daughter: another actor of the scene with hidden: true, "
-                               f"in the same zone")
-                    continue
-                made += _divide(sc, me, d, actors, now, t0, float(x.get("apart", APART)))
-                end = max(float(y["t"]) + float(y.get("dur", 0)) for y in made)
-                if end > b - a:
-                    out.append(f"{where}: the division ends at {end:.1f} s, after the scene ({b - a:.1f} s): "
-                               f"start it on an earlier word, or give the scene dur:")
-        sc["beats"] = plain + made
+            t, mine = t0, []
+            for g in tgs:
+                seen = _expand(dict(sc, beats=now + mine), plan)          # with the shows and hides of verbs
+                if not _actor_state(actors[g], seen, g, t + step)[6]:
+                    out.append(f"{where}: hunt: {g} is hidden or gone when the hunter comes ({t + step:.2f} s)")
+                mine.append({"t": round(t, 3), "actor": me, "move_to": g, "dur": step, **tag})
+                hit = {"hit": x["hit"]} if "hit" in x else {}
+                mine.append({"t": round(t + step, 3), "actor": me, "verb": x["verb"], "target": g, **hit, **tag})
+                t += step + _verb_s(x["verb"])
+                if x.get("then"):
+                    mine.append({"t": round(t, 3), "actor": g, "verb": x["then"], **tag})
+                    if x.get("ghost") is True:
+                        mine.append({"t": round(t, 3), "actor": g, "ghost": True, **tag})
+            end = t + (_verb_s(x["then"]) if x.get("then") else 0)
+            if end > dur + 1e-6:
+                out.append(f"{where}: the hunt ends at {end:.2f} s, after the scene ({dur:.2f} s): start it on an "
+                           f"earlier word, give fewer targets or a shorter dur:, or give the scene dur:")
+            busy = [y for y in src if y.get("actor") == me and t0 < float(y.get("t", 0)) < t]
+            if busy:
+                out.append(f"{where}: {me} has a beat at {float(busy[0].get('t', 0)):.2f} s while the hunt runs "
+                           f"(until {t:.2f} s): move it after the hunt")
+            made += mine
+        elif kind == "wander":
+            if x["wander"] is not True:
+                out.append(f"{where}: wander: {x['wander']!r}; write wander: true (the actor walks in its zone "
+                           f"until its next beat), or leave it out")
+                continue
+            stop = [float(y.get("t", 0)) for y in plain + made if float(y.get("t", 0)) > t0 and
+                    (y.get("actor") == me or me in (y.get("target"), y.get("move_to")))]
+            mine = _wander(plan, sc, me, actors[me], now, t0, min(stop + [dur]), float(step))
+            made += [dict(y, **tag) for y in mine]
+        else:
+            d = x["divide"]
+            if not isinstance(d, str) or d not in actors or d == me or not actors[d].get("hidden") \
+                    or actors[d].get("in") != actors[me].get("in"):
+                out.append(f"{where}: divide: names the daughter: another actor of the scene with hidden: true, "
+                           f"in the same zone")
+                continue
+            mine = [dict(y, **tag) for y in _divide(sc, me, d, actors, now, t0, x.get("apart"))]
+            made += mine
+            end = max(float(y["t"]) + float(y.get("dur", 0)) for y in mine)
+            if end > dur + 1e-6:
+                out.append(f"{where}: the division ends at {end:.2f} s, after the scene ({dur:.2f} s): start it "
+                           f"on an earlier word, or give the scene dur:")
+    sc["beats"] = plain + made
     return out
 
 
@@ -1211,20 +1275,24 @@ def _wander(plan, sc, me, a, beats, t0, t1, step):
 
 
 def _divide(sc, me, d, actors, beats, t0, apart):
-    """The cell plays its divide animation (if its sprite has one); the daughter appears at its place with
-    its marks and badge, and the two move apart."""
-    a = actors[me]
-    x, y, anim, _, _, badge, _ = _actor_state(a, beats, me, t0)
+    """The cell plays its divide animation (if its sprite has one); then the daughter appears at its place with
+    its marks and badge, and the two move apart, edge to edge (apart: a fraction of the zone, if given)."""
+    a, L = actors[me], layout()
+    _, _, anim, _, _, _, _ = _actor_state(a, beats, me, t0)
     out, t = [], t0
     if "divide" in S.meta().get(a.get("sprite"), {}).get("anims", {}):
         t = t0 + S.duration(a["sprite"], "divide")
         out += [{"t": round(t0, 3), "actor": me, "anim": "divide"}, {"t": round(t, 3), "actor": me, "anim": anim}]
-    ms = _marks(a, beats, me, t0)[0]
-    actors[d].update(at=[round(x, 4), round(y, 4)], **({"marks": ms} if ms else {}), **({"badge": badge} if badge else {}))
-    h = apart / 2
-    out += [{"t": round(t, 3), "actor": d, "show": True},
-            {"t": round(t, 3), "actor": me, "move_to": [round(max(0.08, x - h), 4), round(y, 4)], "dur": 0.6},
-            {"t": round(t, 3), "actor": d, "move_to": [round(min(0.92, x + h), 4), round(y, 4)], "dur": 0.6}]
+    x, y, _, _, _, badge, _ = _actor_state(a, beats, me, t)
+    ms = _marks(a, beats, me, t)[0]
+    if apart is None:
+        bx = _box(sc, a, L)
+        apart = (S.meta()[a["sprite"]]["cell"][0] * _scale(sc, a, L) + 2) / ((bx[2] - bx[0]) or 1)
+    h, p = float(apart) / 2, lambda v: round(min(0.95, max(0.05, v)), 4)
+    out += [{"t": round(t, 3), "actor": d, "move_to": [p(x), p(y)], "dur": 0.001},
+            {"t": round(t, 3), "actor": d, "show": True, "badge": badge, "marks": ms},
+            {"t": round(t + 0.01, 3), "actor": me, "move_to": [p(x - h), p(y)], "dur": 0.6},
+            {"t": round(t + 0.01, 3), "actor": d, "move_to": [p(x + h), p(y)], "dur": 0.6}]
     return out
 
 

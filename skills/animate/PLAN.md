@@ -135,17 +135,20 @@ drawn above), `label`, `color`, `hidden`, `in` (a zone of the set), `ghost` (tru
   cannot come back (`ghost: false` or `show: true` fails the check), but its ghost can stay or appear: a
   character who died stays in the set. Put `ghost: true` on the word of the verb that destroys it
   (`apoptosis`): the actor then stays as a ghost; the verb does not hide it.
-- **Behaviors** make plain beats, so `check` sees what plays (who is hit, who is destroyed):
+- **Behaviors** make plain beats, so `check` sees what plays (who is hit, who is destroyed). They work in a
+  `continue: true` scene too. A problem in a beat they make names the behavior ("made by the hunt at 0.75 s").
   - `wander: true`: the actor walks from point to point in its zone and faces where it goes, until its next
-    beat or the end of the scene (`dur:`: one walk, default 1.5 s).
-  - `hunt: [t1, t2]` with `verb:`: the actor goes to each target in turn (`dur:` each, default 1.2 s) and
-    does the verb to it; `then:` is the verb each target does after it (`apoptosis`, `vanish`). Check fails
-    when the hunt ends after the scene.
-  - `divide: c4`: the cell plays its `divide` animation (if its sprite has one); the daughter `c4` (declared
-    with `hidden: true` in the same zone; no `at:` needed) appears at its place with its marks and badge, and
-    the two move apart (`apart:`, default 0.12 of the zone).
-- **At rest** an actor moves a little (one sprite pixel), so it does not stand like a stone. `still: true` on
-  the actor stops it (a prop, an organ, a slide).
+    beat, a beat of a behavior on it (a hunter comes), or the end of the scene (`dur:`: one walk, default 1.5 s).
+  - `hunt: [t1, t2]` with `verb:`: the actor goes to each target in turn (each once, in its zone; `dur:` each,
+    default 1.2 s) and does the verb to it. `then:` is the verb each target does after it (`apoptosis`,
+    `vanish`); with a model, a destroying verb needs its `destroy` relation, and the target cannot come back.
+    `ghost: true` keeps each target as its ghost. Check fails when the hunt ends after the scene, or when the
+    hunter has another beat while the hunt runs.
+  - `divide: c4`: the cell plays its `divide` animation (if its sprite has one); then the daughter `c4`
+    (declared with `hidden: true` in the same zone; no `at:` needed) appears at its place with its marks and
+    badge, and the two move apart, edge to edge (`apart:`: a fraction of the zone).
+- **At rest** an actor moves a little (one sprite pixel): not while it moves or does a verb, or a verb is done
+  to it. `still: true` on the actor stops it (a prop, an organ, a slide).
 - **Marks** on the body: a spot, a plaster, an organ. Each mark has `at:` (fractions of the sprite, 0 to 1,
   mirrored with `flip`) and a `sprite:` (it takes the actor's scale; `anim:` starts when the mark appears, for
   example `kidney` with `anim: glow`) or a `color:` (a dot; `size:` in sprite pixels, default 2). A beat with

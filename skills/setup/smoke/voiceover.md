@@ -40,7 +40,7 @@ The ghost stays.
 
 ## S11
 
-One cell divides, the killer hunts two cells in turn, and one walks around.
+The killer hunts two cells in turn, one cell divides, and one walks around.
 
 ## S12
 
