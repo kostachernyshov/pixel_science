@@ -53,6 +53,7 @@ scenes:
     type: custom
     title: "By hand"
     module: scene.py
+    why: "the setup check: a custom scene must still pass check"
     beats:
       - {word: "hand", shows: drawn}                               # times the code and shows the relation
   - id: S06

@@ -137,8 +137,9 @@ beside the stalks, one left and one right.
 `title`, `items` (up to 4 sprites with labels, or none for a text-only frame), `text` (1 or 2 lines). The last frame; it holds still.
 
 ### custom
-`module` (path to a .py file), `function` (default `draw`), `title` (drawn by the tool, as in other scenes;
-the function does not draw it). The function gets
+`module` (path to a .py file), `function` (default `draw`), `why` (one line: no ready scene shows this set, or
+the frame is key (hook, turn, end) and a ready scene shows it worse; `check` fails without it), `title` (drawn by
+the tool, as in other scenes; the function does not draw it). The function gets
 `(img, t, scene, ctx)`; `ctx["layout"]` has the frame size, stage, and caption place. Read
 `frame.W` and `frame.H`, never 480 and 270. With subtitles, the stage ends above their box. `ctx["dur"]` is
 the scene length; time events with `words.cue` (see Timing). Colors are palette indices or `(r, g, b)`.
@@ -148,3 +149,27 @@ shown twice) and draws it then; `check`
 counts the relation as shown and checks its source and `after:` order, and says that the drawing is not
 checked. `shows:` is for custom scenes only; an action scene shows a relation with a verb.
 A custom scene is a candidate for a new scene type.
+
+Start from this frame: one set for the whole scene, the actors on it, the events on their words.
+
+```python
+from PIL import ImageDraw
+from pixel_kit import sprites as S, ui, words
+from pixel_kit.font import text
+from pixel_kit.palette import INK
+
+def draw(img, t, scene, ctx):
+    plan, L = ctx["plan"], ctx["layout"]
+    x0, y0, x1, y1 = L["stage"]          # under the title, above the caption or the subtitles
+    W, cx, cy = x1 - x0, (x0 + x1) // 2, (y0 + y1) // 2
+    d = ImageDraw.Draw(img)
+    # 1. Set: the same in each frame, from the first second to the last (here: two panels)
+    ui.box(d, x0 + 4, y0 + 4, cx - 2, y1 - 4)
+    ui.box(d, cx + 2, y0 + 4, x1 - 4, y1 - 4)
+    # 2. Actors: on the set; a character that dies stays as a shadow
+    S.idle(img, "nk", t, x0 + W // 4, cy, scale=2)
+    # 3. Events: each on its word (words.cue), or at ctx["shows"][...] for a relation of the model
+    if t >= words.cue(plan, scene, "attacks", default=ctx["dur"] / 2):
+        S.idle(img, "tumor", t, x0 + 3 * W // 4, cy, scale=2)
+        text(img, x0 + 3 * W // 4, y0 + 8, "7 OF 15", INK, align="c")
+```
