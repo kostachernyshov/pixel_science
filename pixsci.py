@@ -44,24 +44,28 @@ def _args(a):
 
 @contextlib.contextmanager
 def _quiet(log):
-    """Sends stderr (progress bars and warnings of torch and Hugging Face) to the file log; stdout stays.
-    An agent reads only the short result, not thousands of progress lines."""
-    sys.stderr.flush()
+    """Sends stderr (progress bars and warnings of torch and Hugging Face) to the file log, one run per file;
+    stdout stays. An agent reads only the short result, not thousands of progress lines."""
+    if sys.stderr:
+        sys.stderr.flush()
+    f = open(log, "w")
     keep = os.dup(2)
+    os.dup2(f.fileno(), 2)
     try:
-        with open(log, "a") as f:
-            os.dup2(f.fileno(), 2)
-            try:
-                yield
-            finally:
-                sys.stderr.flush()
-                os.dup2(keep, 2)
-    except BaseException:
-        if os.path.getsize(log):
-            print(f"voice: stopped; details in {log}", file=sys.stderr)
+        yield
+    except BaseException as e:
+        stop = not (isinstance(e, SystemExit) and e.code in (None, 0))
         raise
+    else:
+        stop = False
     finally:
+        if sys.stderr:
+            sys.stderr.flush()
+        os.dup2(keep, 2)
         os.close(keep)
+        f.close()
+        if stop and os.path.getsize(log):
+            print(f"voice: stopped; details in {log}", file=sys.stderr)
 
 
 def _voice(plan, outdir):

@@ -43,7 +43,7 @@ install it only when the person wants it.
    ```
    It renders `pixsci-check/setup-check-landscape.mp4` (about 25 s, a few seconds of work). With the voice installed, also
    run `voice` and `render ... --voice` on the same plan once: this downloads the models now instead of in the
-   middle of the first real video.
+   middle of the first real video. The download takes minutes; its progress is in `pixsci-check/voice/log.txt`.
 6. **Summary.** Tell the person in a few lines: where `VENV` is, what `doctor` printed, the path of the check video,
    and what to run next: `/pixel-science:storyboard` or `/pixel-science:animate` from a plugin, `/storyboard` or
    `/animate` in a clone ("make a pixel explainer about how vaccines train B cells").

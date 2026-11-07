@@ -42,7 +42,9 @@ explainer.yaml: beats on words {word: "attacks"}, subtitles: true ────�
 The first run downloads about 6 GB from Hugging Face (a cloud sandbox must allow `huggingface.co` and `*.hf.co`).
 On a CPU, speech takes about 5 to 10 times its length; a scene is spoken and aligned again only when its text or
 `tts:` changes. Without the aligner, word times are estimated from the text. The progress bars and warnings of the models go to
-`voice/log.txt`; the command prints only the scenes it speaks, their times, and the path of the audio.
+`OUTDIR/voice/log.txt` (one run per file); the command prints a short result: the scenes spoken, the word times,
+the scene times, and the path of the audio. An error stays on the screen. Progress of the first download:
+`tail OUTDIR/voice/log.txt`.
 
 ## How it works
 
