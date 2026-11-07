@@ -15,7 +15,7 @@ from PIL import ImageDraw
 from .palette import *
 from .font import text, text_w, title_text, TITLE_GLYPHS, LINE
 from .timing import clamp, seg, ease, lerp
-from . import sprites as S, fx, ui, bg, frame, verbs, model, sets, words as WD
+from . import sprites as S, fx, ui, bg, frame, verbs, model, sets, timebar, words as WD
 from .scene import Timeline
 
 WORDS_PER_S = 2.5        # voice-over pace
@@ -96,7 +96,8 @@ def color(name):
 
 # ---------------------------------------------------------------- layout for the current format
 
-SUBS = False             # subtitles on: set from plan["subtitles"] by timeline() and check()
+SUBS = False             # subtitles on: set from plan["subtitles"] by prepare()
+TIMEBAR = False          # a timeline strip at the bottom of the stage: set from plan["timeline"] by prepare()
 SUB_LINES = 2
 
 
@@ -123,6 +124,10 @@ def layout():
             box = (W * 2 // 3, H - margin - box_h, W - side, H - margin)
         L.update(subs=dict(box=box, lines=n), cap_y=box[1],
                  stage=(0, head_h, box[0] - 4 if banner else W, box[1] - 4 if not banner else H))
+    if TIMEBAR:
+        x0, y0, x1, y1 = L["stage"]
+        h = timebar.height(L)
+        L.update(timebar=(x0, y1 - h, x1, y1), stage=(x0, y0, x1, y1 - h))
     return L
 
 
@@ -194,6 +199,9 @@ def _texts(sc):
     for a in (sc.get("actors") or {}).values():
         if isinstance(a.get("label"), str):
             yield "label", a["label"]
+    for b in sc.get("beats") or []:
+        if "mark" in b and isinstance(b.get("label"), str):
+            yield "mark label", b["label"]
 
 
 def _sprites(sc):
@@ -217,6 +225,7 @@ def check(plan):
     """Rules of the skill. Returns a list of problems (empty: all pass)."""
     out = list(prepare(plan))
     carry(plan)
+    out += timebar.check(plan, colors=list(COLOR_NAMES))
     if not plan.get("sources"):
         out.append("sources: list at least one source for the science in the video")
     vo = voiceover(plan)
@@ -253,6 +262,8 @@ def check(plan):
                 continue                  # a relation drawn by custom code (model.check)
             if "counter" in beat and "actor" not in beat:
                 continue                  # a counter of a panel (_check_set)
+            if ("timeline" in beat or "mark" in beat) and "actor" not in beat:
+                continue                  # the timeline strip (timebar.check)
             if beat.get("actor") not in names:
                 out.append(f"{sid}: beat at {beat.get('t')} s names an unknown actor {beat.get('actor')!r}")
             mt = beat.get("move_to")
@@ -287,6 +298,8 @@ def check(plan):
             continue
         frame.use(f)
         L = layout()
+        if TIMEBAR:
+            out += [f"{p} [{f}]" for p in timebar.fit(plan, L)]
         for sc in plan["scenes"]:
             cap = sc.get("caption")
             if cap:
@@ -360,7 +373,7 @@ def _check_set(plan, sc, sid):
 def _bg(sc, t):
     name = sc.get("bg", "paper")
     fn = bg.ALL.get(name, bg.paper)
-    return fn(t) if name == "bloodstream" else fn()
+    return fn(t) if fn is bg.bloodstream else fn()
 
 
 def _heading(img, L, s):
@@ -953,8 +966,9 @@ PAINTERS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 def prepare(plan):
     """Words of the voice-over in time (aligned, or estimated) and beats placed on their words.
     Runs once per plan; plan["_outdir"] is where voice/<scene>.words.json are. Returns problems."""
-    global SUBS
+    global SUBS, TIMEBAR
     SUBS = bool(plan.get("subtitles"))
+    TIMEBAR = bool(plan.get("timeline"))
     if "_words" in plan:
         return plan.get("_word_problems", [])
     WD.attach(plan, voiceover(plan), plan.get("_outdir"))
@@ -1042,4 +1056,31 @@ def timeline(plan):
                        sc.get("fade", True) and not sc.get("continue")))
         key = a + min(dur - 0.3, max(1.2, dur * float(sc.get("key", 0.75))))
         marks.append((key, f"{sc['id']} {sc['type']} {a:.1f}-{b:.1f}s"))
-    return Timeline(scenes, overlay=subtitles(plan, times), fade_col=plan.get("fade_color", PAPER)), marks
+    over = [o for o in (_timebar(plan, times), subtitles(plan, times)) if o]
+
+    def overlay(arr, T):
+        for o in over:
+            arr = o(arr, T)
+        return arr
+    return Timeline(scenes, overlay=overlay if over else None, fade_col=plan.get("fade_color", PAPER)), marks
+
+
+def _timebar(plan, times):
+    """overlay(arr, T) for Timeline: the timeline strip, over the dissolve; hidden in title and summary
+    scenes and in a scene with timeline: false."""
+    if not TIMEBAR:
+        return None
+    from PIL import Image
+    import numpy as np
+    L = layout()
+    evs = timebar.events(plan, times)
+    off = [(a, b) for sc, (a, b) in zip(plan["scenes"], times)
+           if sc.get("type") in ("title", "summary") or sc.get("timeline") is False]
+
+    def overlay(arr, T):
+        if any(a <= T < b for a, b in off):
+            return arr
+        img = Image.fromarray(arr)
+        timebar.draw(img, plan, L, evs, T, color=color)
+        return np.array(img)
+    return overlay

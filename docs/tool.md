@@ -70,7 +70,7 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
 ```
 pixsci.py              command line: doctor, formats, sheet, verbs, check, board, render, frames, voice
 fonts/                 unifont.otf, MedeoPixel.ttf (from npm medeo-font 1.0.0, WOFF to TTF) and their licenses
-pixel_kit/             the core: frame, explain, sets, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
+pixel_kit/             the core: frame, explain, sets, timebar, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
 packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
 packs/earth/           shared water, weather, and soil sprites; the same pack structure
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
