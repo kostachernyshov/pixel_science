@@ -102,12 +102,13 @@ drawn above), `label`, `color`, `hidden`, `in` (a zone of the set). Keep x betwe
 
 **Set.** `set:` builds the set of the storyboard once; the next scenes go on in it with `continue: true`.
 An actor with `in: <zone>` stands in that zone: its `at:` and `move_to: [x, y]` are fractions of the zone,
-and its sprite stays inside it (smaller in the banner when it must).
+and its sprite and label stay inside it. The actors in zones share one scale: the largest at which each
+fits its zone (smaller in the banner or in small panels), so that sizes still compare.
 
 ```yaml
 set: {type: panels, panels: [{title: CONTROL, counter: "0 OF 15"}, {title: MHC LOW, counter: "0 OF 15"}]}
 actors:
-  nk:   {sprite: nk, in: all, at: [0.2, 0.5]}       # in every panel; a target of its verbs is in: all too
+  nk:   {sprite: nk, in: all, at: [0.2, 0.5]}       # in every panel; no parts; a target of its verbs is in: all too
   cell: {sprite: tumor, in: B, at: [0.7, 0.5]}      # zones A, B, C, D (or name: in a panel)
 beats:
   - {word: "seven", panel: B, counter: "7 OF 15"}   # a counter changes on its word; the number is in a source
@@ -119,13 +120,15 @@ actors:
   rec: {sprite: membrane_receptor, in: border, at: [0.6, 0]}    # stands on the line
 ```
 
-- `panels`: 2 to 4 frames with a title and a counter each: side by side, stacked in the vertical frame,
-  2 x 2 for 4 in the square.
+- `panels`: 2 to 4 frames with a title and a counter each: side by side (also 2 or 3 in the square), stacked
+  in the vertical frame, 2 x 2 for 4 in the square. The banner shows frames and counters, no titles.
+  `check` fails when a title and its counter do not fit their panel in a format of the plan.
 - `border`: a line across the stage at `at` (0.2 to 0.8 of its height) between two zones: the outside and the
   inside of a cell, air and water, above and below the ground. `line:` names a look from a pack (`pack.yaml`,
   `borders:`; biology has `membrane`).
 - `continue: true` (an action scene after an action scene): no dissolve; the set, the background, the title,
-  and the actors go on as they are at the end of the scene before (place, zone, flip, badge, shown or hidden).
+  the counters, and the actors go on as they are at the end of the scene before (place, zone, flip, badge,
+  parts, shown or hidden; a destroyed actor stays hidden).
   The scene's own `actors:` add actors or change fields of the ones that go on.
 
 `move_to: <actor>` moves until the two sprites touch, edge to edge, on the side the mover comes from; the

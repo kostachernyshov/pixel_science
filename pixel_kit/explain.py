@@ -328,8 +328,17 @@ def _check_set(plan, sc, sid):
         if sc.get("type") != "action":
             return out + [f"{sid}: set: is for action scenes"]
         out += sets.check(st, sid)
+    if st and st.get("type") == "panels" and not out:
+        for f in plan.get("formats") or []:
+            if f in frame.FORMATS:
+                frame.use(f)
+                out += [f"{sid}: {p} [{f}]" for p in sets.fit(st, layout(), sc.get("beats") or [])]
+        frame.use("landscape")
     zs = set(sets.zones(st, layout())) | ({"all"} if st and st.get("type") == "panels" else set())
     for name, a in (sc.get("actors") or {}).items():
+        if a.get("in") == "all" and a.get("parts"):
+            out.append(f"{sid}: actor {name} is in all panels and has parts; parts and binds show in one panel "
+                       f"only, so give each panel its own actor")
         if a.get("in") and a["in"] not in zs:
             out.append(f"{sid}: actor {name} is in {a['in']!r}, not a zone of the set"
                        f"{' (' + ', '.join(sorted(zs)) + ')' if zs else ' (the scene has no set:)'}")
@@ -564,14 +573,27 @@ def _box(sc, a, L):
     return L["stage"]
 
 
+def _zone_room(sc, a, L):
+    """(width, height) a sprite may take in its zone; on the border, the room of the smaller side."""
+    x0, y0, x1, y1 = _box(sc, a, L)
+    if a["in"] == "border":
+        s0, s1 = L["stage"][1], L["stage"][3]
+        return x1 - x0, 2 * min(y0 - s0, s1 - y0)
+    return x1 - x0, y1 - y0
+
+
 def _scale(sc, a, L):
-    """The sprite scale of an actor; in a zone of a set too small for it (the banner), smaller, down to 1."""
+    """The sprite scale of an actor. In a set, the actors in its zones share one scale, so sizes still
+    compare: the largest at which each fits its zone (in the banner or in small panels, down to 1)."""
     k = int(a.get("scale", L["sprite_scale"]))
-    if a.get("in") and a["in"] != "border" and sc.get("set"):
-        x0, y0, x1, y1 = _box(sc, a, L)
-        cw, ch = S.meta()[a["sprite"]]["cell"]
-        while k > 1 and (cw * k > x1 - x0 or ch * k > y1 - y0):
-            k -= 1
+    if not (a.get("in") and sc.get("set")):
+        return k
+    for b in (sc.get("actors") or {}).values():
+        if b.get("in") and "scale" not in b:
+            w, h = _zone_room(sc, b, L)
+            cw, ch = S.meta()[b["sprite"]]["cell"]
+            while k > 1 and (cw * k > w or ch * k > h):
+                k -= 1
     return k
 
 
@@ -579,9 +601,12 @@ def _place(sc, a, L, fx_, fy_, k):
     """Pixel place of an actor from its fractions. In a zone of a set, the sprite stays inside the zone."""
     x0, y0, x1, y1 = _box(sc, a, L)
     px, py = x0 + fx_ * (x1 - x0), y0 + fy_ * (y1 - y0)
-    if a.get("in") and a["in"] != "border" and sc.get("set"):
+    if a.get("in") and sc.get("set"):
         cw, ch = S.meta()[a["sprite"]]["cell"]
         hw, hh = cw * k / 2, ch * k / 2
+        if a["in"] == "border":                      # on the line, inside the stage
+            x0, x1 = L["stage"][0], L["stage"][2]
+            y0, y1 = L["stage"][1], L["stage"][3]
         px = min(max(px, x0 + hw), x1 - hw) if x1 - x0 > 2 * hw else (x0 + x1) / 2
         py = min(max(py, y0 + hh), y1 - hh) if y1 - y0 > 2 * hh else (y0 + y1) / 2
     return px, py
@@ -599,20 +624,28 @@ def carry(plan):
     its end (place, zone, flip, badge, shown). Their own actors add to these or change them.
     Runs for the current format (an end place found by move_to depends on it), after prepare()."""
     times, prev = None, None
-    for sc in plan["scenes"]:
+    for i, sc in enumerate(plan["scenes"]):
         sc.setdefault("_own", dict(sc.get("actors") or {}))
+        sc.setdefault("_own_keys", sorted(sc))
         if sc.get("continue") and prev is not None and prev.get("type") == sc.get("type") == "action":
-            for k in ("set", "bg", "title"):
-                if k not in sc and k in prev:
-                    sc[k] = prev[k]
             times = times or durations(plan)
-            dur = times[plan["scenes"].index(prev)]
+            a0, a1 = times[i - 1]
             beats = _expand(prev, plan)
+            for k in ("set", "bg", "title"):
+                if k not in sc["_own_keys"] and k in prev:
+                    sc[k] = prev[k]
+            st = sc.get("set")
+            if "set" not in sc["_own_keys"] and st and st.get("type") == "panels":    # counters go on too
+                end = sets.counters(st, beats, a1 - a0)
+                sc["set"] = dict(st, panels=[dict(p, counter=end.get(n)) for n, p in sets.panels(st)])
+            dead = model.world(plan)[i]["dead"] if plan.get("model") else set()
             out = {}
             for name, a in (prev.get("actors") or {}).items():
-                x, y, _, _, flip, badge, shown = _actor_state(a, beats, name, dur[1] - dur[0])
+                x, y, _, _, flip, badge, shown = _actor_state(a, beats, name, a1 - a0)
                 c = {k: v for k, v in a.items() if k != "anim"}
-                c.update(at=[round(x, 4), round(y, 4)], flip=flip, badge=badge, hidden=not shown)
+                c.update(at=[round(x, 4), round(y, 4)], flip=flip, badge=badge, hidden=not shown or name in dead)
+                if "parts" in a or any(b.get("actor") == name and "parts" in b for b in beats):
+                    c["parts"] = model.shown_parts(a, beats, name)
                 out[name] = c
             for name, a in sc["_own"].items():
                 out[name] = dict(out.get(name, {}), **a)
@@ -676,11 +709,10 @@ def _approach_once(plan, sc, beats, done, todo, L, stage):
         bt, end = float(b.get("t", 0)), float(b.get("t", 0)) + float(b.get("dur", 1.0))
         mx, my, _, _, mf = _actor_state(actors[me], out, me, bt)[:5]
         tx, ty, _, _, tf = _actor_state(actors[tg], out, tg, end)[:5]
-        mb, tb = _box(sc, actors[me], L), _box(sc, actors[tg], L)
-        mx, my = mb[0] + mx * (mb[2] - mb[0]), mb[1] + my * (mb[3] - mb[1])
-        tx, ty = tb[0] + tx * (tb[2] - tb[0]), tb[1] + ty * (tb[3] - tb[1])
-        km = _scale(sc, actors[me], L)
-        kt = _scale(sc, actors[tg], L)
+        km, kt = _scale(sc, actors[me], L), _scale(sc, actors[tg], L)
+        mb = _box(sc, actors[me], L)
+        mx, my = _place(sc, actors[me], L, mx, my, km)
+        tx, ty = _place(sc, actors[tg], L, tx, ty, kt)
         bind = model.bind_between(plan, sc, me, tg, out, end) if plan else None
         if bind:
             d = model._axis(mx - tx, my - ty)                      # level or upright, on the target's line
@@ -813,7 +845,8 @@ def p_action(plan, sc, T, dur, ctx):
         if not shown:
             continue
         for dx, dy in [(0, 0)] + copies.get(name, []):
-            _draw_actor(img, a, L, int(px + dx), int(py + dy), k, anim, at, flip, badge, i)
+            _draw_actor(img, a, L, int(px + dx), int(py + dy), k, anim, at, flip, badge, i,
+                        bottom=_box(sc, a, L)[3] + dy if a.get("in") and a["in"] != "border" else None)
     heads = model.draw(img, plan, si, sc, t, state, beats)
     where = {n: tuple(v[:3]) for n, v in state.items()}
     where.update({n: v for n, v in heads.items() if n not in where})
@@ -838,14 +871,17 @@ def p_action(plan, sc, T, dur, ctx):
     return img
 
 
-def _draw_actor(img, a, L, px, py, k, anim, at, flip, badge, i):
+def _draw_actor(img, a, L, px, py, k, anim, at, flip, badge, i, bottom=None):
     _sprite(img, a["sprite"], anim, at, px, py, k, seed=i, flip=flip)
     sh = S.meta()[a["sprite"]]["cell"][1] * k
     if badge:
         bh = S.meta()[badge]["cell"][1] * k
         S.draw(img, badge, "idle", 0, px, max(bh // 2 + 1, py - sh // 2 - bh // 2 + 2), scale=k)
     if a.get("label") and not L["banner"]:
-        text(img, px, py + sh // 2 + 2, a["label"], color(a.get("color", "ink"))[0], align="c")
+        y = py + sh // 2 + 2
+        if bottom is not None:                      # in a zone: the label stays inside it
+            y = min(y, int(bottom) - LINE)
+        text(img, px, y, a["label"], color(a.get("color", "ink"))[0], align="c")
 
 
 def p_summary(plan, sc, t, dur, ctx):
