@@ -99,3 +99,23 @@ def idle(img, name, t, x, y, seed=0, flip=False, scale=1, blink_every=2.3):
     if "blink" in a and ((t + seed * 0.37) % blink_every) < 0.1:
         return draw(img, name, "blink", 0, x, y, flip, scale)
     return draw(img, name, "idle", t + seed * 0.17, x, y, flip, scale)
+
+
+def ghost(rgba, k=1):
+    """The ghost of drawn sprites (an RGBA array, transparent around them): a pale silhouette, half see-through
+    (a checker of LGREY on the grid of sprite pixels, k frame pixels each), with a DGREY outline k pixels wide.
+    Any sprite has one; no ghost frames are drawn by hand."""
+    import numpy as np
+    from .palette import C, LGREY, DGREY
+    a = rgba[..., 3] > 0
+    inner = a.copy()
+    for _ in range(max(1, k)):                       # erode by k: what stays is inside the outline
+        e = inner.copy()
+        e[1:] &= inner[:-1]; e[:-1] &= inner[1:]; e[:, 1:] &= inner[:, :-1]; e[:, :-1] &= inner[:, 1:]
+        e[0] = e[-1] = False; e[:, 0] = e[:, -1] = False
+        inner = e
+    yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
+    out = np.zeros_like(rgba)
+    out[inner & ((xx // max(1, k) + yy // max(1, k)) % 2 == 0)] = (*C(LGREY), 255)
+    out[a & ~inner] = (*C(DGREY), 255)
+    return out

@@ -662,8 +662,12 @@ def check(plan, positions=None, stage=None):
     dead_by_scene = [w["dead"] for w in world(plan)]
     for i, sc in enumerate(plan["scenes"]):
         for name, a in (sc.get("actors") or {}).items():
-            if name in dead_by_scene[i] and not a.get("hidden"):
-                out.append(f"{sc.get('id')}: actor {name!r} was destroyed in an earlier scene and cannot come back")
+            if name not in dead_by_scene[i]:
+                continue
+            back = [b for b in sc.get("beats") or [] if b.get("actor") == name and b.get("ghost") is False]
+            if (not a.get("hidden") and not a.get("ghost")) or back:
+                out.append(f"{sc.get('id')}: actor {name!r} was destroyed in an earlier scene and cannot come back "
+                           f"(a ghost of it can stay or appear: ghost: true)")
     used = {u[3] for u in uses}
     for n in rels:
         if n not in used:

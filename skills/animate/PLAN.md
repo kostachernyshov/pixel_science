@@ -118,10 +118,20 @@ beats:                                                          # t: seconds fro
   - {t: 4.0, actor: nk, anim: move, flip: true}                 # face the other way
   - {t: 4.0, actor: cell, badge: null}                          # remove a badge (or set another)
   - {t: 5.0, actor: cell, show: false}                          # hide (show: true to bring back)
+  - {word: "died", actor: cell, ghost: true}                    # fades to its ghost in 1 s and stays
+  - {word: "plaster", actor: cell, marks: [{at: [0.5, 0.7], sprite: plaster}]}   # the marks from this word
 ```
 
 Actor fields: `sprite`, `at`, `anim`, `scale` (default 2), `flip`, `badge` (a sprite of group `badge`
-drawn above), `label`, `color`, `hidden`, `in` (a zone of the set). Keep x between 0.1 and 0.9: the vertical frame is narrow.
+drawn above), `label`, `color`, `hidden`, `in` (a zone of the set), `ghost` (true: it starts as a ghost),
+`marks`. Keep x between 0.1 and 0.9: the vertical frame is narrow.
+
+- **Ghost.** Any sprite has a ghost: a pale see-through silhouette with an outline, made by the tool. A beat
+  `ghost: true` fades the actor to its ghost (a hidden actor appears as one); `ghost: false` brings it back.
+  A destroyed actor cannot come back, but its ghost can stay or appear: a character who died stays in the set.
+- **Marks** on the body: a spot, a plaster, a glowing organ. Each mark has `at:` (fractions of the sprite,
+  0 to 1, mirrored with `flip`) and a `sprite:` (it takes the actor's scale) or a `color:` (a dot; `size:` in
+  sprite pixels, default 2). A beat with `marks:` gives the list from its word on: list all marks that stay.
 
 **Set.** `set:` builds the set of the storyboard once; the next scenes go on in it with `continue: true`.
 An actor with `in: <zone>` stands in that zone: its `at:` and `move_to: [x, y]` are fractions of the zone,
@@ -151,7 +161,7 @@ actors:
   `borders:`; biology has `membrane`).
 - `continue: true` (an action scene after an action scene): no dissolve; the set, the background, the title,
   the counters, and the actors go on as they are at the end of the scene before (place, zone, flip, badge,
-  parts, shown or hidden; a destroyed actor stays hidden).
+  parts, ghost, marks, shown or hidden; a destroyed actor stays hidden, or stays as its ghost).
   The scene's own `actors:` add actors or change fields of the ones that go on.
 
 `move_to: <actor>` moves until the two sprites touch, edge to edge, on the side the mover comes from; the
@@ -177,7 +187,7 @@ Its site is drawn on the right (a membrane receptor's on top): when the molecule
 closed in later scenes; `{actor: drug, verb: bind, target: pdl1}` puts the drug on PD-L1, which lets go of
 PD-1. `pixsci check` fails on a relation not in the model, a part not shown, parts too far apart or with
 no room for labels (it names the place that fixes it), labels that cover each other, a head or an actor
-label, a destroyed actor that comes back, `after:` out of order, or a source with no quote. A verb with a hit
+label, a destroyed actor that comes back (its ghost may stay), `after:` out of order, or a source with no quote. A verb with a hit
 (`hit`, `secrete`, `block`) fails the check when the two actors do not touch at the moment of contact.
 Bound parts on a level line put their labels on their stalks; on an upright line (one cell above the other),
 beside the stalks, one left and one right.

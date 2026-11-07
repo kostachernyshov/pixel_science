@@ -28,9 +28,9 @@ def _hair_mask(style):
     return mask_circle(W, H, 8.5, 8.5, 6.6) & (yy <= 5)
 
 
-def person(hair="long", top=LAV, blink=False, sick=False, gown=False, ghost=False):
-    """Person, front view, 18x30. sick: tired eyes, no blush, a drop of sweat; gown: hospital gown;
-    ghost: a memory outline (a person who died), one color, no face."""
+def person(hair="long", top=LAV, blink=False, sick=False, gown=False):
+    """Person, front view, 18x30. sick: tired eyes, no blush, a drop of sweat; gown: hospital gown.
+    A person who died is shown by the core ghost of any sprite (beat ghost: true)."""
     s = Spr(W, H)
     hc = HAIR[hair]
     if gown:
@@ -78,10 +78,6 @@ def person(hair="long", top=LAV, blink=False, sick=False, gown=False, ghost=Fals
         s.put(6, 11, LGREY); s.put(11, 11, LGREY)
         s.put(14, 4, BLUE); s.put(14, 5, BLUE); s.put(13, 5, WHITE)
     outline(s, BLACK)
-    if ghost:
-        m = s.a >= 0
-        s.a[m] = DGREY
-        s.a[m & ((xx + yy) % 2 == 0)] = -1
     return s
 
 

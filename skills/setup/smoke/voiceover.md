@@ -32,4 +32,12 @@ A border with a part in it.
 
 ## S09
 
+A plaster goes on, she fades to a ghost, the other comes as a ghost and then comes back.
+
+## S10
+
+The ghost stays.
+
+## S11
+
 One plan, four formats.

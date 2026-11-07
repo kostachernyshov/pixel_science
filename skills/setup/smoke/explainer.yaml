@@ -83,6 +83,22 @@ scenes:
       - {word: "part", mark: 1982, label: START}               # a mark stays on the strip
       - {word: "part", mark: 1983, label: NEXT, color: favorable}  # a close mark: its label stands beside the first
   - id: S09
+    type: action
+    title: "Ghosts"
+    actors:
+      one: {sprite: patient_a, at: [0.3, 0.5], marks: [{at: [0.5, 0.75], color: unfavorable}]}  # a dot on the body
+      two: {sprite: patient_b, at: [0.7, 0.5], hidden: true}
+    beats:
+      - {word: "plaster", actor: one, marks: [{at: [0.5, 0.75], sprite: plaster}]}   # the marks from this word
+      - {word: "fades", actor: one, ghost: true}                   # any sprite has a ghost; it stays
+      - {word: "other", actor: two, ghost: true}                   # a hidden actor appears as a ghost
+      - {word: "back", actor: two, ghost: false}                   # and comes back
+  - id: S10
+    type: action
+    continue: true                                                # the ghost and the marks go on
+    beats:
+      - {word: "stays", actor: two, flip: true}
+  - id: S11
     type: summary
     title: "Ready"
     text: "One plan, four formats."
