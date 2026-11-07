@@ -10,6 +10,7 @@ packs: [biology]                      # sprite packs in packs/ (default: all)
 voiceover: voiceover.md               # '## S01' headings, the voice-over text under each
 tts: {voice: ryan, instruct: "Warm, natural documentary narrator."}   # optional: the voice of `--voice` (docs/tool.md, Voice)
 subtitles: true                       # optional: the voice-over word for word in a box at the bottom (replaces captions)
+timeline: {from: 1982, to: 2014, unit: year}   # optional: a strip of time under the stage (see "Timeline")
 formats: [landscape, vertical, square, banner]
 max_s: 60                             # optional: longest story before the summary (default 60 s)
 sources:                              # required: the papers or textbooks behind each claim
@@ -51,19 +52,23 @@ sits above the bottom 20 % (apps cover it with buttons). In `banner`, there is n
 
 `timeline:` at the top of the plan puts a strip at the bottom of the stage: a scale of time, a "now" cursor,
 and marks. It is a layer over any set: it stays through the scenes and does not dissolve. Title and summary
-scenes, and a scene with `timeline: false`, hide it. Beats (with `word:` or `t:`, no actor) move the cursor
-and add marks:
+scenes, and a scene with `timeline: false`, hide it; the strip keeps its place in every scene, so the stage does not jump. Beats (with `word:` or `t:`,
+no actor) move the cursor and add marks:
 
 ```yaml
-timeline: {from: 1980, to: 2000, unit: year, now: 1998}    # any unit: year, day, hour, million year
+timeline: {from: 1980, to: 2000, unit: year, now: 1998}    # unit in the singular: year, day, million year
+                                                            # now: where the cursor starts (default: from)
 beats:
   - {word: "back", timeline: 1982}                          # the cursor goes there
-  - {word: "donor", mark: 1982, label: DONOR, color: unfavorable}   # a mark stays
+  - {word: "donor", mark: 1982, label: DONOR, color: unfavorable}   # a mark stays; color: a color name
 ```
 
-A jump of more than a quarter of the scale rewinds (`<<` or `>>` while the cursor moves) and leaves its span
-on the line with a label ("16 YEARS") until the cursor moves again. Values are in the scale; a year or a
-date on screen is in a source.
+A jump of more than a quarter of the scale, back or forward, shows `<<` or `>>` while the cursor moves and
+leaves its span on the line with a label ("16 YEARS") until the cursor moves again. Mark labels stand side by
+side above the line; check fails when they do not fit, so keep them short and the marks apart. The cursor
+value has as many decimals as `from:` and `to:`. In the banner the strip has no labels: the line, the marks,
+and the cursor with its value at the right end. Values are in the scale; a year or a date on screen is in a
+source.
 
 ## Subtitles
 
@@ -191,7 +196,7 @@ beside the stalks, one left and one right.
 scenes; the function does not draw it). `why` is one line: no other scene type shows this set, or the frame is
 key (hook, turn, end) and a scene type shows it worse. `check` fails without it. The function gets
 `(img, t, scene, ctx)`; `ctx["layout"]` has the frame size, stage, and caption place. Read
-`frame.W` and `frame.H`, never 480 and 270. With subtitles, the stage ends above their box. `ctx["dur"]` is
+`frame.W` and `frame.H`, never 480 and 270. With subtitles or a timeline, the stage ends above their box or strip. `ctx["dur"]` is
 the scene length; time events with `words.cue` (see Timing). Colors are palette indices or `(r, g, b)`.
 A custom scene that draws a relation of the model says so with a beat: `{word: rain, shows: rain_falls}`.
 The code reads its time from `ctx["shows"]["rain_falls"]` (seconds in the scene, the first time if it is

@@ -8,7 +8,7 @@ voiceover: voiceover.md
 formats: [landscape]
 sources:
   - "Setup check of pixel_science: no claims."
-timeline: {from: 1980, to: 2000, unit: year, now: 1998}     # a strip under the stage of each scene
+timeline: {from: 1980, to: 2000, unit: year, now: 1998}     # a strip under the stage (hidden in title and summary)
 model:
   things:
     t:    {parts: {tcr: {label: TCR, color: GREEN}}}
@@ -81,6 +81,7 @@ scenes:
     beats:
       - {word: "border", timeline: 1982}                       # the cursor rewinds: a long jump shows its span
       - {word: "part", mark: 1982, label: START}               # a mark stays on the strip
+      - {word: "part", mark: 1983, label: NEXT, color: favorable}  # a close mark: its label stands beside the first
   - id: S09
     type: summary
     title: "Ready"

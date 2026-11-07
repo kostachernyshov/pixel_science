@@ -156,4 +156,4 @@ def tme(w=None, h=None):
 
 
 ALL = {"paper": paper, "plain": plain, "dishes": dishes, "tissue": tissue, "epithelium": epithelium,
-       "bloodstream": lambda: bloodstream(0), "lymph_node": lymph_node, "tme": tme}
+       "bloodstream": bloodstream, "lymph_node": lymph_node, "tme": tme}

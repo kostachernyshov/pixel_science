@@ -96,7 +96,7 @@ def color(name):
 
 # ---------------------------------------------------------------- layout for the current format
 
-SUBS = False             # subtitles on: set from plan["subtitles"] by timeline() and check()
+SUBS = False             # subtitles on: set from plan["subtitles"] by prepare()
 TIMEBAR = False          # a timeline strip at the bottom of the stage: set from plan["timeline"] by prepare()
 SUB_LINES = 2
 
@@ -199,6 +199,9 @@ def _texts(sc):
     for a in (sc.get("actors") or {}).values():
         if isinstance(a.get("label"), str):
             yield "label", a["label"]
+    for b in sc.get("beats") or []:
+        if "mark" in b and isinstance(b.get("label"), str):
+            yield "mark label", b["label"]
 
 
 def _sprites(sc):
@@ -222,7 +225,7 @@ def check(plan):
     """Rules of the skill. Returns a list of problems (empty: all pass)."""
     out = list(prepare(plan))
     carry(plan)
-    out += timebar.check(plan)
+    out += timebar.check(plan, colors=list(COLOR_NAMES))
     if not plan.get("sources"):
         out.append("sources: list at least one source for the science in the video")
     vo = voiceover(plan)
@@ -295,6 +298,8 @@ def check(plan):
             continue
         frame.use(f)
         L = layout()
+        if TIMEBAR:
+            out += [f"{p} [{f}]" for p in timebar.fit(plan, L)]
         for sc in plan["scenes"]:
             cap = sc.get("caption")
             if cap:
@@ -368,7 +373,7 @@ def _check_set(plan, sc, sid):
 def _bg(sc, t):
     name = sc.get("bg", "paper")
     fn = bg.ALL.get(name, bg.paper)
-    return fn(t) if name == "bloodstream" else fn()
+    return fn(t) if fn is bg.bloodstream else fn()
 
 
 def _heading(img, L, s):
