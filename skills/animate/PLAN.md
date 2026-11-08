@@ -146,7 +146,9 @@ drawn above), `label`, `color`, `hidden`, `in` (a zone of the set), `ghost` (tru
     hunter has another beat while the hunt runs.
   - `divide: c4`: the cell plays its `divide` animation (if its sprite has one); then the daughter `c4`
     (declared with `hidden: true` in the same zone; no `at:` needed) appears at its place with its marks and
-    badge, and the two move apart, edge to edge (`apart:`: a fraction of the zone).
+    badge, and the two move apart, edge to edge: the cell steps aside and the daughter moves to it
+    (`apart:`: a fraction of the zone between them instead). Right after a `move_to: <actor>` of the cell,
+    give `apart:` or a place first: check says so.
 - **At rest** an actor moves a little (one sprite pixel): not while it moves or does a verb, or a verb is done
   to it. `still: true` on the actor stops it (a prop, an organ, a slide).
 - **Marks** on the body: a spot, a plaster, an organ. Each mark has `at:` (fractions of the sprite, 0 to 1,

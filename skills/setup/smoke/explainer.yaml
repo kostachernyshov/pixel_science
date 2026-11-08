@@ -93,11 +93,13 @@ scenes:
       - {word: "plaster", actor: one, marks: [{at: [0.5, 0.75], sprite: plaster}]}   # the marks from this word
       - {word: "fades", actor: one, ghost: true}                   # any sprite has a ghost; it stays
       - {word: "other", actor: two, ghost: true}                   # a hidden actor appears as a ghost
+      - {word: "then", actor: two, move_to: one, dur: 0.8}          # the scene ends in contact
       - {word: "back", actor: two, ghost: false}                   # and comes back
   - id: S10
     type: action
     continue: true                                                # the ghost and the marks go on
     beats:
+      - {t: 0.1, actor: two, wander: true}                        # goes on from the contact place, in each format
       - {word: "stays", actor: two, flip: true}
   - id: S11
     type: action
