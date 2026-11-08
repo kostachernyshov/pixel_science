@@ -188,9 +188,9 @@ def shown_parts(a, beats, name, t=None):
 def world(plan):
     """For each scene, the state at its start: bound {(rel, actor_a, actor_b): t_on}, occupied
     {(rel, agent, owner): t_on}, dead {actor}. Times of earlier scenes are -inf (settled)."""
+    if plan.world is not None:
+        return plan.world
     rels = get(plan)[1]
-    if "_world" in plan:
-        return plan["_world"]
     bound, occ, dead, out = {}, {}, set(), []
     ev = _events(plan)
     for i, sc in enumerate(plan["scenes"]):
@@ -213,7 +213,8 @@ def world(plan):
                         del bound[k]
             elif kind == "destroy":
                 dead.add(b.get("actor") if not b.get("target") else b.get("target"))
-    plan["_world"] = out
+    if plan.resolved:                     # while stage.resolve runs, later scenes still change
+        plan.world = out
     return out
 
 

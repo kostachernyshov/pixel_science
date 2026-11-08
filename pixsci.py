@@ -20,7 +20,7 @@ import contextlib, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from pixel_kit import explain, frame
+from pixel_kit import explain, frame, plan as P
 
 
 def _args(a):
@@ -80,15 +80,11 @@ def _voice(plan, p, outdir):
         n = words.align(plan, explain.voiceover(plan), paths, outdir)
     if n:
         print(f"word times: {n} scenes aligned")
-    timed = _plan(p, outdir)
-    timed["_spoken"] = plan["_spoken"]
-    return timed, paths
+    return P.load(p, outdir, plan.spoken), paths
 
 
 def _plan(p, outdir=None):
-    plan = explain.load(p)
-    plan["_outdir"] = outdir          # where voice/ is: aligned word times for beats and subtitles
-    return plan
+    return P.load(p, outdir)          # outdir: where voice/ is, aligned word times for beats and subtitles
 
 
 def _formats(plan, fmts):

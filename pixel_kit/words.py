@@ -110,7 +110,7 @@ def load_scene(outdir, sid, text):
 
 
 def attach(plan, texts, outdir=None):
-    """Puts the words of each scene into plan["_words"] = {scene id: [{"w","s","e"}]}, with times from
+    """Puts the words of each scene into plan.words = {scene id: [{"w","s","e"}]}, with times from
     the start of the scene (LEAD added). Returns the number of aligned scenes."""
     out, n = {}, 0
     for sc in plan["scenes"]:
@@ -121,7 +121,7 @@ def attach(plan, texts, outdir=None):
         ws, ok = load_scene(outdir, sid, text)
         n += ok
         out[sid] = [{"w": w["w"], "s": w["s"] + LEAD, "e": w["e"] + LEAD} for w in ws]
-    plan["_words"] = out
+    plan.words = out
     return n
 
 
@@ -141,13 +141,13 @@ def word_time(words, key, n=1):
 
 def cue(plan, sc, key, n=1, dt=0.0, default=0.0):
     """For custom scenes: the time in the scene when a word is heard (see word_time), plus dt."""
-    t = word_time((plan.get("_words") or {}).get(sc.get("id")) or [], key, n)
+    t = word_time(plan.words.get(sc.get("id")) or [], key, n)
     return default if t is None else t + dt
 
 
 def resolve_beats(plan):
     """Sets t of each beat with `word:` from the words of its scene. Returns problems (strings)."""
-    words = plan.get("_words") or {}
+    words = plan.words
     problems = []
     for sc in plan["scenes"]:
         ws = words.get(sc.get("id")) or []
@@ -177,7 +177,7 @@ END_HOLD = 0.7           # s: a page stays after its last word (if the next page
 
 def timeline_words(plan, times):
     """All words in video time: [(word, start, end)]. times: explain.durations(plan)."""
-    words = plan.get("_words") or {}
+    words = plan.words
     out = []
     for sc, (a, _) in zip(plan["scenes"], times):
         for w in words.get(sc.get("id")) or []:

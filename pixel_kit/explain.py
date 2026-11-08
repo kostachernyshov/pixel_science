@@ -2,7 +2,7 @@
 # The plan format is in skills/animate/PLAN.md. Paths in the plan are relative to the plan file.
 #
 #   from pixel_kit import explain, frame
-#   plan = explain.load("my-video/explainer.yaml")
+#   plan = P.load("my-video/explainer.yaml")    # from pixel_kit import plan as P
 #   problems = explain.check(plan)        # rules: captions, sources, sprites, timing, text fits
 #   with frame.using("vertical"):
 #       tl, marks = explain.timeline(plan)    # marks: key times for the storyboard
@@ -32,20 +32,8 @@ COLOR_NAMES = {
 
 # ---------------------------------------------------------------- plan, voice-over, timing
 
-def load(path):
-    import yaml
-    plan = yaml.safe_load(open(path, encoding="utf-8"))
-    plan["_dir"] = os.path.dirname(os.path.abspath(path))
-    plan.setdefault("scenes", [])
-    plan.setdefault("lang", "en")
-    plan.setdefault("formats", list(frame.FORMATS))
-    S.use(plan.get("packs"))              # packs: [biology]; without it, every pack
-    verbs.use(plan.get("packs"))
-    return plan
-
-
 def path(plan, p):
-    return p if not p or os.path.isabs(p) else os.path.join(plan["_dir"], p)
+    return p if not p or os.path.isabs(p) else os.path.join(plan.dir, p)
 
 
 def voiceover(plan):
@@ -66,11 +54,11 @@ def voiceover(plan):
 
 def durations(plan):
     """Start and end of each scene: from the words of its voice-over (2.5 words/s), or "dur" in the scene.
-    With synthesized audio (voice.attach puts plan["_spoken"]), a scene lasts as long as its audio,
+    With synthesized audio (plan.spoken), a scene lasts as long as its audio,
     and a "dur" in the scene is never shorter than the audio."""
     scenes = plan["scenes"]
     vo = voiceover(plan)
-    spoken = plan.get("_spoken") or {}
+    spoken = plan.spoken
     times = []
     t = 0.0
     for sc in scenes:
@@ -225,7 +213,7 @@ def _sprites(sc):
 
 def check(plan):
     """Rules of the skill. Returns a list of problems (empty: all pass)."""
-    out = list(prepare(plan))
+    out = list(plan.problems)
     out += timebar.check(plan, colors=list(COLOR_NAMES))
     if not plan.get("sources"):
         out.append("sources: list at least one source for the science in the video")
@@ -317,7 +305,6 @@ def check(plan):
         ms = verbs.bench(name)
         if ms > verbs.MAX_MS:
             out.append(f"warning: verb {name} takes {ms:.1f} ms a frame (limit {verbs.MAX_MS} ms); make its primitives faster")
-    plan.pop("_world", None)
     fmts = [x for x in (plan.get("formats") or ["landscape"]) if x in frame.FORMATS] or ["landscape"]
     for i, f in enumerate(fmts):          # the model once; contact (geometry) in each format
         with frame.using(f):
@@ -833,18 +820,6 @@ PAINTERS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 
 # ---------------------------------------------------------------- timeline
 
-def prepare(plan):
-    """Words of the voice-over in time (aligned, or estimated), beats placed on their words, then the plan as it
-    plays (stage.resolve: continue, behaviors). Runs once per plan; plan["_outdir"] is where
-    voice/<scene>.words.json are. A plan timed again (to new audio) is read again. Returns problems."""
-    if "_words" in plan:
-        return plan.get("_problems", [])
-    WD.attach(plan, voiceover(plan), plan.get("_outdir"))
-    plan["_problems"] = WD.resolve_beats(plan)
-    plan["_problems"] += stage.resolve(plan, durations(plan))
-    return plan["_problems"]
-
-
 def _sub_lines(ws, maxw):
     """Words into lines that fit maxw (scale 1): [[(i, word, x)]], x from the line start."""
     lines, cur, x = [], [], 0
@@ -912,10 +887,8 @@ def subtitles(plan, times):
 def timeline(plan):
     """Builds the Timeline for the current format (frame.using). Returns (timeline, marks):
     marks are (time, label) for the storyboard."""
-    prepare(plan)
     times = durations(plan)
     scenes, marks = [], []
-    plan.pop("_world", None)
     for si, (sc, (a, b)) in enumerate(zip(plan["scenes"], times)):
         ctx = {"si": si}
         painter = PAINTERS[sc["type"]]

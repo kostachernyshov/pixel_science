@@ -9,14 +9,13 @@ import hashlib, json, os, sys
 from collections import defaultdict
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
-from pixel_kit import explain, frame
+from pixel_kit import explain, frame, plan as P
 FPS = 12
 
 
 def hashes(path):
     """{"check": problems of explain.check, "frames": {"<format> <frame> <scene>": sha1 of the frame}}."""
-    plan = explain.load(path)
-    plan["_outdir"] = None
+    plan = P.load(path)
     out = {"check": explain.check(plan), "frames": {}}
     ids = [(a, b, sc.get("id", "?")) for sc, (a, b) in zip(plan["scenes"], explain.durations(plan))]
     for f in frame.FORMATS:

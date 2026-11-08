@@ -72,7 +72,7 @@ def write_wav(p, samples):
 
 def attach(plan, texts, outdir, say=None):
     """Speaks the voice-over of each scene into outdir/voice/<id>.wav (only what changed) and puts the
-    length of each scene's audio into plan["_spoken"], so that `explain.durations` times scenes to it.
+    length of each scene's audio into plan.spoken, so that `explain.durations` times scenes to it.
     texts: {scene id: spoken text} (words.spoken). say: text -> samples; default Qwen3-TTS.
     Returns {scene id: wav path}."""
     t = settings(plan)
@@ -96,7 +96,7 @@ def attach(plan, texts, outdir, say=None):
             json.dump(meta, open(meta_p, "w"), indent=1, ensure_ascii=False)
         paths[sid] = p
         spoken[sid] = LEAD + len(read_wav(p)) / RATE + TAIL
-    plan["_spoken"] = spoken
+    plan.spoken = spoken
     return paths
 
 

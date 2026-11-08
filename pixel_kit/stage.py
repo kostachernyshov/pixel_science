@@ -57,7 +57,6 @@ def resolve(plan, times):
         if sc.get("type") == "action":
             sc["beats"] = _with_verbs(sc.get("beats") or [])
         prev = sc
-    plan.pop("_world", None)
     return problems
 
 
@@ -257,13 +256,13 @@ def _place(sc, a, L, fx_, fy_, k):
 
 def _beats(plan, sc, L):
     """The scene's beats; for a layout, with each move_to: <actor> turned into the place where the mover
-    touches that actor (fractions of its box). Kept in plan["_placed"] per scene and format: after resolve,
+    touches that actor (fractions of its box). Kept in plan.placed per scene and format: after resolve,
     nothing changes the beats."""
     beats = sc.get("beats") or []
     if L is None or not any(isinstance(b.get("move_to"), str) for b in beats):
         return beats
     key = (next(i for i, s in enumerate(plan["scenes"]) if s is sc), L["W"], L["H"], tuple(L["stage"]))
-    placed = plan.setdefault("_placed", {})
+    placed = plan.placed
     if key not in placed:
         todo = [i for i, b in enumerate(beats) if isinstance(b.get("move_to"), str)]
         out = list(beats)
@@ -323,7 +322,6 @@ def _carry(plan, prev, sc, i, end):
     if "set" not in own_keys and st and st.get("type") == "panels":    # counters go on too
         last = sets.counters(st, beats, end)
         sc["set"] = dict(st, panels=[dict(p, counter=last.get(n)) for n, p in sets.panels(st)])
-    plan.pop("_world", None)              # the scenes before this one have their plain beats now
     dead = model.world(plan)[i]["dead"] if plan.get("model") else set()
     out = {}
     for name, a in (prev.get("actors") or {}).items():

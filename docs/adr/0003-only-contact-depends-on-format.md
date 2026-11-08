@@ -15,7 +15,7 @@ shapes. Architecture reviews suggested a copy of the plan per format as the fix.
    `divide`, and the start place of a `continue` actor whose scene ended in contact.
 2. Nothing else depends on the format: word times, `continue`, behaviors (`wander`, `hunt`, `divide`), the
    show and hide of verbs.
-3. The plan is resolved once, `stage.resolve(plan, times)`, at the end of `prepare`, after word times: these
+3. The plan is resolved once, `stage.resolve(plan, times)`, when it is loaded (`plan.load`), after word times: these
    become plain beats; `move_to: <actor>` stays a name.
 4. Contact is placed per format at draw time, `stage.state_at(plan, sc, t, L)`, for the layout L of the
    current format, lazily, with a memo per (scene, format).
