@@ -3,6 +3,9 @@
 # Builds the frames as `pixsci render` does (check, then a timeline per format), 12 per second, in all four
 # formats (whatever the plan's `formats:`), and writes to OUT.json
 #   {"check": [...], "frames": {"<format> <frame> <scene>": hash}}
+# Subtitles replace the caption, so the formats split the two: vertical and banner (where the subtitle box sits
+# apart: above the reel's buttons, on the banner's right third) are hashed with `subtitles: true`, landscape and
+# square as the plan has it. A plan that sets `subtitles` keeps its value in all four.
 # With BEFORE.json, prints what differs (the check output, then frames grouped by format and scene)
 # and exits 1 when anything differs.
 import hashlib, json, os, sys
@@ -11,6 +14,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 from pixel_kit import explain, frame, plan as P
 FPS = 12
+SUBTITLED = ("vertical", "banner")
 
 
 def hashes(path):
@@ -18,7 +22,10 @@ def hashes(path):
     plan = P.load(path)
     out = {"check": explain.check(plan), "frames": {}}
     ids = [(a, b, sc.get("id", "?")) for sc, (a, b) in zip(plan["scenes"], explain.durations(plan))]
+    keep = "subtitles" in plan            # the layout reads it per format; places are kept per format
     for f in frame.FORMATS:
+        if not keep:
+            plan["subtitles"] = f in SUBTITLED
         with frame.using(f):
             tl, _ = explain.timeline(plan)
             for i in range(int(tl.duration * FPS)):
