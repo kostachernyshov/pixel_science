@@ -10,7 +10,7 @@
 # (x, y) is the anchor (cell center = body center).
 
 import json, os
-from PIL import Image
+from PIL import Image, ImageOps
 from . import packs
 
 _use = None            # pack names, or None for all packs
@@ -61,13 +61,16 @@ def frame(name, anim="idle", i=0, flip=False, scale=1):
     if key not in _frames:
         m = meta()[name]
         a = m["anims"][anim]
-        cw, ch = m["cell"]
+        cw, ch = m.get("source_cell", m["cell"])
         i = max(0, min(a["frames"] - 1, i))
         im = _sheet(name).crop((i * cw, a["row"] * ch, (i + 1) * cw, (a["row"] + 1) * ch))
+        k = scale if scale > 1 else 1
+        w, h = m["cell"]
+        size = (w * k, h * k)
+        if im.size != size:
+            im = ImageOps.fit(im, size, Image.Resampling.NEAREST)
         if flip:
-            im = im.transpose(Image.FLIP_LEFT_RIGHT)
-        if scale > 1:
-            im = im.resize((im.width * scale, im.height * scale), Image.NEAREST)
+            im = im.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
         _frames[key] = im
     return _frames[key]
 

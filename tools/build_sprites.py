@@ -1,7 +1,7 @@
 # Builds packs/<pack>/sprites/*.png and sprites.json from the pack's code/library.py.
 #   python3 tools/build_sprites.py biology            all sprites of the pack
 #   python3 tools/build_sprites.py biology nk tumor   only these (so that PNGs edited by hand stay)
-# Sprites added as PNG (not in library.py) stay in sprites.json; see CONTRIBUTING.md.
+# Sprites registered as PNG keep their art even when a legacy code drawing exists.
 # Sheet: row = animation, column = frame, all cells have one size, transparent background.
 # Light theme: each frame gets a 1 px INK outline if it has none (white bodies on PAPER).
 import json, os, sys
@@ -36,6 +36,8 @@ def main(pack, only):
             del meta[name]
     for name, spec in lib.items():
         if only and name not in only:
+            continue
+        if meta.get(name, {}).get("source") == "png":
             continue
         anims = {an: dict(a, frames=[(light(s), dx, dy) for (s, dx, dy) in a["frames"]])
                  for an, a in spec["anims"].items()}

@@ -5,7 +5,7 @@
 #   - each entry has group, cell, anchor, anims; each animation row and frame fits the sheet
 #   - colors are from the palette (pixel_kit/palette.py), alpha is 0 or 255 (no smoothing)
 #   - each sprite has a row in CREDITS.csv with an author and an allowed license
-import csv, json, os, sys
+import csv, json, os, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
@@ -16,9 +16,26 @@ LICENSES = {"CC0-1.0", "CC-BY-4.0"}
 GROUPS = {"hero", "villain", "civilian", "people", "prop", "badge"}
 
 
+def is_local_pack(pack):
+    """An ignored manifest marks a local pack outside the contribution checks."""
+    manifest = os.path.abspath(os.path.join(pack.dir, "pack.yaml"))
+    if os.path.commonpath((ROOT, manifest)) != ROOT:
+        return False
+    try:
+        return subprocess.run(
+            ["git", "check-ignore", "-q", "--", os.path.relpath(manifest, ROOT)],
+            cwd=ROOT, stderr=subprocess.DEVNULL,
+        ).returncode == 0
+    except FileNotFoundError:
+        return False
+
+
 def main():
     out, total, seen = [], 0, {}
     for p in packs.find().values():
+        if is_local_pack(p):
+            print(f"Skipping local pack: {p.name}")
+            continue
         if os.path.exists(os.path.join(p.sprites_dir, "sprites.json")):
             n, probs = check_pack(p.sprites_dir)
             total += n
@@ -56,7 +73,12 @@ def check_pack(SPR):
             out.append(f"{name}: file {m.get('file')} not found")
             continue
         im = Image.open(path).convert("RGBA")
-        cw, ch = m["cell"]
+        source_cell = m.get("source_cell", m["cell"])
+        if (not isinstance(source_cell, list) or len(source_cell) != 2
+                or any(type(side) is not int or side < 1 for side in source_cell)):
+            out.append(f"{name}: source cell must have two positive integer dimensions")
+            continue
+        cw, ch = source_cell
         for an, a in m["anims"].items():
             if (a["row"] + 1) * ch > im.height or a["frames"] * cw > im.width:
                 out.append(f"{name}: animation {an} is outside the sheet ({im.width}x{im.height})")
