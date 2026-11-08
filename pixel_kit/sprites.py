@@ -28,12 +28,17 @@ def use(names=None):
     _frames.clear()
 
 
+def in_use():
+    """Names of the packs sprites load from: those of use(), else all packs."""
+    return _use or sorted(packs.find())
+
+
 def meta():
     """{name: entry} from the sprites.json of each pack; each entry also gets "pack" and "_dir"."""
     global _meta
     if _meta is None:
         _meta = {}
-        for name in _use or sorted(packs.find()):
+        for name in in_use():
             p = packs.get(name)
             j = os.path.join(p.sprites_dir, "sprites.json")
             if os.path.exists(j):

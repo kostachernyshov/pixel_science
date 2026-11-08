@@ -45,6 +45,21 @@ Look at it on the contact sheet: `python pixsci.py verbs /tmp/verbs.png`.
 
 Scene painters are the `p_<type>` functions in `pixel_kit/explain.py`; backgrounds are in `pixel_kit/bg.py`. Read `frame.W` and `frame.H` at draw time, never fixed sizes. Check the result in all four formats with `pixsci.py board`. Document the new fields in `skills/animate/PLAN.md`.
 
+## Work on the core
+
+- **Frames.** A refactor of the core keeps the frames of the smoke plan as they were. Hash them before the change
+  and after, and compare:
+  ```
+  python tools/frame_hashes.py skills/setup/smoke/explainer.yaml /tmp/before.json
+  python tools/frame_hashes.py skills/setup/smoke/explainer.yaml /tmp/after.json /tmp/before.json
+  ```
+  It prints `EQUAL`. A change that alters frames on purpose names the scenes that differ in its pull request.
+- **Named data.** Data that crosses modules travels in named fields (a dataclass or a NamedTuple), not by index:
+  no `state[name][8]`.
+- **Public names.** A module calls only public names of another module, never `<module>._name`; CI fails on it.
+  `ruff check --select F --ignore F403,F405 pixel_kit pixsci.py tools` passes (CI runs it).
+
 ## Pull requests
 
-One topic in one pull request. CI must pass: the sprite check. Put a storyboard image in the description.
+One topic in one pull request. CI must pass: the sprite check, the setup check plan, the linter, and the
+public-names check. Put a storyboard image in the description.

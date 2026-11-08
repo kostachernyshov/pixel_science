@@ -73,14 +73,14 @@ def style(name):
     """The look of a border line from the packs (pack.yaml, borders:), later packs win:
     {bands: [[r, g, b], ...] from the top, beads: {color, step}} (beads: round heads on the outer bands)."""
     found = None
-    for p in S._use or sorted(packs.find()):
+    for p in S.in_use():
         found = (packs.get(p).meta.get("borders") or {}).get(name, found)
     return found
 
 
 def styles():
     out = set()
-    for p in S._use or sorted(packs.find()):
+    for p in S.in_use():
         out |= set(packs.get(p).meta.get("borders") or {})
     return sorted(out)
 

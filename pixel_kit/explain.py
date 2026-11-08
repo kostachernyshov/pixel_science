@@ -15,7 +15,7 @@ from PIL import ImageDraw
 from .palette import *
 from .font import text, text_w, title_text, TITLE_GLYPHS, LINE
 from .timing import clamp, seg, ease, lerp
-from . import sprites as S, fx, ui, bg, frame, verbs, model, sets, stage, timebar, words as WD
+from . import sprites as S, fx, bg, frame, verbs, model, sets, stage, timebar, words as WD
 from .scene import Timeline
 
 WORDS_PER_S = 2.5        # voice-over pace
