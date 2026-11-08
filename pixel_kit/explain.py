@@ -325,7 +325,6 @@ def check(plan):
         frame.use(f)
         L = layout()
         found = model.check(plan, positions=lambda si, sc, t: stage.state_at(plan, sc, t, L), stage=L["stage"])
-        found += _touch(plan, L)
         out += found if i == 0 else [f"{p} [{f}]" for p in found if "(contact)" in p]
     frame.use("landscape")
     if not plan["scenes"] or plan["scenes"][-1].get("type") not in ("summary", "custom"):
@@ -633,53 +632,12 @@ def _check_marks(sc):
     return out
 
 
-def _touch(plan, L):
-    """A verb with a hit must reach its target: at the moment of contact their sprites touch (layout L)."""
-    out = []
-    for sc in plan["scenes"]:
-        if sc.get("type") != "action":
-            continue
-        actors, beats = sc.get("actors") or {}, sc.get("beats") or []
-        try:
-            hits = _hits(sc)
-        except KeyError:                  # an unknown verb: reported by the beat checks
-            continue
-        for th, _, att, tg in hits:
-            if att not in actors or tg not in actors or model.bind_between(plan, sc, att, tg, beats, th):
-                continue                  # bound things touch through their parts, across the gap of the bind
-            st = stage.state_at(plan, sc, th, L)
-            a, g = st[att], st[tg]
-            if not (a.shown and g.shown):
-                continue
-            dist = math.hypot(g.x - a.x, g.y - a.y) or 1.0
-            d = ((g.x - a.x) / dist, (g.y - a.y) / dist)
-            gap = (dist - model.reach(actors[att]["sprite"], a.k, d, flip=a.flip)
-                   - model.reach(actors[tg]["sprite"], g.k, (-d[0], -d[1]), flip=g.flip))
-            if gap > 2:
-                out.append(f"{sc.get('id')}: hit at {th:.2f} s: {att} does not touch {tg} ({gap:.0f} px apart) "
-                           f"(contact): move it with move_to: {tg}")
-    return out
-
-
-def _hits(sc):
-    """[(contact time, params, attacker, target)] of the beats whose verb has hit mechanics."""
-    out = []
-    for b in sc.get("beats") or []:
-        if b.get("verb") and b.get("target"):
-            h = verbs.hit(b["verb"], b)
-            if h:
-                at, p, by = h
-                a, tg = (b["target"], b["actor"]) if by == "target" else (b["actor"], b["target"])
-                out.append((float(b.get("t", 0)) + at, p, a, tg))
-    return out
-
-
 def p_action(plan, sc, T, dur, ctx):
     """Actors on a stage and timed beats: move, change animation, flip, add or remove a badge, verbs.
     Positions are fractions of the stage (0..1), so the scene fits every format.
     A verb with hit mechanics stops the picture for a moment on contact (the scene time T is warped)."""
     if "hits" not in ctx:
-        ctx["hits"] = _hits(sc)
+        ctx["hits"] = verbs.hits(sc.get("beats") or [])
     beats, hits = sc.get("beats") or [], ctx["hits"]
     t, shake = fx.warp(T, [h[:2] for h in hits])
     img = _bg(sc, t)

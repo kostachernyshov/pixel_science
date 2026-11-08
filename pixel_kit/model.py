@@ -729,4 +729,32 @@ def check(plan, positions=None, stage=None):
                 out += [f"{sc.get('id')}: beat at {bt} s: {x} (contact): move the things apart, make them larger, or show fewer parts"
                         for x in _crowded(stalks(plan, i, sc, bt + SNAP, state, sc.get("beats") or []),
                                          _actor_labels(sc, state))]
-    return out + notes
+    return out + notes + (_hit_contact(plan, positions) if positions else [])
+
+
+def _hit_contact(plan, positions):
+    """A verb with a hit must reach its target: at the moment of contact their sprites touch."""
+    out = []
+    for i, sc in enumerate(plan["scenes"]):
+        if sc.get("type") != "action":
+            continue
+        actors, beats = sc.get("actors") or {}, sc.get("beats") or []
+        try:
+            hits = verbs.hits(beats)
+        except KeyError:                  # an unknown verb: reported by the beat checks
+            continue
+        for th, _, att, tg in hits:
+            if att not in actors or tg not in actors or bind_between(plan, sc, att, tg, beats, th):
+                continue                  # bound things touch through their parts, across the gap of the bind
+            st = positions(i, sc, th)
+            a, g = st[att], st[tg]
+            if not (a.shown and g.shown):
+                continue
+            dist = math.hypot(g.x - a.x, g.y - a.y) or 1.0
+            d = ((g.x - a.x) / dist, (g.y - a.y) / dist)
+            gap = (dist - reach(actors[att]["sprite"], a.k, d, flip=a.flip)
+                   - reach(actors[tg]["sprite"], g.k, (-d[0], -d[1]), flip=g.flip))
+            if gap > 2:
+                out.append(f"{sc.get('id')}: hit at {th:.2f} s: {att} does not touch {tg} ({gap:.0f} px apart) "
+                           f"(contact): move it with move_to: {tg}")
+    return out

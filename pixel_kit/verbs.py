@@ -74,6 +74,19 @@ def hit(name, beat):
     return float(h.get("at", base.get("at", 0))), p, h.get("by", base.get("by", "actor"))
 
 
+def hits(beats):
+    """[(contact time, params, attacker, target)] of the beats whose verb has hit mechanics."""
+    out = []
+    for b in beats:
+        if b.get("verb") and b.get("target"):
+            h = hit(b["verb"], b)
+            if h:
+                at, p, by = h
+                a, tg = (b["target"], b["actor"]) if by == "target" else (b["actor"], b["target"])
+                out.append((float(b.get("t", 0)) + at, p, a, tg))
+    return out
+
+
 # ---------------------------------------------------------------- drawing
 
 def _edge(p, r, q, k=0.8):
