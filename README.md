@@ -116,5 +116,5 @@ are in [AGENTS.md](AGENTS.md). Ideas and bugs: [Issues](https://github.com/kosta
 The tool comes from the `animate` skill of [kostachernyshov/skills](https://github.com/kostachernyshov/skills)
 and the *Cancer Wars* video series.
 
-License: code MIT; sprites CC0-1.0 or CC-BY-4.0, per file in each pack's `sprites/CREDITS.csv`; fonts GNU Unifont and Medeo Pixel (SIL OFL 1.1, `fonts/LICENSE_medeo.txt`).
+License: code MIT; sprites CC0-1.0 (each pack's `pack.yaml`; an outside sprite under CC-BY-4.0 names its author in `sprites.json`); fonts GNU Unifont and Medeo Pixel (SIL OFL 1.1, `fonts/LICENSE_medeo.txt`).
 See [LICENSE](LICENSE).

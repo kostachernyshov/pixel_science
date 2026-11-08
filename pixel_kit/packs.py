@@ -2,7 +2,7 @@
 #
 #   packs/<name>/
 #     pack.yaml      name, version, description, license
-#     sprites/       PNG sheets, sprites.json, CREDITS.csv
+#     sprites/       PNG sheets, sprites.json
 #     code/          a Python package; code/library.py has build() -> sprites drawn in code
 #
 # Packs are found in <repo>/packs and in each folder of $PIXSCI_PACKS (separated by ":").

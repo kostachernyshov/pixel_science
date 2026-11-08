@@ -68,7 +68,7 @@ A verb with no topic that two packs or more need ──► move it to pixel_kit/
        - {prim: jet, from: actor, to: target, color: granule, dur: 0.6}
        - {prim: sparks, at: target, color: granule, t: 0.22, dur: 0.6, n: 6}
    ```
-3. Run `pixsci.py verbs out/verbs.png` and look at the verb's row. Fix the worst thing, draw again.
+3. Run `pixsci.py verbs /tmp/verbs.png` and look at the verb's row. Fix the worst thing, draw again.
 4. Run `pixsci.py check <plan>`: no error, no speed warning for the verb.
 
 ## Steps: a primitive (Python, with the person's "yes")

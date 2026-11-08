@@ -11,7 +11,7 @@ Create beautiful, scientifically clear sprites for still illustrations and video
 
 Find the project root: `${CLAUDE_PLUGIN_ROOT}` for an installed plugin, or the root of the working clone. Save shared library changes in a working clone, not in the plugin cache that updates replace.
 
-Read `CONTRIBUTING.md` and the sections of `docs/tool.md` about sprites and scale. Inspect the PNGs, `sprites.json`, `CREDITS.csv`, and art guidance in the chosen pack.
+Read `CONTRIBUTING.md` and the sections of `docs/tool.md` about sprites and scale. Inspect the PNGs, `sprites.json`, and art guidance in the chosen pack.
 
 ## 1. Check whether a new drawing is needed
 
@@ -65,15 +65,14 @@ For a sheet, use equal-sized cells: one row per animation, one column per frame.
 Use the current layout:
 - PNG directly in `packs/<pack>/sprites/`;
 - an entry in the existing `sprites.json`;
-- a row in the existing `CREDITS.csv`.
 
 For each new or redrawn PNG, explicitly set `"source": "png"` and `"palette": "AAP-64"`. A molecule or protein that binds by its own surface also gets `"body": "molecule"`: draw its binding site where `CONTRIBUTING.md` says, so the tool can find it. Follow `CONTRIBUTING.md` for the other fields and license requirements.
 
 Name the object, not the video or style. Assign specific scientific roles and labels in the scene.
 
-Save only reusable sprites in the library. Keep prompts, concepts, comparisons, and intermediate exports in existing ignored working outputs. Do not create extra asset folders, text descriptions, or separate registries.
+Save only reusable sprites in the library. Keep prompts, concepts, comparisons, and intermediate exports in a temporary folder outside the repo, and show them in the chat. Do not create extra asset folders, text descriptions, or separate registries.
 
-When replacing an accepted drawing, preserve a way to restore the previous version. Do not run a full rebuild of code sprites merely to register one PNG.
+When replacing an accepted drawing, git keeps the previous version; do not keep backup copies. Do not run a full rebuild of code sprites merely to register one PNG.
 
 ## 6. Verify the result
 
@@ -81,7 +80,7 @@ From the working clone root, run:
 
 ```bash
 .venv/bin/python tools/validate_sprites.py
-.venv/bin/python pixsci.py sheet out/sheet.png
+.venv/bin/python pixsci.py sheet /tmp/sheet.png
 ```
 
 The validator must print `VALID`.

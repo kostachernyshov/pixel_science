@@ -4,15 +4,15 @@ Thank you for helping. The library stays useful only if every piece has one styl
 
 ## Packs
 
-Sprites live in packs: `packs/<name>/` with `pack.yaml` (name, version, description, license; optional
+Sprites live in packs: `packs/<name>/` with `pack.yaml` (name, version, description, license, author; optional
 `borders:`, the look of the line of a border set, see PLAN.md),
-`sprites/` (PNG sheets, `sprites.json`, `CREDITS.csv`), and `code/` (a package whose `library.py` has
+`sprites/` (PNG sheets, `sprites.json`), and `code/` (a package whose `library.py` has
 `build()` for sprites drawn in code). A plan picks its packs with `packs: [biology]`. Packs in other
 folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.
 
 ## Add a sprite
 
-1. **License.** Your own drawing, or a file under CC0-1.0 or CC-BY-4.0. No NC, no ND, no BY-SA, no "free for personal use".
+1. **License.** Your own drawing (an image generator is welcome, `docs/adr/0002-generated-sprites.md`), or a file under CC0-1.0 or CC-BY-4.0. No NC, no ND, no BY-SA, no "free for personal use".
 2. **Style.** New PNG art uses the shared AAP-64 palette by Adigun A. Polack (`pixel_kit/palette.py`), declared as `"palette": "AAP-64"` in its existing sprite entry. Existing PICO-8 sprites keep their colors and indices; an omitted palette means PICO-8. Use binary transparency and a crisp dark outline. For detailed receptor/protein art, start with a 128 px canvas and a few meaningful forms; simpler props stay smaller. Rectangular cells are allowed. The old 24–40 px cell / 12–20 px molecule bodies are legacy scale guidance, not a source-size limit.
 3. **Sheet.** One PNG: one row for each animation, one column for each frame, all cells one size, transparent background. Each sprite needs `idle`; cells also want `move`, `hit`, `death` (apoptosis: shrink and break up).
 4. **Metadata.** Add an entry to the pack's `sprites/sprites.json`:
@@ -29,8 +29,9 @@ folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.
    `flip: true`); a membrane receptor faces up, out of the cell. Cells need no key: the tool draws their parts on
    stalks out of the membrane.
    For a higher-resolution sheet that keeps its size in scenes, set `source_cell` to the PNG cell dimensions. The original `cell` and `anchor` still define the size and alignment in scenes. For different aspect ratios, center the drawing in the part of the source cell that fits the display cell. Extra padding is cropped.
-5. **Credits.** Add a row to the pack's `sprites/CREDITS.csv`: sprite, file, author, license, source URL, notes.
-6. **Check.** `python tools/validate_sprites.py` prints `VALID`. Look at the cast sheet: `python pixsci.py sheet out/sheet.png`.
+5. **Credits.** The pack's `license` and `author` in `pack.yaml` cover its sprites. A sprite by an outside author adds
+   `"author"`, `"license"` (CC0-1.0 or CC-BY-4.0), and `"url"` (where it comes from) to its entry in `sprites.json`.
+6. **Check.** `python tools/validate_sprites.py` prints `VALID`. Look at the cast sheet: `python pixsci.py sheet /tmp/sheet.png`.
 
 Sprites drawn in code live in the pack's `code/library.py` and build with `python tools/build_sprites.py <pack> <name>`. Sprites added as PNG stay when the code sprites are built again.
 
@@ -38,7 +39,7 @@ Sprites drawn in code live in the pack's `code/library.py` and build with `pytho
 
 Actions in scenes are verbs: YAML in `packs/<pack>/verbs.yaml` that lists primitives of `pixel_kit/fx.py`.
 Follow `skills/add-verb/SKILL.md`. A verb fits its pack's subject (no ice or fire in biology).
-Look at it on the contact sheet: `python pixsci.py verbs out/verbs.png`.
+Look at it on the contact sheet: `python pixsci.py verbs /tmp/verbs.png`.
 
 ## Add a scene type or a background
 

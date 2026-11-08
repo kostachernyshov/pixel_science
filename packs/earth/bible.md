@@ -18,4 +18,4 @@ composition. Reuse the same sprite files across styles and frame formats.
 inform the concepts. The AAP-64 sprites develop the original code drawings. Their
 identifiers, display dimensions and anchors are shared across environments.
 
-Code: MIT. PNG sprites: CC0-1.0. Credits: `sprites/CREDITS.csv`.
+Code: MIT. PNG sprites: CC0-1.0. Author: `pack.yaml`.

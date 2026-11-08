@@ -2,6 +2,7 @@ name: earth
 version: 0.1.0
 description: Shared base sprites for water, weather, and soil; usable in any environment style.
 license: CC0-1.0 (sprites), MIT (code)
+author: Kosta Chernyshov with OpenAI ImageGen
 # Lines of a border set (pixel_kit/sets.py): bands from the top, beads on the outer bands.
 borders:
   water:  {bands: [[120, 190, 230], [170, 214, 240], [200, 228, 246]]}

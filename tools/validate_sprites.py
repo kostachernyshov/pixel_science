@@ -4,8 +4,9 @@
 #   - each PNG has an entry in sprites.json, and each entry has its PNG
 #   - each entry has group, cell, anchor, anims; each animation row and frame fits the sheet
 #   - colors are from the palette (pixel_kit/palette.py), alpha is 0 or 255 (no smoothing)
-#   - each sprite has a row in CREDITS.csv with an author and an allowed license
-import csv, json, os, subprocess, sys
+#   - pack.yaml has a license; a sprite by an outside author sets author, license, and url
+#     in its entry, and its license is allowed
+import json, os, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
@@ -36,6 +37,8 @@ def main():
         if is_local_pack(p):
             print(f"Skipping local pack: {p.name}")
             continue
+        if not p.meta.get("license"):
+            out.append(f"{p.name}: pack.yaml has no license")
         if os.path.exists(os.path.join(p.sprites_dir, "sprites.json")):
             n, probs = check_pack(p.sprites_dir)
             total += n
@@ -53,7 +56,6 @@ def main():
 def check_pack(SPR):
     out = []
     meta = json.load(open(os.path.join(SPR, "sprites.json")))
-    credits = {r["sprite"]: r for r in csv.DictReader(open(os.path.join(SPR, "CREDITS.csv"), encoding="utf-8"))}
     pngs = {f for f in os.listdir(SPR) if f.endswith(".png")}
     files = {m.get("file") for m in meta.values()}
     for f in sorted(pngs - files):
@@ -95,16 +97,11 @@ def check_pack(SPR):
             out.append(f"{name}: {len(extra)} colors outside the palette, for example #{'%02x%02x%02x' % sorted(extra)[0]}")
         if soft:
             out.append(f"{name}: {soft} half-transparent pixels (use alpha 0 or 255)")
-        c = credits.get(name)
-        if not c:
-            out.append(f"{name}: no row in CREDITS.csv")
-        else:
-            if c.get("license") not in LICENSES:
-                out.append(f"{name}: license {c.get('license')!r} is not allowed; use {', '.join(sorted(LICENSES))}")
-            if not c.get("author"):
-                out.append(f"{name}: no author in CREDITS.csv")
-    for name in sorted(set(credits) - set(meta)):
-        out.append(f"CREDITS.csv: {name} is not in sprites.json")
+        credit = [k for k in ("author", "license", "url") if k in m]
+        if credit and len(credit) < 3:
+            out.append(f"{name}: an outside sprite needs author, license, and url")
+        if "license" in m and m["license"] not in LICENSES:
+            out.append(f"{name}: license {m['license']!r} is not allowed; use {', '.join(sorted(LICENSES))}")
     return len(meta), out
 
 
