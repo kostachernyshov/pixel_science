@@ -22,13 +22,12 @@ def hashes(path):
     plan = P.load(path)
     out = {"check": explain.check(plan), "frames": {}}
     ids = [(a, b, sc.get("id", "?")) for sc, (a, b) in zip(plan["scenes"], explain.durations(plan))]
-    subbed = plan
-    if "subtitles" not in plan:
-        subbed = P.load(path)              # a plan of its own: nothing placed for the caption carries over
-        subbed["subtitles"] = True
+    keep = "subtitles" in plan            # the layout reads it per format; places are kept per format
     for f in frame.FORMATS:
+        if not keep:
+            plan["subtitles"] = f in SUBTITLED
         with frame.using(f):
-            tl, _ = explain.timeline(subbed if f in SUBTITLED else plan)
+            tl, _ = explain.timeline(plan)
             for i in range(int(tl.duration * FPS)):
                 t = i / FPS
                 scene = next((s for a, b, s in ids if a <= t < b), ids[-1][2])
