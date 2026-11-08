@@ -19,7 +19,9 @@ A 46 s video in all four formats renders in about 25 s on a laptop. Plans and vi
 
 ## Voice and subtitles
 
-`--voice` speaks `voiceover.md`, times each word, and puts the sound into the video:
+`pixsci voice` and `--voice` speak `voiceover.md` and time each word; `render --voice` puts the sound into the video.
+A plan times itself to the fresh voice in `OUTDIR/voice/` with or without `--voice` (`check PLAN OUTDIR` too): a scene
+whose text or `tts:` changed after it was spoken is estimated, with a warning, until it is spoken again:
 
 ```
 voiceover.md ─> Qwen3-TTS ─> voice/<scene>.wav ─> Qwen3-ForcedAligner ─> voice/<scene>.words.json

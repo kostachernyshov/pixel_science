@@ -38,12 +38,12 @@ sits above the bottom 20 % (apps cover it with buttons). In `banner`, there is n
 ## Timing
 
 - A scene lasts (words of its voice-over) / 2.5 + 0.8 s, at least 2.5 s. `dur: 4` sets it by hand.
-- With `--voice`, a scene lasts as long as its spoken audio (0.25 s before the words, 0.6 s after); `dur` can make it longer, not shorter.
+- With a voice in OUTDIR (`pixsci voice` or `--voice`), a scene lasts as long as its spoken audio (0.25 s before the words, 0.6 s after); `dur` can make it longer, not shorter.
 - Story before the summary: 20 to 45 s. The summary holds 8 s (`dur` sets more).
 - A beat can start on a word of its scene instead of a time: `{word: "attacks", dt: -0.3, actor: t, verb: hit}`
   (`n: 2`: the second time the word is said). The same word wins: "B" finds "B", not "because". Only when
   the scene does not say the word itself, its start is enough: "attack" finds "attacks".
-  With `--voice`, the time is when the word is heard (`OUTDIR/voice/<scene>.words.json`); without it, estimated.
+  With a voice in OUTDIR, the time is when the word is heard (`OUTDIR/voice/<scene>.words.json`); without it, estimated.
   A `custom` scene asks for the same time with `words.cue(ctx["plan"], scene, "attacks")`.
 - In `voiceover.md`, `[PD-L1|pee dee el one]` shows the first form (subtitles) and speaks the second (voice).
   Write numbers, units, and gene or protein names this way.

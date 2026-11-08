@@ -50,13 +50,13 @@ If the person does not know what to show yet, or the topic is long or has 3 or m
    - Show actions with verbs (`pixsci.py verbs`): `secrete`, `block`, `hit`... A verb gives the effects, the light, and the hit. If no verb fits, add one to the pack with [add-verb](../add-verb/SKILL.md) and go on with the plan: do not stop the person for it.
    - Build the set of the storyboard (`Set:` line) once and tell the story inside it. Use a ready scene type where it shows the set.
    - Write a `custom` scene only when no scene type shows the set, or the frame is key (hook, turn, end) and a scene type shows it worse. Give the reason in `why:`. One custom scene holds the whole set: not a row of short action scenes. Start from the frame in PLAN.md (custom).
-5. **Check.** Run `pixsci.py check explainer.yaml`. Fix the plan until the output is `CHECK PASSED`.
-6. **Storyboard.** Look at a PNG only after `CHECK PASSED`: each image costs thousands of tokens. With a voice, add `--voice` to each command below, so that the times match the audio.
+5. **Check.** Run `pixsci.py check explainer.yaml .` (`.`: the folder with its voice). Fix the plan until the output is `CHECK PASSED`.
+6. **Storyboard.** Look at a PNG only after `CHECK PASSED`: each image costs thousands of tokens. With a voice, the commands below time the plan to the audio in `voice/` by themselves; a scene whose text changed after it was spoken gets a warning: run `pixsci.py voice explainer.yaml .` again.
    - Make the board of one format: the first format of the plan (landscape by default), `pixsci.py board explainer.yaml . -f landscape`. Look at it: text does not overlap or get cut, actors stay inside the frame, the badge and the caption do not cover a face. Fix and run again.
    - After a fix of one scene, look at that scene only: `pixsci.py frames explainer.yaml . -f landscape <t>`, where `<t>` is a time in seconds inside the scene (the scene times are in the output of `check`, or of `voice`).
    - When this format is right, run `pixsci.py board explainer.yaml .` (all formats of the plan) and look at each other board once.
    - Show the boards to the person and ask: "Accept the storyboard? yes / changes". Do not render without "yes".
-7. **Render.** `pixsci.py render explainer.yaml .` (add `--gif` for loops, `-f vertical` for one format). With a voice, render and make the boards with `--voice` (scenes timed to the audio, beats on the heard words, sound in the mp4), so that their times match.
+7. **Render.** `pixsci.py render explainer.yaml .` (add `--gif` for loops, `-f vertical` for one format). With a voice, render with `--voice`: it speaks what is missing and puts the sound in the mp4.
 8. **Summary.** Give the person the paths of the videos and the boards. Name the decisions that you made without the person, one line each.
    - **Candidates.** Put each custom scene that came out well, and each new character, next to the video: `videos/<slug>/candidates/<name>/` with the scene `.py`, the sprites, and `card.md` (what it shows, the part of the plan, the path of one frame). Name them in the summary. They go into the library only when the person asks for it: a scene as a new scene type (CONTRIBUTING.md), a character with [add-sprite](../add-sprite/SKILL.md).
 

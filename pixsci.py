@@ -7,14 +7,15 @@
 #   formats                                   list the formats and their output sizes
 #   sheet     OUT.png                         cast sheet: every sprite of the library
 #   verbs     [OUT.png] [-p pack,...]       verbs (actions for beats); OUT.png: a contact sheet of each verb
-#   check     PLAN                            rules: sources, voice-over, sprites, captions, timing
+#   check     PLAN [OUTDIR]                   rules: sources, voice-over, sprites, captions, timing (OUTDIR: its voice)
 #   board     PLAN OUTDIR [-f a,b]            storyboard for each format: OUTDIR/board-<format>.png
 #   render    PLAN OUTDIR [-f a,b] [--gif]    video for each format: OUTDIR/<name>-<format>.mp4
 #   frames    PLAN OUTDIR [-f a,b] [t ...]    single frames as PNG (default: the key frames)
 #   voice     PLAN OUTDIR                     voice-over spoken (Qwen3-TTS) and its words timed: OUTDIR/voice/
 #
 # -f limits the formats (default: the plan's "formats", else all four).
-# --voice (board, render, frames): time scenes and word beats to the voice in OUTDIR/voice/; render puts it in the mp4.
+# Scenes and word beats are timed to the fresh voice in OUTDIR/voice/ when it is there.
+# --voice (board, render, frames): first speak and align what is missing; render puts the sound in the mp4.
 
 import contextlib, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -68,23 +69,20 @@ def _quiet(log):
             print(f"voice: stopped; details in {log}", file=sys.stderr)
 
 
-def _voice(plan, p, outdir):
-    """Speaks the voice-over of plan (read from p; only scenes that changed) and times the scenes to it: the plan
-    is read again, so its words and beats are timed to the audio. Returns (plan, {scene: wav}).
-    Model output goes to OUTDIR/voice/log.txt."""
-    from pixel_kit import voice, words
-    texts = {k: words.spoken(v) for k, v in explain.voiceover(plan).items()}
+def _plan(p, outdir=None, speak=False):
+    """The plan, timed to the fresh voice in OUTDIR/voice/. speak (--voice): first speak and align what is missing;
+    model output goes to OUTDIR/voice/log.txt."""
+    if not speak:
+        return P.load(p, outdir)
     os.makedirs(os.path.join(outdir, "voice"), exist_ok=True)
     with _quiet(os.path.join(outdir, "voice", "log.txt")):
-        paths = voice.attach(plan, texts, outdir)
-        n = words.align(plan, explain.voiceover(plan), paths, outdir)
-    if n:
-        print(f"word times: {n} scenes aligned")
-    return P.load(p, outdir, plan.spoken), paths
+        return P.load(p, outdir, speak=True)
 
 
-def _plan(p, outdir=None):
-    return P.load(p, outdir)          # outdir: where voice/ is, aligned word times for beats and subtitles
+def _warn(plan):
+    for w in _split(plan.problems)[1]:
+        if " voice " in w:
+            print(w)
 
 
 def _formats(plan, fmts):
@@ -180,7 +178,7 @@ def cmd_verbs(a):
 
 
 def cmd_check(a):
-    plan = _plan(a[0])
+    plan = _plan(a[0], a[1] if len(a) > 1 else None)
     problems, warnings = _split(explain.check(plan))
     times = explain.durations(plan)
     for sc, (s, e) in zip(plan["scenes"], times):
@@ -198,11 +196,9 @@ def cmd_check(a):
 
 def cmd_board(a):
     pos, fmts, _, vo = _args(a)
-    plan = _plan(pos[0], pos[1])
+    plan = _plan(pos[0], pos[1], vo)
     _stop_on_problems(plan)
     os.makedirs(pos[1], exist_ok=True)
-    if vo:
-        plan, _ = _voice(plan, pos[0], pos[1])
     for f in _formats(plan, fmts):
         with frame.using(f):
             tl, marks = explain.timeline(plan)
@@ -214,15 +210,14 @@ def cmd_board(a):
 
 def cmd_render(a):
     pos, fmts, gif, vo = _args(a)
-    plan = _plan(pos[0], pos[1])
+    plan = _plan(pos[0], pos[1], vo)
     _stop_on_problems(plan)
     os.makedirs(pos[1], exist_ok=True)
     name = _name(plan, pos[0])
     track = None
-    if vo:
+    if vo and plan.wavs:
         from pixel_kit import voice
-        plan, paths = _voice(plan, pos[0], pos[1])
-        track = voice.mix(plan, paths, explain.durations(plan), os.path.join(pos[1], f"{name}-voice.wav"))
+        track = voice.mix(plan, plan.wavs, explain.durations(plan), os.path.join(pos[1], f"{name}-voice.wav"))
     for f in _formats(plan, fmts):
         with frame.using(f):
             tl, _ = explain.timeline(plan)
@@ -240,9 +235,8 @@ def cmd_render(a):
 
 def cmd_frames(a):
     pos, fmts, _, vo = _args(a)
-    plan = _plan(pos[0], pos[1])
-    if vo:
-        plan, _ = _voice(plan, pos[0], pos[1])
+    plan = _plan(pos[0], pos[1], vo)
+    _warn(plan)
     for f in _formats(plan, fmts):
         with frame.using(f):
             tl, marks = explain.timeline(plan)
@@ -255,14 +249,14 @@ def cmd_voice(a):
     from pixel_kit import voice
     pos, _, _, _ = _args(a)
     os.makedirs(pos[1], exist_ok=True)
-    plan, paths = _voice(_plan(pos[0]), pos[0], pos[1])
-    if not paths:
+    plan = _plan(pos[0], pos[1], speak=True)
+    if not plan.wavs:
         print("no voice-over text: check `voiceover:` in the plan")
         sys.exit(1)
     times = explain.durations(plan)
     for sc, (s, e) in zip(plan["scenes"], times):
         print(f"{sc.get('id', '?'):5} {s:6.1f}-{e:6.1f} s")
-    out = voice.mix(plan, paths, times, os.path.join(pos[1], f"{_name(plan, pos[0])}-voice.wav"))
+    out = voice.mix(plan, plan.wavs, times, os.path.join(pos[1], f"{_name(plan, pos[0])}-voice.wav"))
     print("voice ->", out)
 
 

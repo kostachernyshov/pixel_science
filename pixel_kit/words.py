@@ -99,26 +99,33 @@ def from_alignment(text, items):
     return [{"w": x["w"], "s": round(float(x["s"]), 3), "e": round(float(x["e"]), 3)} for x in out]
 
 
-def load_scene(outdir, sid, text):
-    """Words of one scene with times in the scene's wav: aligned if voice/<sid>.words.json fits the text."""
-    p = os.path.join(outdir, "voice", f"{sid}.words.json") if outdir else None
-    if p and os.path.exists(p):
+def _aligned(wav, text):
+    """voice/<id>.words.json next to the wav, when it was aligned to this text and this audio."""
+    p = os.path.splitext(wav)[0] + ".words.json"
+    if os.path.exists(p):
         d = json.load(open(p, encoding="utf-8"))
-        if d.get("text") == text:
-            return d["words"], True
-    return estimate(text), False
+        if d.get("text") == text and d.get("wav_mtime") == os.path.getmtime(wav):
+            return d["words"]
+    return None
 
 
-def attach(plan, texts, outdir=None):
+def load_scene(wav, text):
+    """Words of one scene with times in the scene's wav: aligned if the scene has a fresh wav (voice.fresh)
+    and its words.json fits the text and the audio; else estimated. Returns (words, aligned)."""
+    ws = _aligned(wav, text) if wav else None
+    return (ws, True) if ws is not None else (estimate(text), False)
+
+
+def attach(plan, texts, wavs):
     """Puts the words of each scene into plan.words = {scene id: [{"w","s","e"}]}, with times from
-    the start of the scene (LEAD added). Returns the number of aligned scenes."""
+    the start of the scene (LEAD added). wavs: the fresh audio (voice.fresh). Returns the number of aligned scenes."""
     out, n = {}, 0
     for sc in plan["scenes"]:
         sid = sc.get("id")
         text = texts.get(sid, "").strip()
         if not text:
             continue
-        ws, ok = load_scene(outdir, sid, text)
+        ws, ok = load_scene(wavs.get(sid), text)
         n += ok
         out[sid] = [{"w": w["w"], "s": w["s"] + LEAD, "e": w["e"] + LEAD} for w in ws]
     plan.words = out
@@ -259,7 +266,7 @@ ALIGN_PITFALL = ("The aligner is not installed: word times are estimated. Instal
 def align(plan, texts, paths, outdir):
     """Writes voice/<id>.words.json for each scene whose audio or text changed: the written words of the
     scene with the times they are heard (Qwen3-ForcedAligner, Apache 2.0, ~1.8 GB on the first run).
-    texts: {id: text with [written|spoken] marks}; paths: {id: wav} from voice.attach.
+    texts: {id: text with [written|spoken] marks}; paths: {id: wav}, fresh (voice.fresh).
     Returns the number of scenes aligned now."""
     from .voice import settings
     lang = settings(plan)["lang"]
@@ -267,12 +274,9 @@ def align(plan, texts, paths, outdir):
     todo = []
     for sid, wav in paths.items():
         text = texts.get(sid, "").strip()
-        p = os.path.join(d, f"{sid}.words.json")
-        if os.path.exists(p):
-            old = json.load(open(p, encoding="utf-8"))
-            if old.get("text") == text and old.get("wav_mtime") == os.path.getmtime(wav):
-                continue
-        todo.append((sid, text, wav, p))
+        if _aligned(wav, text) is not None:
+            continue
+        todo.append((sid, text, wav, os.path.join(d, f"{sid}.words.json")))
     if not todo:
         return 0
     try:
