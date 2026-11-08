@@ -68,11 +68,11 @@ def _quiet(log):
             print(f"voice: stopped; details in {log}", file=sys.stderr)
 
 
-def _voice(p, outdir):
-    """Speaks the voice-over (only scenes that changed) and times the scenes to it: the plan is read again, so its
-    words and beats are timed to the audio. Returns (plan, {scene: wav}). Model output goes to OUTDIR/voice/log.txt."""
+def _voice(plan, p, outdir):
+    """Speaks the voice-over of plan (read from p; only scenes that changed) and times the scenes to it: the plan
+    is read again, so its words and beats are timed to the audio. Returns (plan, {scene: wav}).
+    Model output goes to OUTDIR/voice/log.txt."""
     from pixel_kit import voice, words
-    plan = _plan(p, outdir)
     texts = {k: words.spoken(v) for k, v in explain.voiceover(plan).items()}
     os.makedirs(os.path.join(outdir, "voice"), exist_ok=True)
     with _quiet(os.path.join(outdir, "voice", "log.txt")):
@@ -206,7 +206,7 @@ def cmd_board(a):
     _stop_on_problems(plan)
     os.makedirs(pos[1], exist_ok=True)
     if vo:
-        plan, _ = _voice(pos[0], pos[1])
+        plan, _ = _voice(plan, pos[0], pos[1])
     for f in _formats(plan, fmts):
         frame.use(f)
         tl, marks = explain.timeline(plan)
@@ -225,7 +225,7 @@ def cmd_render(a):
     track = None
     if vo:
         from pixel_kit import voice
-        plan, paths = _voice(pos[0], pos[1])
+        plan, paths = _voice(plan, pos[0], pos[1])
         track = voice.mix(plan, paths, explain.durations(plan), os.path.join(pos[1], f"{name}-voice.wav"))
     for f in _formats(plan, fmts):
         frame.use(f)
@@ -246,7 +246,7 @@ def cmd_frames(a):
     pos, fmts, _, vo = _args(a)
     plan = _plan(pos[0], pos[1])
     if vo:
-        plan, _ = _voice(pos[0], pos[1])
+        plan, _ = _voice(plan, pos[0], pos[1])
     for f in _formats(plan, fmts):
         frame.use(f)
         tl, marks = explain.timeline(plan)
@@ -259,7 +259,7 @@ def cmd_voice(a):
     from pixel_kit import voice
     pos, _, _, _ = _args(a)
     os.makedirs(pos[1], exist_ok=True)
-    plan, paths = _voice(pos[0], pos[1])
+    plan, paths = _voice(_plan(pos[0]), pos[0], pos[1])
     if not paths:
         print("no voice-over text: check `voiceover:` in the plan")
         sys.exit(1)

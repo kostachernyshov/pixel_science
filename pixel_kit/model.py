@@ -275,7 +275,7 @@ def _edge(name, anim_k, px, py, d, off, flip=False):
     return px + nx * off + d[0] * s, py + ny * off + d[1] * s
 
 
-def _axis(dx, dy):
+def axis(dx, dy):
     if abs(dx) >= abs(dy):
         return (1 if dx >= 0 else -1, 0)
     return (0, 1 if dy >= 0 else -1)
@@ -376,7 +376,7 @@ def layout_parts(plan, sc, t, state, beats):
                 others = others or [o for o in state if o != name and state[o].shown]
                 if others:
                     target = min(others, key=lambda o: math.hypot(state[o].x - px, state[o].y - py))
-            d = _axis(state[target].x - px, state[target].y - py) if target else (1, 0)
+            d = axis(state[target].x - px, state[target].y - py) if target else (1, 0)
             off = (rows.index(sl[p]) - (len(rows) - 1) / 2) * (ROWS + 3) * u
             mol = is_molecule(a["sprite"])          # its site is drawn in the sprite: no stalk
             fl = bool(state[name].flip)

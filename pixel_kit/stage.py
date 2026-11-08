@@ -9,6 +9,7 @@
 
 import math
 from dataclasses import dataclass
+from typing import NamedTuple
 from .timing import clamp, seg, ease, lerp
 from . import sprites as S, verbs, model, sets
 
@@ -76,9 +77,22 @@ def state_at(plan, sc, t, L):
 
 # ---------------------------------------------------------------- one pass over an actor's beats
 
+class _Seen(NamedTuple):
+    """An actor at time t before a layout: place in fractions (x, y) and how it looks."""
+    x: float
+    y: float
+    anim: str
+    anim_t: float
+    flip: bool
+    badge: object
+    shown: bool
+    look: tuple
+    marks: tuple
+
+
 def _fold(a, beats, name, t, start):
-    """Place (fractions), animation, the time in it, flip, badge, shown, look, marks of an actor at time t.
-    A move_to that is still an actor's name (resolve, before a format) does not move it."""
+    """_Seen of an actor at time t. A move_to that is still an actor's name (resolve, before a format) does not
+    move it."""
     x, y = start
     anim, a_t0 = a.get("anim", "idle"), 0.0
     flip, badge, shown = bool(a.get("flip", False)), a.get("badge"), not a.get("hidden", False)
@@ -112,7 +126,7 @@ def _fold(a, beats, name, t, start):
             shown = bool(b["show"])
         if "marks" in b:
             marks, m_t0 = b["marks"] or [], bt
-    return x, y, anim, t - a_t0, flip, badge, shown, (prev, look, u), (marks, m_t0)
+    return _Seen(x, y, anim, t - a_t0, flip, badge, shown, (prev, look, u), (marks, m_t0))
 
 
 def _prev(plan, sc):
@@ -131,8 +145,8 @@ def _start(plan, sc, name, L):
         return tuple(a["at"])
     prev = _prev(plan, sc)
     if prev is not None and name in (prev.get("actors") or {}):
-        x, y = _fold(prev["actors"][name], _beats(plan, prev, L), name, math.inf, _start(plan, prev, name, L))[:2]
-        return round(x, 4), round(y, 4)
+        s = _fold(prev["actors"][name], _beats(plan, prev, L), name, math.inf, _start(plan, prev, name, L))
+        return round(s.x, 4), round(s.y, 4)
     return 0.5, 0.5
 
 
@@ -241,25 +255,22 @@ def _place(sc, a, L, fx_, fy_, k):
     return px, py
 
 
-_PLACED = {}             # (scene, format) -> its beats with move_to: <actor> placed
-
-
 def _beats(plan, sc, L):
     """The scene's beats; for a layout, with each move_to: <actor> turned into the place where the mover
-    touches that actor (fractions of its box)."""
+    touches that actor (fractions of its box). Kept in plan["_placed"] per scene and format: after resolve,
+    nothing changes the beats."""
     beats = sc.get("beats") or []
     if L is None or not any(isinstance(b.get("move_to"), str) for b in beats):
         return beats
-    key = (id(sc), L["W"], L["H"], tuple(L["stage"]))
-    hit = _PLACED.get(key)
-    if hit and hit[0] is sc and hit[1] is beats:  # the scene itself is kept, so its id is not reused
-        return hit[2]
-    todo = [i for i, b in enumerate(beats) if isinstance(b.get("move_to"), str)]
-    out = list(beats)
-    for _ in range(2):              # twice: a target that itself moves to an actor is placed by the first pass
-        out = _approach(plan, sc, beats, out, todo, L)
-    _PLACED[key] = (sc, beats, out)
-    return out
+    key = (next(i for i, s in enumerate(plan["scenes"]) if s is sc), L["W"], L["H"], tuple(L["stage"]))
+    placed = plan.setdefault("_placed", {})
+    if key not in placed:
+        todo = [i for i, b in enumerate(beats) if isinstance(b.get("move_to"), str)]
+        out = list(beats)
+        for _ in range(2):          # twice: a target that itself moves to an actor is placed by the first pass
+            out = _approach(plan, sc, beats, out, todo, L)
+        placed[key] = out
+    return placed[key]
 
 
 def _approach(plan, sc, beats, done, todo, L):
@@ -273,15 +284,15 @@ def _approach(plan, sc, beats, done, todo, L):
         if me not in actors or tg not in actors or me == tg:
             continue
         bt, end = float(b.get("t", 0)), float(b.get("t", 0)) + float(b.get("dur", 1.0))
-        mx, my, _, _, mf = _fold(actors[me], out, me, bt, _start(plan, sc, me, L))[:5]
-        tx, ty, _, _, tf = _fold(actors[tg], out, tg, end, _start(plan, sc, tg, L))[:5]
-        km, kt = _scale(sc, actors[me], L), _scale(sc, actors[tg], L)
+        mover = _fold(actors[me], out, me, bt, _start(plan, sc, me, L))
+        target = _fold(actors[tg], out, tg, end, _start(plan, sc, tg, L))
+        km, kt = _scale(sc, actors[me], L), _scale(sc, actors[tg], L)         # sprite scales: mover, target
         mb = _box(sc, actors[me], L)
-        mx, my = _place(sc, actors[me], L, mx, my, km)
-        tx, ty = _place(sc, actors[tg], L, tx, ty, kt)
+        mx, my = _place(sc, actors[me], L, mover.x, mover.y, km)
+        tx, ty = _place(sc, actors[tg], L, target.x, target.y, kt)
         bind = model.bind_between(plan, sc, me, tg, out, end)
         if bind:
-            d = model._axis(mx - tx, my - ty)                      # level or upright, on the target's line
+            d = model.axis(mx - tx, my - ty)                      # level or upright, on the target's line
             ua = model.unit(km)
             mols = (model.is_molecule(actors[me]["sprite"]), model.is_molecule(actors[tg]["sprite"]))
             lo, hi = model.bind_range(plan, bind[1], bind[2], ua, d, mols)
@@ -289,8 +300,8 @@ def _approach(plan, sc, beats, done, todo, L):
         else:
             dist = math.hypot(mx - tx, my - ty) or 1.0
             d, gap = ((mx - tx) / dist, (my - ty) / dist), 0
-        far = (model.reach(actors[tg]["sprite"], kt, d, flip=tf) + gap
-               + model.reach(actors[me]["sprite"], km, (-d[0], -d[1]), flip=mf))
+        far = (model.reach(actors[tg]["sprite"], kt, d, flip=target.flip) + gap
+               + model.reach(actors[me]["sprite"], km, (-d[0], -d[1]), flip=mover.flip))
         nx, ny = tx + d[0] * far, ty + d[1] * far
         out[i] = dict(b, move_to=[round((nx - mb[0]) / ((mb[2] - mb[0]) or 1), 4),
                                   round((ny - mb[1]) / ((mb[3] - mb[1]) or 1), 4)])
@@ -316,12 +327,13 @@ def _carry(plan, prev, sc, i, end):
     dead = model.world(plan)[i]["dead"] if plan.get("model") else set()
     out = {}
     for name, a in (prev.get("actors") or {}).items():
-        x, y, _, _, flip, badge, shown, look, marks = _fold(a, beats, name, end, _start(plan, prev, name, None))
-        ghost = look[1] == "ghost"
+        s = _fold(a, beats, name, end, _start(plan, prev, name, None))
+        ghost = s.look[1] == "ghost"
         c = {k: v for k, v in a.items() if k not in ("anim", "at")}
         if not _by_contact(plan, prev, beats, name, end):
-            c["at"] = [round(x, 4), round(y, 4)]
-        c.update(flip=flip, badge=badge, ghost=ghost, marks=marks[0], hidden=not shown or (name in dead and not ghost))
+            c["at"] = [round(s.x, 4), round(s.y, 4)]
+        c.update(flip=s.flip, badge=s.badge, ghost=ghost, marks=s.marks[0],
+                 hidden=not s.shown or (name in dead and not ghost))
         if "parts" in a or any(b.get("actor") == name and "parts" in b for b in beats):
             c["parts"] = model.shown_parts(a, beats, name)
         out[name] = c
@@ -377,7 +389,7 @@ def _behave(plan, sc, dur):
             t, mine = t0, []
             for g in tgs:
                 seen = _with_verbs(now + mine)          # with the shows and hides of verbs
-                if not _fold(actors[g], seen, g, t + step, _start(plan, sc, g, None))[6]:
+                if not _fold(actors[g], seen, g, t + step, _start(plan, sc, g, None)).shown:
                     out.append(f"{where}: hunt: {g} is hidden or gone when the hunter comes ({t + step:.2f} s)")
                 mine.append({"t": round(t, 3), "actor": me, "move_to": g, "dur": step, **tag})
                 hit = {"hit": x["hit"]} if "hit" in x else {}
@@ -432,7 +444,8 @@ def _wander(plan, sc, me, beats, t0, t1, step):
     import random, zlib
     a = sc["actors"][me]
     rnd = random.Random(zlib.crc32(f"{plan.get('seed', 0)}/{sc.get('id')}/{me}/{t0}".encode()))
-    x, y, _, _, flip = _fold(a, beats, me, t0, _start(plan, sc, me, None))[:5]
+    s = _fold(a, beats, me, t0, _start(plan, sc, me, None))
+    x, y, flip = s.x, s.y, s.flip
     out, t = [], t0
     while t1 - t > 0.4:
         d = min(step, t1 - t - 0.1)
@@ -452,15 +465,16 @@ def _divide(plan, sc, me, d, beats, t0, apart):
     or apart: a fraction of the zone between them."""
     a = sc["actors"][me]
     start = _start(plan, sc, me, None)
-    anim = _fold(a, beats, me, t0, start)[2]
+    anim = _fold(a, beats, me, t0, start).anim
     out, t = [], t0
     if "divide" in S.meta().get(a.get("sprite"), {}).get("anims", {}):
         t = t0 + S.duration(a["sprite"], "divide")
         out += [{"t": round(t0, 3), "actor": me, "anim": "divide"}, {"t": round(t, 3), "actor": me, "anim": anim}]
-    x, y, _, _, _, badge, _, _, marks = _fold(a, beats, me, t, start)
+    s = _fold(a, beats, me, t, start)
+    x, y = s.x, s.y
     p = lambda v: round(min(0.95, max(0.05, v)), 4)
     out += [{"t": round(t, 3), "actor": d, "move_to": [p(x), p(y)], "dur": 0.001},
-            {"t": round(t, 3), "actor": d, "show": True, "badge": badge, "marks": marks[0]}]
+            {"t": round(t, 3), "actor": d, "show": True, "badge": s.badge, "marks": s.marks[0]}]
     if apart is None:
         return out + [{"t": round(t + 0.01, 3), "actor": me, "move_to": [p(x - APART / 2), p(y)], "dur": 0.6},
                       {"t": round(t + 0.01, 3), "actor": d, "move_to": me, "dur": 0.6}]
