@@ -54,8 +54,8 @@ def voiceover(plan):
 
 def durations(plan):
     """Start and end of each scene: from the words of its voice-over (2.5 words/s), or "dur" in the scene.
-    With synthesized audio (plan.spoken), a scene lasts as long as its audio,
-    and a "dur" in the scene is never shorter than the audio."""
+    With a fresh voice (plan.spoken), a scene lasts as long as its voice,
+    and a "dur" in the scene is never shorter than the voice."""
     scenes = plan["scenes"]
     vo = voiceover(plan)
     spoken = plan.spoken

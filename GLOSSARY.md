@@ -27,7 +27,7 @@ Terms of pixel_science. Use these words in code, docs, issues, and plans.
 | **Model** | `model:` in a plan: the things of one story, their parts, and its relations, each with a source. Written in `storyboard`, checked by `pixsci check` (`pixel_kit/model.py`). | mechanism table |
 | **Part** | A thing's piece that acts at its surface (a receptor, a ligand). Drawn on a stalk out of its owner's membrane, with a lock or key head; on a molecule (`"body": "molecule"`), the site is the sprite's own edge. | badge, icon |
 | **Relation** | One link of the model: `bind`, `occupy`, `transfer`, `change`, `destroy`. A verb names the kinds it shows (`relation:`); a beat with it must match a relation. | link, edge |
-| **Voice** | The voice-over spoken by Qwen3-TTS: one wav per scene in `OUTDIR/voice/`, made by `pixsci voice` or `--voice`. A plan times itself to the fresh voice in `OUTDIR/voice/` (audio that fits its scene's text and `tts:`). | narration, audio |
+| **Voice** | The voice-over spoken by Qwen3-TTS: one wav per scene in `OUTDIR/voice/`, made by `pixsci voice` or `--voice`. A plan times itself to the fresh voice in `OUTDIR/voice/`: spoken from its scene's current text and `tts:` (else stale). | narration, audio |
 | **Word times** | When each word of a scene is heard: `OUTDIR/voice/<scene>.words.json`, from forced alignment of the known text to the voice. | transcript, timestamps |
 | **Word beat** | A beat with `word:` in place of `t:`: it starts when the word is heard. | cue point |
 | **Subtitles** | The voice-over word for word in a box at the bottom (`subtitles: true`); each word types in while it is heard. | captions |

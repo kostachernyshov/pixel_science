@@ -9,7 +9,7 @@
 # the model from Hugging Face (1.7B: ~4.5 GB). Each scene is spoken once; a scene is spoken again only when
 # its text or the `tts:` settings change. After the voice, words.align times each word (subtitles, beats).
 
-import json, os, wave
+import contextlib, json, os, sys, wave
 from typing import NamedTuple
 import numpy as np
 
@@ -74,8 +74,8 @@ def write_wav(p, samples):
 
 
 class Voice(NamedTuple):
-    """The voice in OUTDIR/voice/ for the current text. wavs: {scene id: wav} whose audio fits the scene's text and
-    the tts: settings. stale: scenes with text and no such audio, in a folder that has a voice."""
+    """The voice in OUTDIR/voice/ for the current text. wavs: {scene id: wav} of the fresh voice, spoken from the
+    scene's current text and tts: settings. stale: scenes with text and no fresh voice, in a folder that has a voice."""
     wavs: dict
     stale: list
 
@@ -89,9 +89,10 @@ def _meta(outdir):
     return json.load(open(p)) if os.path.exists(p) else {}
 
 
-def fresh(plan, texts, outdir):
-    """The Voice of these texts ({scene id: spoken text}, words.spoken) in OUTDIR/voice/. One rule for scene lengths
-    and word times: a scene uses its audio only when it is fresh."""
+def fresh(plan, texts):
+    """The Voice of these texts ({scene id: spoken text}, words.spoken) in plan.outdir/voice/. One rule for scene
+    lengths and word times: a scene uses its voice only when it is fresh."""
+    outdir = plan.outdir
     if not outdir:
         return Voice({}, [])
     t, meta = settings(plan), _meta(outdir)
@@ -109,12 +110,12 @@ def fresh(plan, texts, outdir):
     return Voice(wavs, stale)
 
 
-def speak(plan, texts, outdir, say=None):
-    """Speaks each scene that has no fresh audio into OUTDIR/voice/<id>.wav. texts: {scene id: spoken text}
+def speak(plan, texts, say=None):
+    """Speaks each scene that has no fresh voice into plan.outdir/voice/<id>.wav. texts: {scene id: spoken text}
     (words.spoken). say: text -> samples; default Qwen3-TTS. Returns the Voice after it."""
-    t = settings(plan)
+    t, outdir = settings(plan), plan.outdir
     os.makedirs(os.path.join(outdir, "voice"), exist_ok=True)
-    meta, have = _meta(outdir), fresh(plan, texts, outdir).wavs
+    meta, have = _meta(outdir), fresh(plan, texts).wavs
     for sc in plan["scenes"]:
         sid = sc.get("id")
         text = texts.get(sid, "").strip()
@@ -125,12 +126,39 @@ def speak(plan, texts, outdir, say=None):
         write_wav(os.path.join(outdir, "voice", f"{sid}.wav"), say(text))
         meta[sid] = _key(t, text)
         json.dump(meta, open(os.path.join(outdir, "voice", "meta.json"), "w"), indent=1, ensure_ascii=False)
-    return fresh(plan, texts, outdir)
+    return fresh(plan, texts)
 
 
 def lengths(wavs):
-    """{scene id: s}: how long each scene's audio lasts, with the silence before and after its words."""
+    """{scene id: s}: how long each scene's voice lasts, with the silence before and after its words."""
     return {sid: LEAD + len(read_wav(p)) / RATE + TAIL for sid, p in wavs.items()}
+
+
+@contextlib.contextmanager
+def quiet(log):
+    """Sends stderr (progress bars and warnings of torch and Hugging Face) to the file log, one run per file;
+    stdout stays. An agent reads only the short result, not thousands of progress lines."""
+    os.makedirs(os.path.dirname(log), exist_ok=True)
+    if sys.stderr:
+        sys.stderr.flush()
+    f = open(log, "w")
+    keep = os.dup(2)
+    os.dup2(f.fileno(), 2)
+    try:
+        yield
+    except BaseException as e:
+        stop = not (isinstance(e, SystemExit) and e.code in (None, 0))
+        raise
+    else:
+        stop = False
+    finally:
+        if sys.stderr:
+            sys.stderr.flush()
+        os.dup2(keep, 2)
+        os.close(keep)
+        f.close()
+        if stop and os.path.getsize(log):
+            print(f"voice: stopped; details in {log}", file=sys.stderr)
 
 
 def mix(plan, paths, times, out):

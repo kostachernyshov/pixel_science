@@ -10,14 +10,16 @@ from . import explain, frame, sprites as S, stage, verbs, voice, words as WD
 
 
 class Plan(dict):
-    """The fields of the plan file, plus what load derives from them. Two plans in one process are independent."""
+    """The fields of the plan file, plus what load derives from them. Two plans in one process are independent,
+    except the packs they use (sprites.use, verbs.use: #70)."""
 
     def __init__(self, data, dir, outdir=None):
         super().__init__(data)
         self.dir = dir              # the plan file's folder: paths in the plan are relative to it
         self.outdir = outdir        # where voice/ is: the voice and its word times
-        self.wavs = {}              # {scene id: wav}: the fresh audio of a scene (voice.fresh)
-        self.spoken = {}            # {scene id: s}: how long that audio lasts
+        self.wavs = {}              # {scene id: wav}: the fresh voice of a scene (voice.fresh)
+        self.spoken = {}            # {scene id: s}: how long it lasts
+        self.stale = []             # scenes with text and no fresh voice, in a folder that has a voice
         self.words = {}             # {scene id: [{"w", "s", "e"}]}: when each word is heard (words.attach)
         self.problems = []          # what preparing found
         self.placed = {}            # stage: contact places per (scene, format)
@@ -26,10 +28,11 @@ class Plan(dict):
 
 
 def load(path, outdir=None, speak=False):
-    """The plan of the file at path, prepared, in the order of the work: text, voice, timing. Scenes with fresh
-    audio in OUTDIR/voice/ last as long as it, and their words are aligned to it; other scenes are estimated.
+    """The plan of the file at path, prepared, in the order of the work: text, voice, timing. Scenes with a fresh
+    voice in OUTDIR/voice/ last as long as it, and their words are aligned to it; other scenes are estimated.
     Then beats go on their words and the plan is resolved as it plays (stage.resolve: continue, behaviors).
-    speak: first speak and align what has no fresh audio (Qwen3-TTS, Qwen3-ForcedAligner)."""
+    speak: first speak and align what has no fresh voice (Qwen3-TTS, Qwen3-ForcedAligner); the models' output
+    goes to OUTDIR/voice/log.txt."""
     import yaml
     plan = Plan(yaml.safe_load(open(path, encoding="utf-8")), os.path.dirname(os.path.abspath(path)), outdir)
     plan.setdefault("scenes", [])
@@ -39,13 +42,17 @@ def load(path, outdir=None, speak=False):
     verbs.use(plan.get("packs"))
     texts = explain.voiceover(plan)
     said = {k: WD.spoken(v) for k, v in texts.items()}
-    vo = voice.speak(plan, said, outdir) if speak else voice.fresh(plan, said, outdir)
-    n = WD.align(plan, texts, vo.wavs, outdir) if speak else 0
-    if n:
-        print(f"word times: {n} scenes aligned")
-    plan.wavs, plan.spoken = vo.wavs, voice.lengths(vo.wavs)
+    if speak:
+        with voice.quiet(os.path.join(outdir, "voice", "log.txt")):
+            vo = voice.speak(plan, said)
+            n = WD.align(plan, texts, vo.wavs)
+        if n:
+            print(f"word times: {n} scenes aligned")
+    else:
+        vo = voice.fresh(plan, said)
+    plan.wavs, plan.stale, plan.spoken = vo.wavs, vo.stale, voice.lengths(vo.wavs)
     WD.attach(plan, texts, plan.wavs)
-    plan.problems = [f"warning: {sid}: voice is older than its text or tts:; run pixsci voice" for sid in vo.stale]
+    plan.problems = [f"warning: {sid}: voice is missing or older than its text; run pixsci voice" for sid in plan.stale]
     plan.problems += WD.resolve_beats(plan)
     plan.problems += stage.resolve(plan, explain.durations(plan))
     plan.resolved = True

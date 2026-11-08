@@ -118,7 +118,7 @@ def load_scene(wav, text):
 
 def attach(plan, texts, wavs):
     """Puts the words of each scene into plan.words = {scene id: [{"w","s","e"}]}, with times from
-    the start of the scene (LEAD added). wavs: the fresh audio (voice.fresh). Returns the number of aligned scenes."""
+    the start of the scene (LEAD added). wavs: the fresh voice (voice.fresh). Returns the number of aligned scenes."""
     out, n = {}, 0
     for sc in plan["scenes"]:
         sid = sc.get("id")
@@ -263,20 +263,19 @@ ALIGN_PITFALL = ("The aligner is not installed: word times are estimated. Instal
                  "  .venv/bin/pip install --no-deps qwen-asr==0.0.6")
 
 
-def align(plan, texts, paths, outdir):
+def align(plan, texts, paths):
     """Writes voice/<id>.words.json for each scene whose audio or text changed: the written words of the
     scene with the times they are heard (Qwen3-ForcedAligner, Apache 2.0, ~1.8 GB on the first run).
     texts: {id: text with [written|spoken] marks}; paths: {id: wav}, fresh (voice.fresh).
     Returns the number of scenes aligned now."""
     from .voice import settings
     lang = settings(plan)["lang"]
-    d = os.path.join(outdir, "voice")
     todo = []
     for sid, wav in paths.items():
         text = texts.get(sid, "").strip()
         if _aligned(wav, text) is not None:
             continue
-        todo.append((sid, text, wav, os.path.join(d, f"{sid}.words.json")))
+        todo.append((sid, text, wav, os.path.splitext(wav)[0] + ".words.json"))
     if not todo:
         return 0
     try:

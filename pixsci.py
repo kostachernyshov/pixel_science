@@ -17,7 +17,7 @@
 # Scenes and word beats are timed to the fresh voice in OUTDIR/voice/ when it is there.
 # --voice (board, render, frames): first speak and align what is missing; render puts the sound in the mp4.
 
-import contextlib, os, sys
+import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
@@ -43,46 +43,14 @@ def _args(a):
     return pos, fmts, gif, vo
 
 
-@contextlib.contextmanager
-def _quiet(log):
-    """Sends stderr (progress bars and warnings of torch and Hugging Face) to the file log, one run per file;
-    stdout stays. An agent reads only the short result, not thousands of progress lines."""
-    if sys.stderr:
-        sys.stderr.flush()
-    f = open(log, "w")
-    keep = os.dup(2)
-    os.dup2(f.fileno(), 2)
-    try:
-        yield
-    except BaseException as e:
-        stop = not (isinstance(e, SystemExit) and e.code in (None, 0))
-        raise
-    else:
-        stop = False
-    finally:
-        if sys.stderr:
-            sys.stderr.flush()
-        os.dup2(keep, 2)
-        os.close(keep)
-        f.close()
-        if stop and os.path.getsize(log):
-            print(f"voice: stopped; details in {log}", file=sys.stderr)
-
-
 def _plan(p, outdir=None, speak=False):
-    """The plan, timed to the fresh voice in OUTDIR/voice/. speak (--voice): first speak and align what is missing;
-    model output goes to OUTDIR/voice/log.txt."""
-    if not speak:
-        return P.load(p, outdir)
-    os.makedirs(os.path.join(outdir, "voice"), exist_ok=True)
-    with _quiet(os.path.join(outdir, "voice", "log.txt")):
-        return P.load(p, outdir, speak=True)
+    """The plan, timed to the fresh voice in OUTDIR/voice/. speak (--voice): first speak and align what is missing."""
+    return P.load(p, outdir, speak)
 
 
 def _warn(plan):
     for w in _split(plan.problems)[1]:
-        if " voice " in w:
-            print(w)
+        print(w)
 
 
 def _formats(plan, fmts):
