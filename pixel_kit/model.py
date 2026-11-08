@@ -354,12 +354,12 @@ def layout_parts(plan, sc, t, state, beats):
     sl, _ = slots(plan)
     actors = sc.get("actors") or {}
     shown = {name: [p for p in shown_parts(a, beats, name, t) if p in P and P[p][0] == thing_of(name, a)]
-             for name, a in actors.items() if name in state and state[name][8]}
+             for name, a in actors.items() if name in state and state[name].shown}
     rows = scene_rows(plan, sc, beats)
     out = {}
     for name, ps in shown.items():
         a = actors[name]
-        px, py, r, k = state[name][:4]
+        px, py, k = state[name].x, state[name].y, state[name].k
         u = unit(k)
         for p in ps:
             target = None
@@ -367,19 +367,19 @@ def layout_parts(plan, sc, t, state, beats):
                 if rel.get("kind") == "bind" and p in (rel["a"], rel["b"]):
                     q = rel["b"] if rel["a"] == p else rel["a"]
                     o = owner(plan, sc, q, t, beats)
-                    if o in state and state[o][8] and o != name and (target is None or
-                            math.hypot(state[o][0] - px, state[o][1] - py) <
-                            math.hypot(state[target][0] - px, state[target][1] - py)):
+                    if o in state and state[o].shown and o != name and (target is None or
+                            math.hypot(state[o].x - px, state[o].y - py) <
+                            math.hypot(state[target].x - px, state[target].y - py)):
                         target = o
             if target is None:
-                others = [o for o in state if o != name and state[o][8] and o in actors and actors[o].get("parts")]
-                others = others or [o for o in state if o != name and state[o][8]]
+                others = [o for o in state if o != name and state[o].shown and o in actors and actors[o].get("parts")]
+                others = others or [o for o in state if o != name and state[o].shown]
                 if others:
-                    target = min(others, key=lambda o: math.hypot(state[o][0] - px, state[o][1] - py))
-            d = _axis(state[target][0] - px, state[target][1] - py) if target else (1, 0)
+                    target = min(others, key=lambda o: math.hypot(state[o].x - px, state[o].y - py))
+            d = _axis(state[target].x - px, state[target].y - py) if target else (1, 0)
             off = (rows.index(sl[p]) - (len(rows) - 1) / 2) * (ROWS + 3) * u
             mol = is_molecule(a["sprite"])          # its site is drawn in the sprite: no stalk
-            fl = bool(state[name][6])
+            fl = bool(state[name].flip)
             out[(p, name)] = {"d": d, "u": u, "off": fit_off(a["sprite"], k, d, off, fl), "mol": mol,
                               "_at": (a["sprite"], k, px, py, fl)}
             if mol:                                 # its label goes above the body
@@ -527,11 +527,11 @@ def agent_place(plan, si, sc, t, state, beats):
         if not g or agent not in state:
             continue
         d, u = g["d"], g["u"]
-        reach = (0 if g["mol"] else (STALK + HEAD + 1) * u) + state[agent][2] * 0.6   # on a molecule: at its edge
+        reach = (0 if g["mol"] else (STALK + HEAD + 1) * u) + state[agent].r * 0.6   # on a molecule: at its edge
         tx, ty = g["base"][0] + d[0] * reach, g["base"][1] + d[1] * reach
         k = ease(clamp((t - on) / GLIDE))
-        state[agent][0] += (tx - state[agent][0]) * k
-        state[agent][1] += (ty - state[agent][1]) * k
+        state[agent].x += (tx - state[agent].x) * k
+        state[agent].y += (ty - state[agent].y) * k
 
 
 # ---------------------------------------------------------------- checks
@@ -547,8 +547,8 @@ def _actor_labels(sc, state):
     from .font import text_w, LINE
     out = []
     for name, a in (sc.get("actors") or {}).items():
-        if a.get("label") and name in state and state[name][8] and frame.H >= 160:
-            px, py, _, k = state[name][:4]
+        if a.get("label") and name in state and state[name].shown and frame.H >= 160:
+            px, py, k = state[name].x, state[name].y, state[name].k
             w, y = text_w(str(a["label"])), int(py) + S.meta()[a["sprite"]]["cell"][1] * k // 2 + 2
             out.append((name, (int(px) - w / 2, y, int(px) + w / 2, y + LINE)))
     return out
@@ -580,7 +580,8 @@ def _crowded(st, others=()):
 
 
 def check(plan, positions=None, stage=None):
-    """Problems of the model and of the beats that show it. positions(si, sc, t) -> state for the contact rule;
+    """Problems of the model and of the beats that show it. positions(si, sc, t) -> {actor: stage.ActorState} for
+    the contact rule;
     stage (x0, y0, x1, y1) turns a wrong gap into the place that fixes it."""
     things, rels = get(plan)
     P = parts(plan)
@@ -711,7 +712,7 @@ def check(plan, positions=None, stage=None):
             if stage and lo <= hi and ob in state:          # where the partner's owner may stand on the axis
                 ax = 0 if d[0] else 1
                 a0, a1 = (stage[0], stage[2]) if ax == 0 else (stage[1], stage[3])
-                ends = sorted(state[ob][ax] + (g - gap) * d[ax] for g in (lo + 1, hi - 1))
+                ends = sorted((state[ob].x, state[ob].y)[ax] + (g - gap) * d[ax] for g in (lo + 1, hi - 1))
                 f0, f1 = ((e - a0) / ((a1 - a0) or 1) for e in ends)
                 fix = f": place {ob} at {'xy'[ax]} {f0:.2f} to {f1:.2f}, or move it with move_to: {oa}"
             if gb["d"] != (-d[0], -d[1]) or gap < bind_range(plan, r["a"], r["b"], u, d, (ga["mol"], gb["mol"]),
