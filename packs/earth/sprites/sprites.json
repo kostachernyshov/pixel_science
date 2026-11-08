@@ -18,7 +18,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "cloud": {
   "file": "cloud.png",
@@ -39,7 +44,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   84,
+   54
+  ],
+  "palette": "AAP-64"
  },
  "water_drop": {
   "file": "water_drop.png",
@@ -60,7 +70,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   52,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "snowflake": {
   "file": "snowflake.png",
@@ -81,7 +96,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   72,
+   64
+  ],
+  "palette": "AAP-64"
  },
  "ice": {
   "file": "ice.png",
@@ -102,7 +122,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   72,
+   64
+  ],
+  "palette": "AAP-64"
  },
  "water_pool": {
   "file": "water_pool.png",
@@ -123,7 +148,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   100,
+   48
+  ],
+  "palette": "AAP-64"
  },
  "river": {
   "file": "river.png",
@@ -144,7 +174,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   100,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "soil": {
   "file": "soil.png",
@@ -171,6 +206,561 @@
     "loop": true
    }
   },
-  "source": "code"
- }
+  "source": "png",
+  "source_cell": [
+   88,
+   68
+  ],
+  "palette": "AAP-64"
+ },
+  "rock_strata": {
+    "file": "rock_strata.png",
+    "group": "prop",
+    "cell": [
+      48,
+      32
+    ],
+    "anchor": [
+      24.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "rock_fold": {
+    "file": "rock_fold.png",
+    "group": "prop",
+    "cell": [
+      48,
+      32
+    ],
+    "anchor": [
+      24.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "rock_fault": {
+    "file": "rock_fault.png",
+    "group": "prop",
+    "cell": [
+      48,
+      32
+    ],
+    "anchor": [
+      24.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "sandstone_sample": {
+    "file": "sandstone_sample.png",
+    "group": "prop",
+    "cell": [
+      28,
+      24
+    ],
+    "anchor": [
+      14.0,
+      12.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "basalt_sample": {
+    "file": "basalt_sample.png",
+    "group": "prop",
+    "cell": [
+      28,
+      24
+    ],
+    "anchor": [
+      14.0,
+      12.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "granite_sample": {
+    "file": "granite_sample.png",
+    "group": "prop",
+    "cell": [
+      28,
+      24
+    ],
+    "anchor": [
+      14.0,
+      12.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "limestone_fossil": {
+    "file": "limestone_fossil.png",
+    "group": "prop",
+    "cell": [
+      28,
+      24
+    ],
+    "anchor": [
+      14.0,
+      12.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "pumice_sample": {
+    "file": "pumice_sample.png",
+    "group": "prop",
+    "cell": [
+      28,
+      24
+    ],
+    "anchor": [
+      14.0,
+      12.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "quartz_crystal": {
+    "file": "quartz_crystal.png",
+    "group": "prop",
+    "cell": [
+      20,
+      28
+    ],
+    "anchor": [
+      10.0,
+      14.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "halite_crystal": {
+    "file": "halite_crystal.png",
+    "group": "prop",
+    "cell": [
+      28,
+      28
+    ],
+    "anchor": [
+      14.0,
+      14.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "mineral_mica": {
+    "file": "mineral_mica.png",
+    "group": "prop",
+    "cell": [
+      28,
+      24
+    ],
+    "anchor": [
+      14.0,
+      12.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "sand_grains": {
+    "file": "sand_grains.png",
+    "group": "prop",
+    "cell": [
+      16,
+      12
+    ],
+    "anchor": [
+      8.0,
+      6.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "gravel_clast": {
+    "file": "gravel_clast.png",
+    "group": "prop",
+    "cell": [
+      16,
+      14
+    ],
+    "anchor": [
+      8.0,
+      7.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "clay_aggregate": {
+    "file": "clay_aggregate.png",
+    "group": "prop",
+    "cell": [
+      28,
+      20
+    ],
+    "anchor": [
+      14.0,
+      10.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "volcano_cutaway": {
+    "file": "volcano_cutaway.png",
+    "group": "prop",
+    "cell": [
+      56,
+      44
+    ],
+    "anchor": [
+      28.0,
+      22.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "tectonic_plate": {
+    "file": "tectonic_plate.png",
+    "group": "prop",
+    "cell": [
+      48,
+      20
+    ],
+    "anchor": [
+      24.0,
+      10.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "subduction_section": {
+    "file": "subduction_section.png",
+    "group": "prop",
+    "cell": [
+      56,
+      36
+    ],
+    "anchor": [
+      28.0,
+      18.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "aquifer_section": {
+    "file": "aquifer_section.png",
+    "group": "prop",
+    "cell": [
+      48,
+      36
+    ],
+    "anchor": [
+      24.0,
+      18.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "glacier": {
+    "file": "glacier.png",
+    "group": "prop",
+    "cell": [
+      28,
+      16
+    ],
+    "anchor": [
+      14.0,
+      8.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "sand_dune": {
+    "file": "sand_dune.png",
+    "group": "prop",
+    "cell": [
+      28,
+      16
+    ],
+    "anchor": [
+      14.0,
+      8.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "stalactite": {
+    "file": "stalactite.png",
+    "group": "prop",
+    "cell": [
+      12,
+      28
+    ],
+    "anchor": [
+      6.0,
+      14.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "stalagmite": {
+    "file": "stalagmite.png",
+    "group": "prop",
+    "cell": [
+      20,
+      28
+    ],
+    "anchor": [
+      10.0,
+      14.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "ammonite_fossil": {
+    "file": "ammonite_fossil.png",
+    "group": "prop",
+    "cell": [
+      28,
+      24
+    ],
+    "anchor": [
+      14.0,
+      12.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "trilobite_fossil": {
+    "file": "trilobite_fossil.png",
+    "group": "prop",
+    "cell": [
+      24,
+      28
+    ],
+    "anchor": [
+      12.0,
+      14.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "meteorite": {
+    "file": "meteorite.png",
+    "group": "prop",
+    "cell": [
+      28,
+      24
+    ],
+    "anchor": [
+      14.0,
+      12.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  }
 }
