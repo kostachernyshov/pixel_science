@@ -60,7 +60,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "killer_t": {
   "file": "killer_t.png",
@@ -123,7 +128,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "helper_t": {
   "file": "helper_t.png",
@@ -186,7 +196,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "treg": {
   "file": "treg.png",
@@ -249,7 +264,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "car_t": {
   "file": "car_t.png",
@@ -312,7 +332,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "b_cell": {
   "file": "b_cell.png",
@@ -369,7 +394,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "dendritic": {
   "file": "dendritic.png",
@@ -432,7 +462,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   92,
+   84
+  ],
+  "palette": "AAP-64"
  },
  "macrophage": {
   "file": "macrophage.png",
@@ -507,7 +542,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   92,
+   84
+  ],
+  "palette": "AAP-64"
  },
  "tumor": {
   "file": "tumor.png",
@@ -558,7 +598,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   96,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "tumor_mhc_low": {
   "file": "tumor_mhc_low.png",
@@ -603,7 +648,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   96,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "tumor_no_mhc": {
   "file": "tumor_no_mhc.png",
@@ -648,7 +698,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   96,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "tumor_pdl1": {
   "file": "tumor_pdl1.png",
@@ -699,7 +754,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   96,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "tumor_stress": {
   "file": "tumor_stress.png",
@@ -744,7 +804,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   96,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "blast": {
   "file": "blast.png",
@@ -783,7 +848,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   64,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "epithelial": {
   "file": "epithelial.png",
@@ -834,7 +904,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   90,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "stem": {
   "file": "stem.png",
@@ -879,7 +954,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   98,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "mutant": {
   "file": "mutant.png",
@@ -924,7 +1004,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   90,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "clone_a": {
   "file": "clone_a.png",
@@ -969,7 +1054,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   90,
+   64
+  ],
+  "palette": "AAP-64"
  },
  "clone_b": {
   "file": "clone_b.png",
@@ -1014,7 +1104,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   90,
+   64
+  ],
+  "palette": "AAP-64"
  },
  "clone_c": {
   "file": "clone_c.png",
@@ -1059,7 +1154,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   90,
+   64
+  ],
+  "palette": "AAP-64"
  },
  "clone_d": {
   "file": "clone_d.png",
@@ -1104,7 +1204,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   90,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "senescent": {
   "file": "senescent.png",
@@ -1137,7 +1242,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "granulocyte": {
   "file": "granulocyte.png",
@@ -1176,7 +1286,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   76,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "badge_mhc": {
   "file": "badge_mhc.png",
@@ -1197,7 +1312,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   26
+  ],
+  "palette": "AAP-64"
  },
  "badge_mhc_self": {
   "file": "badge_mhc_self.png",
@@ -1218,7 +1338,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   26
+  ],
+  "palette": "AAP-64"
  },
  "badge_mhc_neo": {
   "file": "badge_mhc_neo.png",
@@ -1239,7 +1364,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   26
+  ],
+  "palette": "AAP-64"
  },
  "badge_tcr": {
   "file": "badge_tcr.png",
@@ -1260,7 +1390,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   26
+  ],
+  "palette": "AAP-64"
  },
  "badge_pd1": {
   "file": "badge_pd1.png",
@@ -1281,7 +1416,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   26
+  ],
+  "palette": "AAP-64"
  },
  "badge_ctla4": {
   "file": "badge_ctla4.png",
@@ -1302,7 +1442,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   26
+  ],
+  "palette": "AAP-64"
  },
  "badge_pdl1": {
   "file": "badge_pdl1.png",
@@ -1323,7 +1468,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   26
+  ],
+  "palette": "AAP-64"
  },
  "badge_stress": {
   "file": "badge_stress.png",
@@ -1344,7 +1494,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   26
+  ],
+  "palette": "AAP-64"
  },
  "syringe": {
   "file": "syringe.png",
@@ -1365,7 +1520,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   72,
+   22
+  ],
+  "palette": "AAP-64"
  },
  "syringe_drug": {
   "file": "syringe_drug.png",
@@ -1386,7 +1546,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   72,
+   22
+  ],
+  "palette": "AAP-64"
  },
  "vial_antiserum": {
   "file": "vial_antiserum.png",
@@ -1407,7 +1572,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   36,
+   32
+  ],
+  "palette": "AAP-64"
  },
  "vial_drug": {
   "file": "vial_drug.png",
@@ -1428,7 +1598,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   36,
+   32
+  ],
+  "palette": "AAP-64"
  },
  "dish": {
   "file": "dish.png",
@@ -1455,7 +1630,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   68,
+   60
+  ],
+  "palette": "AAP-64"
  },
  "mouse_top": {
   "file": "mouse_top.png",
@@ -1476,7 +1656,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   56,
+   80
+  ],
+  "palette": "AAP-64"
  },
  "mouse_side": {
   "file": "mouse_side.png",
@@ -1497,7 +1682,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   44
+  ],
+  "palette": "AAP-64"
  },
  "dna": {
   "file": "dna.png",
@@ -1524,7 +1714,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   38,
+   44
+  ],
+  "palette": "AAP-64"
  },
  "dna_mut": {
   "file": "dna_mut.png",
@@ -1545,7 +1740,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   38,
+   44
+  ],
+  "palette": "AAP-64"
  },
  "glucose": {
   "file": "glucose.png",
@@ -1566,7 +1766,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   26
+  ],
+  "palette": "AAP-64"
  },
  "pill": {
   "file": "pill.png",
@@ -1587,7 +1792,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   36,
+   18
+  ],
+  "palette": "AAP-64"
  },
  "granule_blue": {
   "file": "granule_blue.png",
@@ -1608,7 +1818,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   30,
+   22
+  ],
+  "palette": "AAP-64"
  },
  "granule_green": {
   "file": "granule_green.png",
@@ -1629,7 +1844,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   30,
+   22
+  ],
+  "palette": "AAP-64"
  },
  "antibody": {
   "file": "antibody.png",
@@ -1650,7 +1870,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   42,
+   34
+  ],
+  "palette": "AAP-64"
  },
  "chromosome": {
   "file": "chromosome.png",
@@ -1671,7 +1896,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   30,
+   34
+  ],
+  "palette": "AAP-64"
  },
  "chromosome_ph": {
   "file": "chromosome_ph.png",
@@ -1692,18 +1922,23 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   30,
+   24
+  ],
+  "palette": "AAP-64"
  },
  "patient_a": {
   "file": "patient_a.png",
   "group": "people",
   "cell": [
-   26,
-   34
+   28,
+   36
   ],
   "anchor": [
-   13.0,
-   17.0
+   14.0,
+   18.0
   ],
   "anims": {
    "idle": {
@@ -1735,20 +1970,31 @@
     "frames": 2,
     "fps": 2,
     "loop": true
+   },
+   "ghost": {
+    "row": 5,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   56,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "patient_b": {
   "file": "patient_b.png",
   "group": "people",
   "cell": [
-   26,
-   34
+   28,
+   36
   ],
   "anchor": [
-   13.0,
-   17.0
+   14.0,
+   18.0
   ],
   "anims": {
    "idle": {
@@ -1780,20 +2026,31 @@
     "frames": 2,
     "fps": 2,
     "loop": true
+   },
+   "ghost": {
+    "row": 5,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   56,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "patient_c": {
   "file": "patient_c.png",
   "group": "people",
   "cell": [
-   26,
-   34
+   28,
+   36
   ],
   "anchor": [
-   13.0,
-   17.0
+   14.0,
+   18.0
   ],
   "anims": {
    "idle": {
@@ -1825,9 +2082,20 @@
     "frames": 2,
     "fps": 2,
     "loop": true
+   },
+   "ghost": {
+    "row": 5,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   56,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "kidney": {
   "file": "kidney.png",
@@ -1860,7 +2128,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   44,
+   44
+  ],
+  "palette": "AAP-64"
  },
  "plaster": {
   "file": "plaster.png",
@@ -1881,7 +2154,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   34,
+   20
+  ],
+  "palette": "AAP-64"
  },
  "manager": {
   "file": "manager.png",
@@ -1920,7 +2198,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   56,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "scientist": {
   "file": "scientist.png",
@@ -1953,7 +2236,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   56,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "clinician": {
   "file": "clinician.png",
@@ -1986,7 +2274,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   56,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "file_doc": {
   "file": "file_doc.png",
@@ -2007,7 +2300,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   38,
+   34
+  ],
+  "palette": "AAP-64"
  },
  "folder": {
   "file": "folder.png",
@@ -2028,7 +2326,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   46,
+   32
+  ],
+  "palette": "AAP-64"
  },
  "computer": {
   "file": "computer.png",
@@ -2055,7 +2358,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   50,
+   40
+  ],
+  "palette": "AAP-64"
  },
  "check_card": {
   "file": "check_card.png",
@@ -2076,7 +2384,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   46,
+   38
+  ],
+  "palette": "AAP-64"
  },
  "bulb": {
   "file": "bulb.png",
@@ -2109,7 +2422,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   42,
+   42
+  ],
+  "palette": "AAP-64"
  },
  "tube": {
   "file": "tube.png",
@@ -2130,7 +2448,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   30,
+   40
+  ],
+  "palette": "AAP-64"
  },
  "tube_orange": {
   "file": "tube_orange.png",
@@ -2151,7 +2474,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   30,
+   40
+  ],
+  "palette": "AAP-64"
  },
  "plate": {
   "file": "plate.png",
@@ -2178,7 +2506,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   94,
+   66
+  ],
+  "palette": "AAP-64"
  },
  "sequencer": {
   "file": "sequencer.png",
@@ -2205,7 +2538,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   68,
+   48
+  ],
+  "palette": "AAP-64"
  },
  "datasheet": {
   "file": "datasheet.png",
@@ -2226,7 +2564,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   54,
+   38
+  ],
+  "palette": "AAP-64"
  },
  "agent": {
   "file": "agent.png",
@@ -2265,7 +2608,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   60,
+   60
+  ],
+  "palette": "AAP-64"
  },
  "supervisor": {
   "file": "supervisor.png",
@@ -2298,7 +2646,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   70,
+   60
+  ],
+  "palette": "AAP-64"
  },
  "lock": {
   "file": "lock.png",
@@ -2325,7 +2678,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   42,
+   40
+  ],
+  "palette": "AAP-64"
  },
  "deck": {
   "file": "deck.png",
@@ -2346,7 +2704,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   54,
+   36
+  ],
+  "palette": "AAP-64"
  },
  "person": {
   "file": "person.png",
@@ -2385,7 +2748,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   56,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "protein": {
   "file": "protein.png",
@@ -2406,7 +2774,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   128,
+   128
+  ],
+  "palette": "AAP-64"
  },
  "rna": {
   "file": "rna.png",
@@ -2427,7 +2800,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   64,
+   38
+  ],
+  "palette": "AAP-64"
  },
  "lipid": {
   "file": "lipid.png",
@@ -2448,7 +2826,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   48,
+   52
+  ],
+  "palette": "AAP-64"
  },
  "plasmid": {
   "file": "plasmid.png",
@@ -2469,7 +2852,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   68,
+   60
+  ],
+  "palette": "AAP-64"
  },
  "dna_fragment": {
   "file": "dna_fragment.png",
@@ -2490,7 +2878,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   42,
+   40
+  ],
+  "palette": "AAP-64"
  },
  "proteasome": {
   "file": "proteasome.png",
@@ -2511,7 +2904,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   128,
+   128
+  ],
+  "palette": "AAP-64"
  },
  "vesicle": {
   "file": "vesicle.png",
@@ -2532,7 +2930,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   64,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "nucleus": {
   "file": "nucleus.png",
@@ -2553,7 +2956,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   76,
+   64
+  ],
+  "palette": "AAP-64"
  },
  "mitochondrion": {
   "file": "mitochondrion.png",
@@ -2574,7 +2982,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   84,
+   52
+  ],
+  "palette": "AAP-64"
  },
  "ribosome": {
   "file": "ribosome.png",
@@ -2595,7 +3008,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   128,
+   128
+  ],
+  "palette": "AAP-64"
  },
  "bacterium": {
   "file": "bacterium.png",
@@ -2616,7 +3034,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "virus": {
   "file": "virus.png",
@@ -2637,7 +3060,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   72,
+   64
+  ],
+  "palette": "AAP-64"
  },
  "pipette": {
   "file": "pipette.png",
@@ -2658,7 +3086,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   40,
+   76
+  ],
+  "palette": "AAP-64"
  },
  "microscope": {
   "file": "microscope.png",
@@ -2679,7 +3112,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   76,
+   76
+  ],
+  "palette": "AAP-64"
  },
  "centrifuge": {
   "file": "centrifuge.png",
@@ -2700,7 +3138,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   84,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "pcr_machine": {
   "file": "pcr_machine.png",
@@ -2721,7 +3164,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   84,
+   68
+  ],
+  "palette": "AAP-64"
  },
  "heart": {
   "file": "heart.png",
@@ -2742,7 +3190,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   72,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "lungs": {
   "file": "lungs.png",
@@ -2763,7 +3216,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   72
+  ],
+  "palette": "AAP-64"
  },
  "liver": {
   "file": "liver.png",
@@ -2784,7 +3242,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   84,
+   58
+  ],
+  "palette": "AAP-64"
  },
  "brain": {
   "file": "brain.png",
@@ -2805,7 +3268,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   80,
+   64
+  ],
+  "palette": "AAP-64"
  },
  "zebrafish": {
   "file": "zebrafish.png",
@@ -2826,7 +3294,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   84,
+   46
+  ],
+  "palette": "AAP-64"
  },
  "fruit_fly": {
   "file": "fruit_fly.png",
@@ -2847,7 +3320,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   72,
+   56
+  ],
+  "palette": "AAP-64"
  },
  "nematode": {
   "file": "nematode.png",
@@ -2868,7 +3346,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   84,
+   44
+  ],
+  "palette": "AAP-64"
  },
  "leaf": {
   "file": "leaf.png",
@@ -2889,7 +3372,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   72,
+   60
+  ],
+  "palette": "AAP-64"
  },
  "flower": {
   "file": "flower.png",
@@ -2910,7 +3398,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   68,
+   76
+  ],
+  "palette": "AAP-64"
  },
  "peptide_self": {
   "file": "peptide_self.png",
@@ -2931,7 +3424,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   60,
+   28
+  ],
+  "palette": "AAP-64"
  },
  "peptide_mutant": {
   "file": "peptide_mutant.png",
@@ -2952,7 +3450,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   60,
+   28
+  ],
+  "palette": "AAP-64"
  },
  "seed": {
   "file": "seed.png",
@@ -2979,7 +3482,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   68,
+   76
+  ],
+  "palette": "AAP-64"
  },
  "gel": {
   "file": "gel.png",
@@ -3006,7 +3514,12 @@
     "loop": false
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   76,
+   76
+  ],
+  "palette": "AAP-64"
  },
  "chloroplast": {
   "file": "chloroplast.png",
@@ -3027,7 +3540,12 @@
     "loop": true
    }
   },
-  "source": "code"
+  "source": "png",
+  "source_cell": [
+   84,
+   52
+  ],
+  "palette": "AAP-64"
  },
  "protein_folded": {
   "file": "protein_folded.png",
@@ -3084,6 +3602,1216 @@
   ],
   "anchor": [
    32.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "snail": {
+  "file": "snail.png",
+  "group": "prop",
+  "cell": [
+   32,
+   20
+  ],
+  "anchor": [
+   16.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "earthworm": {
+  "file": "earthworm.png",
+  "group": "prop",
+  "cell": [
+   32,
+   16
+  ],
+  "anchor": [
+   16.0,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "honey_bee": {
+  "file": "honey_bee.png",
+  "group": "prop",
+  "cell": [
+   24,
+   20
+  ],
+  "anchor": [
+   12.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "butterfly": {
+  "file": "butterfly.png",
+  "group": "prop",
+  "cell": [
+   32,
+   28
+  ],
+  "anchor": [
+   16.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "dragonfly": {
+  "file": "dragonfly.png",
+  "group": "prop",
+  "cell": [
+   36,
+   24
+  ],
+  "anchor": [
+   18.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "ladybird": {
+  "file": "ladybird.png",
+  "group": "prop",
+  "cell": [
+   32,
+   32
+  ],
+  "anchor": [
+   16.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "grasshopper": {
+  "file": "grasshopper.png",
+  "group": "prop",
+  "cell": [
+   32,
+   24
+  ],
+  "anchor": [
+   16.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "ant": {
+  "file": "ant.png",
+  "group": "prop",
+  "cell": [
+   32,
+   20
+  ],
+  "anchor": [
+   16.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "spider": {
+  "file": "spider.png",
+  "group": "prop",
+  "cell": [
+   32,
+   28
+  ],
+  "anchor": [
+   16.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "crab": {
+  "file": "crab.png",
+  "group": "prop",
+  "cell": [
+   32,
+   24
+  ],
+  "anchor": [
+   16.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "shrimp": {
+  "file": "shrimp.png",
+  "group": "prop",
+  "cell": [
+   36,
+   20
+  ],
+  "anchor": [
+   18.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "jellyfish": {
+  "file": "jellyfish.png",
+  "group": "prop",
+  "cell": [
+   28,
+   32
+  ],
+  "anchor": [
+   14.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "sea_star": {
+  "file": "sea_star.png",
+  "group": "prop",
+  "cell": [
+   32,
+   32
+  ],
+  "anchor": [
+   16.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "octopus": {
+  "file": "octopus.png",
+  "group": "prop",
+  "cell": [
+   48,
+   44
+  ],
+  "anchor": [
+   24.0,
+   22.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "bivalve_clam": {
+  "file": "bivalve_clam.png",
+  "group": "prop",
+  "cell": [
+   32,
+   28
+  ],
+  "anchor": [
+   16.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "coral_branch": {
+  "file": "coral_branch.png",
+  "group": "prop",
+  "cell": [
+   28,
+   32
+  ],
+  "anchor": [
+   14.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "marine_sponge": {
+  "file": "marine_sponge.png",
+  "group": "prop",
+  "cell": [
+   28,
+   32
+  ],
+  "anchor": [
+   14.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "sea_anemone": {
+  "file": "sea_anemone.png",
+  "group": "prop",
+  "cell": [
+   32,
+   32
+  ],
+  "anchor": [
+   16.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "frog": {
+  "file": "frog.png",
+  "group": "prop",
+  "cell": [
+   32,
+   24
+  ],
+  "anchor": [
+   16.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "tadpole": {
+  "file": "tadpole.png",
+  "group": "prop",
+  "cell": [
+   32,
+   20
+  ],
+  "anchor": [
+   16.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "lizard": {
+  "file": "lizard.png",
+  "group": "prop",
+  "cell": [
+   36,
+   20
+  ],
+  "anchor": [
+   18.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "snake": {
+  "file": "snake.png",
+  "group": "prop",
+  "cell": [
+   32,
+   24
+  ],
+  "anchor": [
+   16.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "tortoise": {
+  "file": "tortoise.png",
+  "group": "prop",
+  "cell": [
+   32,
+   24
+  ],
+  "anchor": [
+   16.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "songbird": {
+  "file": "songbird.png",
+  "group": "prop",
+  "cell": [
+   32,
+   28
+  ],
+  "anchor": [
+   16.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "bat": {
+  "file": "bat.png",
+  "group": "prop",
+  "cell": [
+   48,
+   28
+  ],
+  "anchor": [
+   24.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "rabbit": {
+  "file": "rabbit.png",
+  "group": "prop",
+  "cell": [
+   32,
+   24
+  ],
+  "anchor": [
+   16.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "fox": {
+  "file": "fox.png",
+  "group": "prop",
+  "cell": [
+   36,
+   20
+  ],
+  "anchor": [
+   18.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "deer": {
+  "file": "deer.png",
+  "group": "prop",
+  "cell": [
+   40,
+   32
+  ],
+  "anchor": [
+   20.0,
+   16.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "caterpillar": {
+  "file": "caterpillar.png",
+  "group": "prop",
+  "cell": [
+   32,
+   16
+  ],
+  "anchor": [
+   16.0,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "ladybird_larva": {
+  "file": "ladybird_larva.png",
+  "group": "prop",
+  "cell": [
+   32,
+   20
+  ],
+  "anchor": [
+   16.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "dandelion_diaspore": {
+  "file": "dandelion_diaspore.png",
+  "group": "prop",
+  "cell": [
+   36,
+   48
+  ],
+  "anchor": [
+   18.0,
+   24.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "maple_samara": {
+  "file": "maple_samara.png",
+  "group": "prop",
+  "cell": [
+   28,
+   20
+  ],
+  "anchor": [
+   14.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "burdock_burr": {
+  "file": "burdock_burr.png",
+  "group": "prop",
+  "cell": [
+   28,
+   28
+  ],
+  "anchor": [
+   14.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "acorn": {
+  "file": "acorn.png",
+  "group": "prop",
+  "cell": [
+   24,
+   28
+  ],
+  "anchor": [
+   12.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "pine_cone": {
+  "file": "pine_cone.png",
+  "group": "prop",
+  "cell": [
+   20,
+   28
+  ],
+  "anchor": [
+   10.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "fern_frond": {
+  "file": "fern_frond.png",
+  "group": "prop",
+  "cell": [
+   28,
+   40
+  ],
+  "anchor": [
+   14.0,
+   20.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "moss_tuft": {
+  "file": "moss_tuft.png",
+  "group": "prop",
+  "cell": [
+   28,
+   24
+  ],
+  "anchor": [
+   14.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "mushroom": {
+  "file": "mushroom.png",
+  "group": "prop",
+  "cell": [
+   24,
+   28
+  ],
+  "anchor": [
+   12.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "lichen_patch": {
+  "file": "lichen_patch.png",
+  "group": "prop",
+  "cell": [
+   28,
+   24
+  ],
+  "anchor": [
+   14.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "pollen_grain": {
+  "file": "pollen_grain.png",
+  "group": "prop",
+  "cell": [
+   16,
+   16
+  ],
+  "anchor": [
+   8.0,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "stoma": {
+  "file": "stoma.png",
+  "group": "prop",
+  "cell": [
+   32,
+   24
+  ],
+  "anchor": [
+   16.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "leaf_cross_section": {
+  "file": "leaf_cross_section.png",
+  "group": "prop",
+  "cell": [
+   48,
+   28
+  ],
+  "anchor": [
+   24.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "xylem_vessel": {
+  "file": "xylem_vessel.png",
+  "group": "prop",
+  "cell": [
+   20,
+   36
+  ],
+  "anchor": [
+   10.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "phloem_tube": {
+  "file": "phloem_tube.png",
+  "group": "prop",
+  "cell": [
+   24,
+   36
+  ],
+  "anchor": [
+   12.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "root_hair": {
+  "file": "root_hair.png",
+  "group": "prop",
+  "cell": [
+   28,
+   16
+  ],
+  "anchor": [
+   14.0,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "root_nodule": {
+  "file": "root_nodule.png",
+  "group": "prop",
+  "cell": [
+   28,
+   24
+  ],
+  "anchor": [
+   14.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "tomato_section": {
+  "file": "tomato_section.png",
+  "group": "prop",
+  "cell": [
+   28,
+   28
+  ],
+  "anchor": [
+   14.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "apple_section": {
+  "file": "apple_section.png",
+  "group": "prop",
+  "cell": [
+   28,
+   28
+  ],
+  "anchor": [
+   14.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "cereal_spike": {
+  "file": "cereal_spike.png",
+  "group": "prop",
+  "cell": [
+   20,
+   36
+  ],
+  "anchor": [
+   10.0,
+   18.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "grass_tuft": {
+  "file": "grass_tuft.png",
+  "group": "prop",
+  "cell": [
+   24,
+   20
+  ],
+  "anchor": [
+   12.0,
+   10.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "succulent_rosette": {
+  "file": "succulent_rosette.png",
+  "group": "prop",
+  "cell": [
+   28,
+   24
+  ],
+  "anchor": [
+   14.0,
+   12.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "cactus_column": {
+  "file": "cactus_column.png",
+  "group": "prop",
+  "cell": [
+   16,
+   28
+  ],
+  "anchor": [
+   8.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "lotus_leaf": {
+  "file": "lotus_leaf.png",
+  "group": "prop",
+  "cell": [
+   28,
+   16
+  ],
+  "anchor": [
+   14.0,
+   8.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "plant_bud": {
+  "file": "plant_bud.png",
+  "group": "prop",
+  "cell": [
+   16,
+   28
+  ],
+  "anchor": [
+   8.0,
+   14.0
+  ],
+  "anims": {
+   "idle": {
+    "row": 0,
+    "frames": 1,
+    "fps": 1,
+    "loop": true
+   }
+  },
+  "source": "png",
+  "palette": "AAP-64"
+ },
+ "potato_tuber": {
+  "file": "potato_tuber.png",
+  "group": "prop",
+  "cell": [
+   28,
+   20
+  ],
+  "anchor": [
+   14.0,
    10.0
   ],
   "anims": {
