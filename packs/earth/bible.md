@@ -15,6 +15,7 @@ composition. Reuse the same sprite files across styles and frame formats.
 
 [USGS: Water Cycle](https://www.usgs.gov/water-science-school/water-cycle) and
 [USGS: Water Cycle Terms](https://www.usgs.gov/glossary/glossary-water-cycle-terms)
-inform the concepts. The drawings are original code; no source illustrations are copied.
+inform the concepts. The AAP-64 sprites develop the original code drawings. Their
+identifiers, display dimensions and anchors are shared across environments.
 
 Code: MIT. PNG sprites: CC0-1.0. Credits: `sprites/CREDITS.csv`.

@@ -1,9 +1,34 @@
 sprite,file,author,license,source,notes
-cloud,cloud.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
-ice,ice.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
-river,river.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
-snowflake,snowflake.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
-soil,soil.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
-sun,sun.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
-water_drop,water_drop.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
-water_pool,water_pool.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/earth/code/library.py,original code drawing; shared across styles
+cloud,cloud.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/earth/code/library.py,AAP-64 redraw based on the original code art
+ice,ice.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/earth/code/library.py,AAP-64 redraw based on the original code art
+river,river.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/earth/code/library.py,AAP-64 redraw based on the original code art
+snowflake,snowflake.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/earth/code/library.py,AAP-64 redraw based on the original code art
+soil,soil.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/earth/code/library.py,AAP-64 redraw based on the original code art
+sun,sun.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/earth/code/library.py,AAP-64 redraw based on the original code art
+water_drop,water_drop.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/earth/code/library.py,AAP-64 redraw based on the original code art
+water_pool,water_pool.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/earth/code/library.py,AAP-64 redraw based on the original code art
+rock_strata,rock_strata.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: superposition, deposition, geological cross sections."
+rock_fold,rock_fold.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: folding, deformation, geological structure."
+rock_fault,rock_fault.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: fault displacement, earthquakes, geological correlation."
+sandstone_sample,sandstone_sample.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: sedimentary rocks, cementation, weathering."
+basalt_sample,basalt_sample.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: igneous rocks, cooling, rock cycle."
+granite_sample,granite_sample.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: igneous texture, minerals in rocks, cooling histories."
+limestone_fossil,limestone_fossil.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: fossils, sedimentary environments, carbonate rocks."
+pumice_sample,pumice_sample.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: volcanism, porosity, material density."
+quartz_crystal,quartz_crystal.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: mineral habit, crystallization, geological materials."
+halite_crystal,halite_crystal.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: mineral habit, evaporation, crystallization."
+mineral_mica,mineral_mica.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: mineral cleavage, rock constituents, material structure."
+sand_grains,sand_grains.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: sediment transport, grain size, erosion."
+gravel_clast,gravel_clast.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: abrasion, sediment transport, sorting."
+clay_aggregate,clay_aggregate.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: fine sediment, soil structure, particle comparison."
+volcano_cutaway,volcano_cutaway.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: volcanic structure, magma pathways, rock cycle."
+tectonic_plate,tectonic_plate.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: plate motion, lithosphere, boundary explanations."
+subduction_section,subduction_section.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: convergent boundaries, trenches, subduction geometry."
+aquifer_section,aquifer_section.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: groundwater, porosity, confined aquifers."
+glacier,glacier.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: glacial erosion, ice storage, landscape change."
+sand_dune,sand_dune.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: wind transport, deposition, landform geometry."
+stalactite,stalactite.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: mineral precipitation, cave formation, dripwater deposition."
+stalagmite,stalagmite.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: mineral precipitation, cave formation, dripwater deposition."
+ammonite_fossil,ammonite_fossil.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: fossils, geological time, marine past environments."
+trilobite_fossil,trilobite_fossil.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: fossils, arthropod history, body symmetry."
+meteorite,meteorite.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: planetary materials, impacts, surface versus interior."
