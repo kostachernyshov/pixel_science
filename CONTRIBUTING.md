@@ -28,6 +28,7 @@ folders load from `$PIXSCI_PACKS`. A sprite name is unique across packs.
    the tool finds the site there, along a level or upright line. A free molecule faces right (in a scene, the one on the right of its partner gets
    `flip: true`); a membrane receptor faces up, out of the cell. Cells need no key: the tool draws their parts on
    stalks out of the membrane.
+   For a higher-resolution sheet that keeps its size in scenes, set `source_cell` to the PNG cell dimensions. The original `cell` and `anchor` still define the size and alignment in scenes. For different aspect ratios, center the drawing in the part of the source cell that fits the display cell. Extra padding is cropped.
 5. **Credits.** Add a row to the pack's `sprites/CREDITS.csv`: sprite, file, author, license, source URL, notes.
 6. **Check.** `python tools/validate_sprites.py` prints `VALID`. Look at the cast sheet: `python pixsci.py sheet out/sheet.png`.
 
