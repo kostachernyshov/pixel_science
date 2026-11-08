@@ -22,7 +22,7 @@ Terms of pixel_science. Use these words in code, docs, issues, and plans.
 | **Color role** | A name for a color ramp in a verb (`granule`, `pdl1`), dark to bright, from palette names. | color, hex |
 | **Light layer** | A second layer of the frame with glow; the style blends it over the colors (`fx.LIGHT`). | bloom, shader |
 | **Hit** | Mechanics of a blow: windup of the attacker, freeze of the picture on contact, shake, push of the target. Presets `soft`, `normal`, `heavy`. | impact |
-| **Contact sheet** | A grid of frames of each verb over time: `pixsci.py verbs out/verbs.png`. Used to look at a verb. | preview |
+| **Contact sheet** | A grid of frames of each verb over time: `pixsci.py verbs /tmp/verbs.png`. Used to look at a verb. | preview |
 | **Model** | `model:` in a plan: the things of one story, their parts, and its relations, each with a source. Written in `storyboard`, checked by `pixsci check` (`pixel_kit/model.py`). | mechanism table |
 | **Part** | A thing's piece that acts at its surface (a receptor, a ligand). Drawn on a stalk out of its owner's membrane, with a lock or key head; on a molecule (`"body": "molecule"`), the site is the sprite's own edge. | badge, icon |
 | **Relation** | One link of the model: `bind`, `occupy`, `transfer`, `change`, `destroy`. A verb names the kinds it shows (`relation:`); a beat with it must match a relation. | link, edge |

@@ -1,17 +1,18 @@
 # The tool without an agent
 
 The skills run these commands for you. Read this page to run them by hand, to work on the core, or to see how a
-plan becomes a video. Paths are relative to the repo root.
+plan becomes a video. Commands run from the repo root; `videos/my-topic/` stands for the video's own folder,
+outside this repo. Previews (`sheet`, `verbs`) go to a temporary folder.
 
 ## Commands
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # also needs ffmpeg
 .venv/bin/python pixsci.py doctor                                     # what is there, what is missing
-.venv/bin/python pixsci.py sheet  out/sheet.png                       # the sprites you can use
+.venv/bin/python pixsci.py sheet  /tmp/sheet.png                       # the sprites you can use
 .venv/bin/python pixsci.py check  videos/my-topic/explainer.yaml       # a plan you wrote (PLAN.md)
-.venv/bin/python pixsci.py board  videos/my-topic/explainer.yaml out   # storyboards, every format
-.venv/bin/python pixsci.py render videos/my-topic/explainer.yaml out   # the videos
+.venv/bin/python pixsci.py board  videos/my-topic/explainer.yaml videos/my-topic   # storyboards, every format
+.venv/bin/python pixsci.py render videos/my-topic/explainer.yaml videos/my-topic   # the videos
 ```
 
 A 46 s video in all four formats renders in about 25 s on a laptop. Plans and videos are not committed.
@@ -35,8 +36,8 @@ explainer.yaml: beats on words {word: "attacks"}, subtitles: true ────�
 ```bash
 .venv/bin/pip install -r requirements-voice.txt          # Python 3.10 to 3.12, PyTorch
 .venv/bin/pip install --no-deps qwen-asr==0.0.6           # the aligner; it pins another transformers but works with this one
-.venv/bin/python pixsci.py voice  videos/my-topic/explainer.yaml out          # listen: out/<name>-voice.wav
-.venv/bin/python pixsci.py render videos/my-topic/explainer.yaml out --voice  # video with sound and subtitles
+.venv/bin/python pixsci.py voice  videos/my-topic/explainer.yaml videos/my-topic   # listen: <name>-voice.wav
+.venv/bin/python pixsci.py render videos/my-topic/explainer.yaml videos/my-topic --voice  # video with sound and subtitles
 ```
 
 The first run downloads about 6 GB from Hugging Face (a cloud sandbox must allow `huggingface.co` and `*.hf.co`).
@@ -58,7 +59,7 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
 - `action` scenes place actors in fractions of the frame and run timed beats (move, animation, badge, ghost, marks, verb, and behaviors: wander, hunt, divide), so one scene fits every format.
 - Verbs are actions with effects (`secrete`, `block`, `hit`): YAML in a pack that lists primitives of the core
   (`pixel_kit/fx.py`), with a light layer over the colors and hit mechanics (windup, freeze, shake, push).
-  `pixsci.py verbs out/verbs.png` lists and draws them. Why: `docs/adr/0001-verbs-and-primitives.md`.
+  `pixsci.py verbs /tmp/verbs.png` lists and draws them. Why: `docs/adr/0001-verbs-and-primitives.md`.
 - The frame is small (480x270 for 16:9) and scaled x4 with nearest neighbor: sharp pixels at any size.
 - Text: Medeo Pixel on a grid 2 times finer than the frame (one text pixel is half a frame pixel), so
   text keeps its size (16 px line at scale 1) with finer letters. Sizes stay in frame pixels. Text is drawn
@@ -71,7 +72,7 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
 pixsci.py              command line: doctor, formats, sheet, verbs, check, board, render, frames, voice
 fonts/                 unifont.otf, MedeoPixel.ttf (from npm medeo-font 1.0.0, WOFF to TTF) and their licenses
 pixel_kit/             the core: frame, explain, sets, timebar, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
-packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json, CREDITS.csv); code/ (sprites drawn in code)
+packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json); code/ (sprites drawn in code)
 packs/earth/           shared water, weather, and soil sprites; the same pack structure
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
 skills/                agent skills: setup, storyboard, animate, add-verb (linked from .claude/skills and .agents/skills)

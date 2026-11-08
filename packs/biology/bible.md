@@ -49,4 +49,4 @@ These inform what features to distinguish; no reference art is copied.
 - [RCSB PDB-101: Proteasome](https://pdb101.rcsb.org/motm/166): a barrel-shaped protein
   degradation assembly, simplified here to a small icon.
 
-Art code is MIT; PNG sprites are CC0-1.0, with authorship in `sprites/CREDITS.csv`.
+Art code is MIT; PNG sprites are CC0-1.0, with authorship in `pack.yaml`.

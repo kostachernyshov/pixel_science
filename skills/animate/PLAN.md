@@ -192,7 +192,7 @@ Use it whenever an actor must reach another one (a syringe, a hit, a bind): numb
 
 **Verbs.** A beat with `verb:` plays an action: effects with color and light, and for some verbs a hit
 (the attacker pulls back, the picture stops on contact, the frame shakes, the target is pushed back).
-`pixsci.py verbs` lists the verbs of the core and the packs; `pixsci.py verbs out/verbs.png` draws them.
+`pixsci.py verbs` lists the verbs of the core and the packs; `pixsci.py verbs /tmp/verbs.png` draws them.
 Core verbs: `appear` (set `hidden: true` on the actor), `vanish`, `hit`, `highlight`, `alert`.
 Biology verbs: `secrete`, `block`, `apoptosis`, `bind`. Effects have no coordinates: they take place and size
 from the actor and the `target`. `hit: heavy` on a beat makes a hit stronger, `hit: false` removes it.
