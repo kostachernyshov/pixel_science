@@ -19,7 +19,9 @@ A 46 s video in all four formats renders in about 25 s on a laptop. Plans and vi
 
 ## Voice and subtitles
 
-`--voice` speaks `voiceover.md`, times each word, and puts the sound into the video:
+`pixsci voice` and `--voice` speak `voiceover.md` and time each word; `render --voice` puts the sound into the video.
+A plan times itself to the fresh voice in `OUTDIR/voice/` with or without `--voice` (`check PLAN OUTDIR` too): a scene
+whose text or `tts:` changed after it was spoken is estimated, with a warning, until it is spoken again:
 
 ```
 voiceover.md ─> Qwen3-TTS ─> voice/<scene>.wav ─> Qwen3-ForcedAligner ─> voice/<scene>.words.json
@@ -71,7 +73,7 @@ packs/         ─┘        (layout per format: pixel_kit/frame.py)
 ```
 pixsci.py              command line: doctor, formats, sheet, verbs, check, board, render, frames, voice
 fonts/                 unifont.otf, MedeoPixel.ttf (from npm medeo-font 1.0.0, WOFF to TTF) and their licenses
-pixel_kit/             the core: frame, explain, stage, model, sets, timebar, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
+pixel_kit/             the core: frame, plan, explain, stage, model, sets, timebar, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
 packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json); code/ (sprites drawn in code)
 packs/earth/           shared water, weather, and soil sprites; the same pack structure
 tools/                 build_sprites.py, validate_sprites.py, make_sheet.py, frame_hashes.py (frames equal before and after a change)

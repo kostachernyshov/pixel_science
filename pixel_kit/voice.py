@@ -1,13 +1,16 @@
 # Voice-over audio: voiceover.md spoken by Qwen3-TTS (local, Apache 2.0, Russian, English and 8 more languages).
 #
 #   pixsci voice  PLAN OUTDIR             OUTDIR/voice/<scene>.wav and OUTDIR/<name>-voice.wav
-#   pixsci render PLAN OUTDIR --voice     the same audio, scenes timed to it, sound in each mp4
+#   pixsci render PLAN OUTDIR --voice     speaks what is missing, then the sound in each mp4
+#
+# A plan times itself to the fresh voice in OUTDIR/voice/ (plan.load), with or without --voice.
 #
 # Optional: requirements-voice.txt (Python 3.10 to 3.12, PyTorch; see docs/tool.md, Voice). The first run downloads
 # the model from Hugging Face (1.7B: ~4.5 GB). Each scene is spoken once; a scene is spoken again only when
 # its text or the `tts:` settings change. After the voice, words.align times each word (subtitles, beats).
 
-import json, os, wave
+import contextlib, json, os, sys, wave
+from typing import NamedTuple
 import numpy as np
 
 RATE = 24000             # Hz, Qwen3-TTS output
@@ -70,34 +73,92 @@ def write_wav(p, samples):
         w.writeframes(pcm.tobytes())
 
 
-def attach(plan, texts, outdir, say=None):
-    """Speaks the voice-over of each scene into outdir/voice/<id>.wav (only what changed) and puts the
-    length of each scene's audio into plan["_spoken"], so that `explain.durations` times scenes to it.
-    texts: {scene id: spoken text} (words.spoken). say: text -> samples; default Qwen3-TTS.
-    Returns {scene id: wav path}."""
-    t = settings(plan)
-    d = os.path.join(outdir, "voice")
-    os.makedirs(d, exist_ok=True)
-    meta_p = os.path.join(d, "meta.json")
-    meta = json.load(open(meta_p)) if os.path.exists(meta_p) else {}
-    paths, spoken = {}, {}
+class Voice(NamedTuple):
+    """The voice in OUTDIR/voice/ for the current text. wavs: {scene id: wav} of the fresh voice, spoken from the
+    scene's current text and tts: settings. stale: scenes with text and no fresh voice, in a folder that has a voice."""
+    wavs: dict
+    stale: list
+
+
+def _key(t, text):
+    return {"text": text, **{k: t[k] for k in ("voice", "lang", "instruct", "model", "seed")}}
+
+
+def _meta(outdir):
+    p = os.path.join(outdir, "voice", "meta.json")
+    return json.load(open(p)) if os.path.exists(p) else {}
+
+
+def fresh(plan, texts):
+    """The Voice of these texts ({scene id: spoken text}, words.spoken) in plan.outdir/voice/. One rule for scene
+    lengths and word times: a scene uses its voice only when it is fresh."""
+    outdir = plan.outdir
+    if not outdir:
+        return Voice({}, [])
+    t, meta = settings(plan), _meta(outdir)
+    wavs, stale = {}, []
     for sc in plan["scenes"]:
         sid = sc.get("id")
         text = texts.get(sid, "").strip()
         if not text:
             continue
-        p = os.path.join(d, f"{sid}.wav")
-        key = {"text": text, **{k: t[k] for k in ("voice", "lang", "instruct", "model", "seed")}}
-        if meta.get(sid) != key or not os.path.exists(p):
-            say = say or qwen3(t)
-            print(f"voice {sid}: {text[:60]}", flush=True)
-            write_wav(p, say(text))
-            meta[sid] = key
-            json.dump(meta, open(meta_p, "w"), indent=1, ensure_ascii=False)
-        paths[sid] = p
-        spoken[sid] = LEAD + len(read_wav(p)) / RATE + TAIL
-    plan["_spoken"] = spoken
-    return paths
+        p = os.path.join(outdir, "voice", f"{sid}.wav")
+        if meta.get(sid) == _key(t, text) and os.path.exists(p):
+            wavs[sid] = p
+        elif meta:
+            stale.append(sid)
+    return Voice(wavs, stale)
+
+
+def speak(plan, texts, say=None):
+    """Speaks each scene that has no fresh voice into plan.outdir/voice/<id>.wav. texts: {scene id: spoken text}
+    (words.spoken). say: text -> samples; default Qwen3-TTS. Returns the Voice after it."""
+    t, outdir = settings(plan), plan.outdir
+    os.makedirs(os.path.join(outdir, "voice"), exist_ok=True)
+    meta, have = _meta(outdir), fresh(plan, texts).wavs
+    for sc in plan["scenes"]:
+        sid = sc.get("id")
+        text = texts.get(sid, "").strip()
+        if not text or sid in have:
+            continue
+        say = say or qwen3(t)
+        print(f"voice {sid}: {text[:60]}", flush=True)
+        write_wav(os.path.join(outdir, "voice", f"{sid}.wav"), say(text))
+        meta[sid] = _key(t, text)
+        json.dump(meta, open(os.path.join(outdir, "voice", "meta.json"), "w"), indent=1, ensure_ascii=False)
+    return fresh(plan, texts)
+
+
+def lengths(wavs):
+    """{scene id: s}: how long each scene's voice lasts, with the silence before and after its words."""
+    return {sid: LEAD + len(read_wav(p)) / RATE + TAIL for sid, p in wavs.items()}
+
+
+@contextlib.contextmanager
+def quiet(log):
+    """Sends stderr (progress bars and warnings of torch and Hugging Face) to the file log, one run per file;
+    stdout stays. An agent reads only the short result, not thousands of progress lines."""
+    os.makedirs(os.path.dirname(log), exist_ok=True)
+    if sys.stderr:
+        sys.stderr.flush()
+    f = open(log, "w")
+    keep = os.dup(2)
+    os.dup2(f.fileno(), 2)
+    try:
+        yield
+    except BaseException as e:
+        stop = not (isinstance(e, SystemExit) and e.code in (None, 0))
+        raise
+    else:
+        stop = False
+    finally:
+        if sys.stderr:
+            sys.stderr.flush()
+        os.dup2(keep, 2)
+        os.close(keep)
+        f.close()
+        if stop and os.path.getsize(log):
+            print(f"voice: stopped; details in {log}", file=sys.stderr)
 
 
 def mix(plan, paths, times, out):

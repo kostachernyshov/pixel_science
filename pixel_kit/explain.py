@@ -2,10 +2,10 @@
 # The plan format is in skills/animate/PLAN.md. Paths in the plan are relative to the plan file.
 #
 #   from pixel_kit import explain, frame
-#   plan = explain.load("my-video/explainer.yaml")
+#   plan = P.load("my-video/explainer.yaml")    # from pixel_kit import plan as P
 #   problems = explain.check(plan)        # rules: captions, sources, sprites, timing, text fits
-#   frame.use("vertical")
-#   tl, marks = explain.timeline(plan)    # marks: key times for the storyboard
+#   with frame.using("vertical"):
+#       tl, marks = explain.timeline(plan)    # marks: key times for the storyboard
 #
 # Scene types: title, cast, action, fact, flow, summary, custom.
 # Layout is relative to the frame, so one plan renders in every format of frame.FORMATS.
@@ -32,20 +32,8 @@ COLOR_NAMES = {
 
 # ---------------------------------------------------------------- plan, voice-over, timing
 
-def load(path):
-    import yaml
-    plan = yaml.safe_load(open(path, encoding="utf-8"))
-    plan["_dir"] = os.path.dirname(os.path.abspath(path))
-    plan.setdefault("scenes", [])
-    plan.setdefault("lang", "en")
-    plan.setdefault("formats", list(frame.FORMATS))
-    S.use(plan.get("packs"))              # packs: [biology]; without it, every pack
-    verbs.use(plan.get("packs"))
-    return plan
-
-
 def path(plan, p):
-    return p if not p or os.path.isabs(p) else os.path.join(plan["_dir"], p)
+    return p if not p or os.path.isabs(p) else os.path.join(plan.dir, p)
 
 
 def voiceover(plan):
@@ -66,11 +54,11 @@ def voiceover(plan):
 
 def durations(plan):
     """Start and end of each scene: from the words of its voice-over (2.5 words/s), or "dur" in the scene.
-    With synthesized audio (voice.attach puts plan["_spoken"]), a scene lasts as long as its audio,
-    and a "dur" in the scene is never shorter than the audio."""
+    With a fresh voice (plan.spoken), a scene lasts as long as its voice,
+    and a "dur" in the scene is never shorter than the voice."""
     scenes = plan["scenes"]
     vo = voiceover(plan)
-    spoken = plan.get("_spoken") or {}
+    spoken = plan.spoken
     times = []
     t = 0.0
     for sc in scenes:
@@ -96,13 +84,12 @@ def color(name):
 
 # ---------------------------------------------------------------- layout for the current format
 
-SUBS = False             # subtitles on: set from plan["subtitles"] by prepare()
-TIMEBAR = False          # a timeline strip at the bottom of the stage: set from plan["timeline"] by prepare()
 SUB_LINES = 2
 
 
-def layout():
-    """Sizes for the current format. Tall frames stack items; the banner is one low row."""
+def layout(plan):
+    """Sizes of the plan in the current format. Tall frames stack items; the banner is one low row.
+    The plan's subtitles: and timeline: take room at the bottom."""
     W, H = frame.W, frame.H
     tall = H > W
     banner = H < 160
@@ -113,7 +100,7 @@ def layout():
     head_h = 0 if banner else 30
     L = dict(W=W, H=H, tall=tall, banner=banner, cap_scale=cap_scale, cap_y=cap_y,
              head_h=head_h, stage=(0, head_h, W, cap_y - 4), sprite_scale=2, subs=None)
-    if SUBS:
+    if plan.get("subtitles"):
         # subtitles: a box of SUB_LINES lines at the bottom (one line in the banner); no caption
         n = 1 if banner else SUB_LINES
         box_h = n * LINE + (n - 1) * 2 + 10
@@ -124,7 +111,7 @@ def layout():
             box = (W * 2 // 3, H - margin - box_h, W - side, H - margin)
         L.update(subs=dict(box=box, lines=n), cap_y=box[1],
                  stage=(0, head_h, box[0] - 4 if banner else W, box[1] - 4 if not banner else H))
-    if TIMEBAR:
+    if plan.get("timeline"):
         x0, y0, x1, y1 = L["stage"]
         h = timebar.height(L)
         L.update(timebar=(x0, y1 - h, x1, y1), stage=(x0, y0, x1, y1 - h))
@@ -226,7 +213,7 @@ def _sprites(sc):
 
 def check(plan):
     """Rules of the skill. Returns a list of problems (empty: all pass)."""
-    out = list(prepare(plan))
+    out = list(plan.problems)
     out += timebar.check(plan, colors=list(COLOR_NAMES))
     if not plan.get("sources"):
         out.append("sources: list at least one source for the science in the video")
@@ -304,29 +291,26 @@ def check(plan):
     for f in plan.get("formats") or []:
         if f not in frame.FORMATS:
             continue
-        frame.use(f)
-        L = layout()
-        if TIMEBAR:
-            out += [f"{p} [{f}]" for p in timebar.fit(plan, L)]
-        for sc in plan["scenes"]:
-            cap = sc.get("caption")
-            if cap:
-                k, lines = fit_text(cap, L["W"] - 16, (L["cap_scale"], 1), max_lines=1 if L["banner"] else 2)
-                if len(lines) > (1 if L["banner"] else 2):
-                    out.append(f"{sc.get('id')}: caption {cap!r} does not fit the {f} frame")
-    frame.use("landscape")
+        with frame.using(f):
+            L = layout(plan)
+            if plan.get("timeline"):
+                out += [f"{p} [{f}]" for p in timebar.fit(plan, L)]
+            for sc in plan["scenes"]:
+                cap = sc.get("caption")
+                if cap:
+                    k, lines = fit_text(cap, L["W"] - 16, (L["cap_scale"], 1), max_lines=1 if L["banner"] else 2)
+                    if len(lines) > (1 if L["banner"] else 2):
+                        out.append(f"{sc.get('id')}: caption {cap!r} does not fit the {f} frame")
     for name in sorted(used & set(verbs.all())):
         ms = verbs.bench(name)
         if ms > verbs.MAX_MS:
             out.append(f"warning: verb {name} takes {ms:.1f} ms a frame (limit {verbs.MAX_MS} ms); make its primitives faster")
-    plan.pop("_world", None)
     fmts = [x for x in (plan.get("formats") or ["landscape"]) if x in frame.FORMATS] or ["landscape"]
     for i, f in enumerate(fmts):          # the model once; contact (geometry) in each format
-        frame.use(f)
-        L = layout()
-        found = model.check(plan, positions=lambda si, sc, t: stage.state_at(plan, sc, t, L), stage=L["stage"])
+        with frame.using(f):
+            L = layout(plan)
+            found = model.check(plan, positions=lambda si, sc, t: stage.state_at(plan, sc, t, L), stage=L["stage"])
         out += found if i == 0 else [f"{p} [{f}]" for p in found if "(contact)" in p]
-    frame.use("landscape")
     if not plan["scenes"] or plan["scenes"][-1].get("type") not in ("summary", "custom"):
         out.append("the last scene must be a summary (or a custom final frame)")
     story_end = times[-2][1] if len(times) > 1 and plan["scenes"][-1].get("type") == "summary" else (times[-1][1] if times else 0)
@@ -365,10 +349,9 @@ def _check_set(plan, sc, sid):
     if st and st.get("type") == "panels" and not out:
         for f in plan.get("formats") or []:
             if f in frame.FORMATS:
-                frame.use(f)
-                out += [f"{sid}: {p} [{f}]" for p in sets.fit(st, layout(), sc.get("beats") or [])]
-        frame.use("landscape")
-    zs = set(sets.zones(st, layout())) | ({"all"} if st and st.get("type") == "panels" else set())
+                with frame.using(f):
+                    out += [f"{sid}: {p} [{f}]" for p in sets.fit(st, layout(plan), sc.get("beats") or [])]
+    zs = set(sets.zones(st, layout(plan))) | ({"all"} if st and st.get("type") == "panels" else set())
     for name, a in (sc.get("actors") or {}).items():
         if a.get("in") == "all" and a.get("parts"):
             out.append(f"{sid}: actor {name} is in all panels and has parts; parts and binds show in one panel "
@@ -476,7 +459,7 @@ def _items(img, L, items, t, box, t0=0.3, step=0.35, labels=True, still=False):
 
 def p_title(plan, sc, t, dur, ctx):
     img = bg.paper()
-    L = layout()
+    L = layout(plan)
     W, H = L["W"], L["H"]
     s = (sc.get("title") or "").upper()
     k = 6
@@ -499,7 +482,7 @@ def p_title(plan, sc, t, dur, ctx):
 def p_cast(plan, sc, t, dur, ctx):
     """The characters of the story in a row (a grid in a tall frame), each with a label."""
     img = _bg(sc, t)
-    L = layout()
+    L = layout(plan)
     _heading(img, L, sc.get("title"))
     _items(img, L, sc.get("items") or [], t, L["stage"])
     _caption(img, L, sc, t)
@@ -509,7 +492,7 @@ def p_cast(plan, sc, t, dur, ctx):
 def p_flow(plan, sc, t, dur, ctx):
     """Steps of a process with arrows: left to right, or top to bottom in a tall frame."""
     img = _bg(sc, t)
-    L = layout()
+    L = layout(plan)
     _heading(img, L, sc.get("title"))
     steps = sc.get("steps") or []
     n = len(steps)
@@ -555,7 +538,7 @@ def p_flow(plan, sc, t, dur, ctx):
 def p_fact(plan, sc, t, dur, ctx):
     """One idea: a sprite and 1 to 3 short lines (beside it when wide, under it when tall)."""
     img = _bg(sc, t)
-    L = layout()
+    L = layout(plan)
     W = L["W"]
     x0, y0, x1, y1 = L["stage"]
     lines = sc.get("text") or []
@@ -641,7 +624,7 @@ def p_action(plan, sc, T, dur, ctx):
     beats, hits = sc.get("beats") or [], ctx["hits"]
     t, shake = fx.warp(T, [h[:2] for h in hits])
     img = _bg(sc, t)
-    L = layout()
+    L = layout(plan)
     if sc.get("set"):
         sets.draw(img, sc["set"], L, beats, t)
     base = img.copy()
@@ -775,7 +758,7 @@ def p_summary(plan, sc, t, dur, ctx):
     """The last frame: a heading, up to 4 sprites with labels, and 1 or 2 lines of conclusion.
     It appears in about 1.5 s and then holds still."""
     img = bg.plain()
-    L = layout()
+    L = layout(plan)
     W, H = L["W"], L["H"]
     _heading(img, L, sc.get("title") or plan.get("title"))
     lines = sc.get("text") or []
@@ -821,7 +804,7 @@ def p_custom(plan, sc, t, dur, ctx):
         spec.loader.exec_module(mod)
         fn = ctx["_fn"] = getattr(mod, sc.get("function", "draw"))
     img = _bg(sc, t)
-    L = layout()
+    L = layout(plan)
     _heading(img, L, sc.get("title"))     # the same heading as the other scene types
     shows = {}                            # relation: the first time the scene shows it
     for b in sc.get("beats") or []:
@@ -836,21 +819,6 @@ PAINTERS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 
 
 # ---------------------------------------------------------------- timeline
-
-def prepare(plan):
-    """Words of the voice-over in time (aligned, or estimated), beats placed on their words, then the plan as it
-    plays (stage.resolve: continue, behaviors). Runs once per plan; plan["_outdir"] is where
-    voice/<scene>.words.json are. A plan timed again (to new audio) is read again. Returns problems."""
-    global SUBS, TIMEBAR
-    SUBS = bool(plan.get("subtitles"))
-    TIMEBAR = bool(plan.get("timeline"))
-    if "_words" in plan:
-        return plan.get("_problems", [])
-    WD.attach(plan, voiceover(plan), plan.get("_outdir"))
-    plan["_problems"] = WD.resolve_beats(plan)
-    plan["_problems"] += stage.resolve(plan, durations(plan))
-    return plan["_problems"]
-
 
 def _sub_lines(ws, maxw):
     """Words into lines that fit maxw (scale 1): [[(i, word, x)]], x from the line start."""
@@ -873,9 +841,9 @@ def _sub_lines(ws, maxw):
 def subtitles(plan, times):
     """overlay(arr, T) for Timeline: the voice-over word for word in a box at the bottom.
     Each word types in letter by letter while it is said; the word being said is yellow."""
-    if not SUBS:
+    if not plan.get("subtitles"):
         return None
-    L = layout()
+    L = layout(plan)
     x0, y0, x1, y1 = L["subs"]["box"]
     n = L["subs"]["lines"]
     maxw = x1 - x0 - 12
@@ -917,12 +885,10 @@ def subtitles(plan, times):
 
 
 def timeline(plan):
-    """Builds the Timeline for the current format (frame.use). Returns (timeline, marks):
+    """Builds the Timeline for the current format (frame.using). Returns (timeline, marks):
     marks are (time, label) for the storyboard."""
-    prepare(plan)
     times = durations(plan)
     scenes, marks = [], []
-    plan.pop("_world", None)
     for si, (sc, (a, b)) in enumerate(zip(plan["scenes"], times)):
         ctx = {"si": si}
         painter = PAINTERS[sc["type"]]
@@ -943,11 +909,11 @@ def timeline(plan):
 def _timebar(plan, times):
     """overlay(arr, T) for Timeline: the timeline strip, over the dissolve; hidden in title and summary
     scenes and in a scene with timeline: false."""
-    if not TIMEBAR:
+    if not plan.get("timeline"):
         return None
     from PIL import Image
     import numpy as np
-    L = layout()
+    L = layout(plan)
     evs = timebar.events(plan, times)
     off = [(a, b) for sc, (a, b) in zip(plan["scenes"], times)
            if sc.get("type") in ("title", "summary") or sc.get("timeline") is False]
