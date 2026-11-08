@@ -1,0 +1,442 @@
+{
+  "bar_magnet": {
+    "file": "bar_magnet.png",
+    "group": "prop",
+    "cell": [
+      32,
+      16
+    ],
+    "anchor": [
+      16.0,
+      8.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "horseshoe_magnet": {
+    "file": "horseshoe_magnet.png",
+    "group": "prop",
+    "cell": [
+      32,
+      32
+    ],
+    "anchor": [
+      16.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "compass": {
+    "file": "compass.png",
+    "group": "prop",
+    "cell": [
+      32,
+      32
+    ],
+    "anchor": [
+      16.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "convex_lens": {
+    "file": "convex_lens.png",
+    "group": "prop",
+    "cell": [
+      16,
+      32
+    ],
+    "anchor": [
+      8.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "concave_lens": {
+    "file": "concave_lens.png",
+    "group": "prop",
+    "cell": [
+      16,
+      32
+    ],
+    "anchor": [
+      8.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "triangular_prism": {
+    "file": "triangular_prism.png",
+    "group": "prop",
+    "cell": [
+      32,
+      28
+    ],
+    "anchor": [
+      16.0,
+      14.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "plane_mirror": {
+    "file": "plane_mirror.png",
+    "group": "prop",
+    "cell": [
+      12,
+      32
+    ],
+    "anchor": [
+      6.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "pendulum_bob": {
+    "file": "pendulum_bob.png",
+    "group": "prop",
+    "cell": [
+      24,
+      32
+    ],
+    "anchor": [
+      12.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "coil_spring": {
+    "file": "coil_spring.png",
+    "group": "prop",
+    "cell": [
+      20,
+      32
+    ],
+    "anchor": [
+      10.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "pulley": {
+    "file": "pulley.png",
+    "group": "prop",
+    "cell": [
+      32,
+      32
+    ],
+    "anchor": [
+      16.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "lever_beam": {
+    "file": "lever_beam.png",
+    "group": "prop",
+    "cell": [
+      32,
+      12
+    ],
+    "anchor": [
+      16.0,
+      6.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "inclined_plane": {
+    "file": "inclined_plane.png",
+    "group": "prop",
+    "cell": [
+      32,
+      20
+    ],
+    "anchor": [
+      16.0,
+      10.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "balance_scale": {
+    "file": "balance_scale.png",
+    "group": "prop",
+    "cell": [
+      40,
+      36
+    ],
+    "anchor": [
+      20.0,
+      18.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "battery_cell": {
+    "file": "battery_cell.png",
+    "group": "prop",
+    "cell": [
+      20,
+      32
+    ],
+    "anchor": [
+      10.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "resistor": {
+    "file": "resistor.png",
+    "group": "prop",
+    "cell": [
+      28,
+      12
+    ],
+    "anchor": [
+      14.0,
+      6.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "capacitor": {
+    "file": "capacitor.png",
+    "group": "prop",
+    "cell": [
+      24,
+      32
+    ],
+    "anchor": [
+      12.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "solenoid": {
+    "file": "solenoid.png",
+    "group": "prop",
+    "cell": [
+      32,
+      20
+    ],
+    "anchor": [
+      16.0,
+      10.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "tuning_fork": {
+    "file": "tuning_fork.png",
+    "group": "prop",
+    "cell": [
+      20,
+      32
+    ],
+    "anchor": [
+      10.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "loudspeaker_cone": {
+    "file": "loudspeaker_cone.png",
+    "group": "prop",
+    "cell": [
+      32,
+      32
+    ],
+    "anchor": [
+      16.0,
+      16.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  },
+  "weight_block": {
+    "file": "weight_block.png",
+    "group": "prop",
+    "cell": [
+      20,
+      20
+    ],
+    "anchor": [
+      10.0,
+      10.0
+    ],
+    "anims": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "fps": 1,
+        "loop": true
+      }
+    },
+    "source": "png",
+    "palette": "AAP-64"
+  }
+}
