@@ -18,14 +18,14 @@ def hashes(path):
     plan = explain.load(path)
     plan["_outdir"] = None
     out = {"check": explain.check(plan), "frames": {}}
+    ids = [(a, b, sc.get("id", "?")) for sc, (a, b) in zip(plan["scenes"], explain.durations(plan))]
     for f in frame.FORMATS:
-        frame.use(f)
-        tl, _ = explain.timeline(plan)
-        ids = [(a, b, sc.get("id", "?")) for sc, (a, b) in zip(plan["scenes"], explain.durations(plan))]
-        for i in range(int(tl.duration * FPS)):
-            t = i / FPS
-            scene = next((s for a, b, s in ids if a <= t < b), ids[-1][2])
-            out["frames"][f"{f} {i:05d} {scene}"] = hashlib.sha1(tl.frame(t).tobytes()).hexdigest()
+        with frame.using(f):
+            tl, _ = explain.timeline(plan)
+            for i in range(int(tl.duration * FPS)):
+                t = i / FPS
+                scene = next((s for a, b, s in ids if a <= t < b), ids[-1][2])
+                out["frames"][f"{f} {i:05d} {scene}"] = hashlib.sha1(tl.frame(t).tobytes()).hexdigest()
     return out
 
 

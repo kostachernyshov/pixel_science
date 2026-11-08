@@ -208,11 +208,11 @@ def cmd_board(a):
     if vo:
         plan, _ = _voice(plan, pos[0], pos[1])
     for f in _formats(plan, fmts):
-        frame.use(f)
-        tl, marks = explain.timeline(plan)
-        cols = 3 if frame.W >= frame.H else 4
-        out = os.path.join(pos[1], f"board-{f}.png")
-        tl.storyboard(out, [t for t, _ in marks], cols=cols, labels=[m.split()[0] for _, m in marks])
+        with frame.using(f):
+            tl, marks = explain.timeline(plan)
+            cols = 3 if frame.W >= frame.H else 4
+            out = os.path.join(pos[1], f"board-{f}.png")
+            tl.storyboard(out, [t for t, _ in marks], cols=cols, labels=[m.split()[0] for _, m in marks])
         print("board ->", out)
 
 
@@ -228,18 +228,18 @@ def cmd_render(a):
         plan, paths = _voice(plan, pos[0], pos[1])
         track = voice.mix(plan, paths, explain.durations(plan), os.path.join(pos[1], f"{name}-voice.wav"))
     for f in _formats(plan, fmts):
-        frame.use(f)
-        tl, _ = explain.timeline(plan)
-        out = os.path.join(pos[1], f"{name}-{f}.mp4")
-        print(f"[{f}] {frame.out_size()[0]}x{frame.out_size()[1]}")
-        tl.render(out)
-        if track:
-            voice.mux(out, track)
-        print("video ->", out)
-        if gif:
-            g = os.path.join(pos[1], f"{name}-{f}.gif")
-            tl.gif(g)
-            print("gif ->", g)
+        with frame.using(f):
+            tl, _ = explain.timeline(plan)
+            out = os.path.join(pos[1], f"{name}-{f}.mp4")
+            print(f"[{f}] {frame.out_size()[0]}x{frame.out_size()[1]}")
+            tl.render(out)
+            if track:
+                voice.mux(out, track)
+            print("video ->", out)
+            if gif:
+                g = os.path.join(pos[1], f"{name}-{f}.gif")
+                tl.gif(g)
+                print("gif ->", g)
 
 
 def cmd_frames(a):
@@ -248,11 +248,11 @@ def cmd_frames(a):
     if vo:
         plan, _ = _voice(plan, pos[0], pos[1])
     for f in _formats(plan, fmts):
-        frame.use(f)
-        tl, marks = explain.timeline(plan)
-        times = [float(x) for x in pos[2:]] or [t for t, _ in marks]
-        for p in tl.export_frames(os.path.join(pos[1], f), times):
-            print(p)
+        with frame.using(f):
+            tl, marks = explain.timeline(plan)
+            times = [float(x) for x in pos[2:]] or [t for t, _ in marks]
+            for p in tl.export_frames(os.path.join(pos[1], f), times):
+                print(p)
 
 
 def cmd_voice(a):

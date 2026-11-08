@@ -4,8 +4,8 @@
 #   from pixel_kit import explain, frame
 #   plan = explain.load("my-video/explainer.yaml")
 #   problems = explain.check(plan)        # rules: captions, sources, sprites, timing, text fits
-#   frame.use("vertical")
-#   tl, marks = explain.timeline(plan)    # marks: key times for the storyboard
+#   with frame.using("vertical"):
+#       tl, marks = explain.timeline(plan)    # marks: key times for the storyboard
 #
 # Scene types: title, cast, action, fact, flow, summary, custom.
 # Layout is relative to the frame, so one plan renders in every format of frame.FORMATS.
@@ -304,17 +304,16 @@ def check(plan):
     for f in plan.get("formats") or []:
         if f not in frame.FORMATS:
             continue
-        frame.use(f)
-        L = layout()
-        if TIMEBAR:
-            out += [f"{p} [{f}]" for p in timebar.fit(plan, L)]
-        for sc in plan["scenes"]:
-            cap = sc.get("caption")
-            if cap:
-                k, lines = fit_text(cap, L["W"] - 16, (L["cap_scale"], 1), max_lines=1 if L["banner"] else 2)
-                if len(lines) > (1 if L["banner"] else 2):
-                    out.append(f"{sc.get('id')}: caption {cap!r} does not fit the {f} frame")
-    frame.use("landscape")
+        with frame.using(f):
+            L = layout()
+            if TIMEBAR:
+                out += [f"{p} [{f}]" for p in timebar.fit(plan, L)]
+            for sc in plan["scenes"]:
+                cap = sc.get("caption")
+                if cap:
+                    k, lines = fit_text(cap, L["W"] - 16, (L["cap_scale"], 1), max_lines=1 if L["banner"] else 2)
+                    if len(lines) > (1 if L["banner"] else 2):
+                        out.append(f"{sc.get('id')}: caption {cap!r} does not fit the {f} frame")
     for name in sorted(used & set(verbs.all())):
         ms = verbs.bench(name)
         if ms > verbs.MAX_MS:
@@ -322,11 +321,10 @@ def check(plan):
     plan.pop("_world", None)
     fmts = [x for x in (plan.get("formats") or ["landscape"]) if x in frame.FORMATS] or ["landscape"]
     for i, f in enumerate(fmts):          # the model once; contact (geometry) in each format
-        frame.use(f)
-        L = layout()
-        found = model.check(plan, positions=lambda si, sc, t: stage.state_at(plan, sc, t, L), stage=L["stage"])
+        with frame.using(f):
+            L = layout()
+            found = model.check(plan, positions=lambda si, sc, t: stage.state_at(plan, sc, t, L), stage=L["stage"])
         out += found if i == 0 else [f"{p} [{f}]" for p in found if "(contact)" in p]
-    frame.use("landscape")
     if not plan["scenes"] or plan["scenes"][-1].get("type") not in ("summary", "custom"):
         out.append("the last scene must be a summary (or a custom final frame)")
     story_end = times[-2][1] if len(times) > 1 and plan["scenes"][-1].get("type") == "summary" else (times[-1][1] if times else 0)
@@ -365,9 +363,8 @@ def _check_set(plan, sc, sid):
     if st and st.get("type") == "panels" and not out:
         for f in plan.get("formats") or []:
             if f in frame.FORMATS:
-                frame.use(f)
-                out += [f"{sid}: {p} [{f}]" for p in sets.fit(st, layout(), sc.get("beats") or [])]
-        frame.use("landscape")
+                with frame.using(f):
+                    out += [f"{sid}: {p} [{f}]" for p in sets.fit(st, layout(), sc.get("beats") or [])]
     zs = set(sets.zones(st, layout())) | ({"all"} if st and st.get("type") == "panels" else set())
     for name, a in (sc.get("actors") or {}).items():
         if a.get("in") == "all" and a.get("parts"):
@@ -917,7 +914,7 @@ def subtitles(plan, times):
 
 
 def timeline(plan):
-    """Builds the Timeline for the current format (frame.use). Returns (timeline, marks):
+    """Builds the Timeline for the current format (frame.using). Returns (timeline, marks):
     marks are (time, label) for the storyboard."""
     prepare(plan)
     times = durations(plan)

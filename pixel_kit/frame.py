@@ -1,10 +1,12 @@
 # Video formats. The frame is drawn small (PICO-8 pixels) and scaled x4 with nearest neighbor.
 #
 #   from pixel_kit import frame
-#   frame.use("vertical")        set the format before a scene is drawn
-#   frame.W, frame.H             current frame size in pixels (read them at draw time, not at import)
+#   with frame.using("vertical"):    the format while a scene is drawn; the one before comes back on exit
+#       frame.W, frame.H             current frame size in pixels (read them at draw time, not at import)
 #
 # Each module reads frame.W and frame.H when it draws, so one process can render all formats.
+
+import contextlib
 
 FORMATS = {
     "landscape": (480, 270),     # 16:9  -> 1920x1080 (YouTube, slides)
@@ -18,13 +20,18 @@ NAME = "landscape"
 W, H = FORMATS[NAME]
 
 
-def use(name):
+@contextlib.contextmanager
+def using(name):
+    """The format `name` inside the block; the format before it comes back after."""
     global NAME, W, H
     if name not in FORMATS:
         raise KeyError(f"unknown format {name!r}; use one of {', '.join(FORMATS)}")
-    NAME = name
-    W, H = FORMATS[name]
-    return W, H
+    before = NAME
+    NAME, (W, H) = name, FORMATS[name]
+    try:
+        yield
+    finally:
+        NAME, (W, H) = before, FORMATS[before]
 
 
 def out_size():
