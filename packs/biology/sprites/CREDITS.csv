@@ -1,104 +1,159 @@
 sprite,file,author,license,source,notes
-nk,nk.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-killer_t,killer_t.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-helper_t,helper_t.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-treg,treg.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-car_t,car_t.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-b_cell,b_cell.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-dendritic,dendritic.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-macrophage,macrophage.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-tumor,tumor.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-tumor_mhc_low,tumor_mhc_low.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-tumor_no_mhc,tumor_no_mhc.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-tumor_pdl1,tumor_pdl1.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-tumor_stress,tumor_stress.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-blast,blast.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-epithelial,epithelial.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-stem,stem.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-mutant,mutant.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-clone_a,clone_a.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-clone_b,clone_b.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-clone_c,clone_c.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-clone_d,clone_d.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-senescent,senescent.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-granulocyte,granulocyte.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-badge_mhc,badge_mhc.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-badge_mhc_self,badge_mhc_self.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-badge_mhc_neo,badge_mhc_neo.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-badge_tcr,badge_tcr.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-badge_pd1,badge_pd1.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-badge_ctla4,badge_ctla4.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-badge_pdl1,badge_pdl1.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-badge_stress,badge_stress.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-syringe,syringe.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-syringe_drug,syringe_drug.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-vial_antiserum,vial_antiserum.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-vial_drug,vial_drug.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-dish,dish.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-mouse_top,mouse_top.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-mouse_side,mouse_side.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-dna,dna.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-dna_mut,dna_mut.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-glucose,glucose.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-pill,pill.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-granule_blue,granule_blue.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-granule_green,granule_green.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-antibody,antibody.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-chromosome,chromosome.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-chromosome_ph,chromosome_ph.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-patient_a,patient_a.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-patient_b,patient_b.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-patient_c,patient_c.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-kidney,kidney.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-plaster,plaster.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-manager,manager.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-scientist,scientist.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-clinician,clinician.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-file_doc,file_doc.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-folder,folder.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-computer,computer.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-check_card,check_card.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-bulb,bulb.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-tube,tube.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-tube_orange,tube_orange.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-plate,plate.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-sequencer,sequencer.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-datasheet,datasheet.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-agent,agent.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-supervisor,supervisor.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-lock,lock.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-deck,deck.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-person,person.png,Kosta Chernyshov,CC0-1.0,packs/biology/code/library.py,drawn in code
-bacterium,bacterium.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-brain,brain.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-centrifuge,centrifuge.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-chloroplast,chloroplast.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-dna_fragment,dna_fragment.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-flower,flower.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-fruit_fly,fruit_fly.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-gel,gel.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-heart,heart.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-leaf,leaf.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-lipid,lipid.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-liver,liver.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-lungs,lungs.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-microscope,microscope.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-mitochondrion,mitochondrion.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-nematode,nematode.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-nucleus,nucleus.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-pcr_machine,pcr_machine.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-peptide_mutant,peptide_mutant.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-peptide_self,peptide_self.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-pipette,pipette.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-plasmid,plasmid.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-proteasome,proteasome.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-protein,protein.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-ribosome,ribosome.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-rna,rna.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-seed,seed.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-vesicle,vesicle.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-virus,virus.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
-zebrafish,zebrafish.png,Kosta Chernyshov / OpenAI Codex,CC0-1.0,packs/biology/code/basics.py,original code drawing; shared across styles
+nk,nk.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+killer_t,killer_t.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+helper_t,helper_t.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+treg,treg.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+car_t,car_t.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+b_cell,b_cell.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+dendritic,dendritic.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+macrophage,macrophage.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+tumor,tumor.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+tumor_mhc_low,tumor_mhc_low.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+tumor_no_mhc,tumor_no_mhc.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+tumor_pdl1,tumor_pdl1.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+tumor_stress,tumor_stress.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+blast,blast.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+epithelial,epithelial.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+stem,stem.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+mutant,mutant.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+clone_a,clone_a.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+clone_b,clone_b.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+clone_c,clone_c.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+clone_d,clone_d.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+senescent,senescent.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+granulocyte,granulocyte.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+badge_mhc,badge_mhc.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+badge_mhc_self,badge_mhc_self.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+badge_mhc_neo,badge_mhc_neo.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+badge_tcr,badge_tcr.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+badge_pd1,badge_pd1.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+badge_ctla4,badge_ctla4.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+badge_pdl1,badge_pdl1.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+badge_stress,badge_stress.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+syringe,syringe.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+syringe_drug,syringe_drug.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+vial_antiserum,vial_antiserum.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+vial_drug,vial_drug.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+dish,dish.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+mouse_top,mouse_top.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+mouse_side,mouse_side.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+dna,dna.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+dna_mut,dna_mut.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+glucose,glucose.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+pill,pill.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+granule_blue,granule_blue.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+granule_green,granule_green.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+antibody,antibody.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+chromosome,chromosome.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+chromosome_ph,chromosome_ph.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+patient_a,patient_a.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+patient_b,patient_b.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+patient_c,patient_c.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+kidney,kidney.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+plaster,plaster.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+manager,manager.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+scientist,scientist.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+clinician,clinician.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+file_doc,file_doc.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+folder,folder.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+computer,computer.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+check_card,check_card.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+bulb,bulb.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+tube,tube.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+tube_orange,tube_orange.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+plate,plate.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+sequencer,sequencer.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+datasheet,datasheet.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+agent,agent.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+supervisor,supervisor.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+lock,lock.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+deck,deck.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+person,person.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/library.py,AAP-64 redraw based on the original code art
+bacterium,bacterium.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+brain,brain.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+centrifuge,centrifuge.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+chloroplast,chloroplast.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+dna_fragment,dna_fragment.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+flower,flower.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+fruit_fly,fruit_fly.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+gel,gel.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+heart,heart.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+leaf,leaf.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+lipid,lipid.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+liver,liver.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+lungs,lungs.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+microscope,microscope.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+mitochondrion,mitochondrion.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+nematode,nematode.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+nucleus,nucleus.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+pcr_machine,pcr_machine.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+peptide_mutant,peptide_mutant.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+peptide_self,peptide_self.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+pipette,pipette.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+plasmid,plasmid.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+proteasome,proteasome.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+protein,protein.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+ribosome,ribosome.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+rna,rna.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+seed,seed.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+vesicle,vesicle.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+virus,virus.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
+zebrafish,zebrafish.png,Kosta Chernyshov / OpenAI Codex / OpenAI ImageGen,CC0-1.0,packs/biology/code/basics.py,AAP-64 redraw based on the original code art
 protein_folded,protein_folded.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,Shared molecular art; AAP-64 palette
-membrane_receptor,membrane_receptor.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,Simplified shared receptor; 128 px canvas; AAP-64; three broad folds and intrinsic binding surface
+membrane_receptor,membrane_receptor.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,Compact shared receptor; 64 px canvas; AAP-64; upward-facing binding pocket
 membrane,membrane.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,Shared molecular art; AAP-64 palette
+snail,snail.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: locomotion, food webs, shell protection."
+earthworm,earthworm.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: soil ecology, decomposition, burrowing."
+honey_bee,honey_bee.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: pollination, insect anatomy, food webs."
+butterfly,butterfly.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: metamorphosis, pollination, bilateral symmetry."
+dragonfly,dragonfly.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: pond food webs, insect flight, insect anatomy."
+ladybird,ladybird.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: insect anatomy, pest predation, food webs."
+grasshopper,grasshopper.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: jumping, herbivory, insect anatomy."
+ant,ant.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: social insects, food transport, food webs."
+spider,spider.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: arachnid anatomy, predation, food webs."
+crab,crab.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: marine food webs, crustacean anatomy, locomotion."
+shrimp,shrimp.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: crustacean anatomy, aquatic food webs, swimming."
+jellyfish,jellyfish.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: marine food webs, body plans, drifting."
+sea_star,sea_star.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: radial symmetry, marine ecosystems, regeneration."
+octopus,octopus.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: cephalopod anatomy, movement, marine food webs."
+bivalve_clam,bivalve_clam.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: filter feeding, shell protection, marine sediments."
+coral_branch,coral_branch.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: reef ecosystems, animal colonies, carbonate formation."
+marine_sponge,marine_sponge.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: filter feeding, porous body plans, reef communities."
+sea_anemone,sea_anemone.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: cnidarian body plan, marine food webs, symbiosis."
+frog,frog.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: amphibian life cycle, pond food webs, movement."
+tadpole,tadpole.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: amphibian metamorphosis, pond ecosystems, swimming."
+lizard,lizard.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: thermoregulation, terrestrial food webs, locomotion."
+snake,snake.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: locomotion, predation, thermoregulation."
+tortoise,tortoise.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: shell protection, terrestrial habitats, body plans."
+songbird,songbird.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: seed dispersal, food webs, vertebrate anatomy."
+bat,bat.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: mammalian flight, echolocation stories, nocturnal food webs."
+rabbit,rabbit.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: herbivory, food webs, locomotion."
+fox,fox.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: predation, food webs, habitat comparisons."
+deer,deer.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: herbivory, food webs, locomotion."
+caterpillar,caterpillar.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: metamorphosis, herbivory, food webs."
+ladybird_larva,ladybird_larva.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: complete metamorphosis, aphid predation, insect life stages."
+dandelion_diaspore,dandelion_diaspore.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: wind dispersal, aerodynamic drag, form and function."
+maple_samara,maple_samara.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: seed dispersal, autorotation, aerodynamic shape."
+burdock_burr,burdock_burr.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: animal-mediated dispersal, hooked attachment, plant reproduction."
+acorn,acorn.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: seed dispersal, food webs, germination stories."
+pine_cone,pine_cone.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: gymnosperm reproduction, seed protection, forest ecology."
+fern_frond,fern_frond.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: plant groups, understory habitats, leaf architecture."
+moss_tuft,moss_tuft.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: plant life cycles, moist habitats, colonization."
+mushroom,mushroom.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: fungal body plans, decomposition, spore dispersal."
+lichen_patch,lichen_patch.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: symbiosis, colonization, ecological succession."
+pollen_grain,pollen_grain.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: pollination, plant reproduction, particle transport."
+stoma,stoma.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: gas exchange, transpiration, plant water balance."
+leaf_cross_section,leaf_cross_section.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: photosynthesis, leaf anatomy, gas exchange."
+xylem_vessel,xylem_vessel.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: water transport, plant support, capillary explanations."
+phloem_tube,phloem_tube.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: sugar transport, vascular tissue, source-sink stories."
+root_hair,root_hair.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: water uptake, surface area, plant nutrition."
+root_nodule,root_nodule.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: nitrogen fixation, root symbiosis, plant nutrition."
+tomato_section,tomato_section.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: fruit anatomy, seed protection, dispersal."
+apple_section,apple_section.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: fruit anatomy, seed dispersal, plant reproduction."
+cereal_spike,cereal_spike.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: crop reproduction, grains as food, wind pollination stories."
+grass_tuft,grass_tuft.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: grassland habitats, herbivory, wind response."
+succulent_rosette,succulent_rosette.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: water storage, plant adaptations, leaf form."
+cactus_column,cactus_column.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: dryland adaptations, stem water storage, photosynthetic stems."
+lotus_leaf,lotus_leaf.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: leaf form, water repellency, aquatic plants."
+plant_bud,plant_bud.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: seasonal growth, bud protection, dormancy."
+potato_tuber,potato_tuber.png,Kosta Chernyshov with OpenAI ImageGen,CC0-1.0,,"Original shared pixel art. Reuse: vegetative reproduction, food storage, stem modifications."
