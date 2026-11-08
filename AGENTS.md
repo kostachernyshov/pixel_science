@@ -14,7 +14,7 @@ The repo holds the product only. Each kind of file has one home; put new work th
 | `packs/<pack>/` | `pack.yaml` (license, author), `verbs.yaml`, `bible.md`, `code/library.py` | packs: `biology`, `earth`, `physics`; a new pack needs a "yes" |
 | `packs/<pack>/sprites/` | PNG sheets and `sprites.json`, flat | every sprite of a topic goes into its topic's pack |
 | `skills/<skill>/` | agent skills (`.claude/skills`, `.agents/skills` link here) | see Skills below |
-| `tools/` | `build_sprites.py`, `validate_sprites.py`, `make_sheet.py` | |
+| `tools/` | `build_sprites.py`, `validate_sprites.py`, `make_sheet.py`, `frame_hashes.py` | |
 | `docs/tool.md` | commands, voice, how it works, layout | |
 | `docs/adr/NNNN-*.md` | one accepted decision each | see Decisions below |
 | `docs/agents/` | issue tracker, labels, domain docs | |

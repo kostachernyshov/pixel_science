@@ -15,3 +15,10 @@ jobs:
         run: |
           python pixsci.py check skills/setup/smoke/explainer.yaml
           python pixsci.py board skills/setup/smoke/explainer.yaml "$RUNNER_TEMP/ci" -f landscape,vertical,square,banner
+      - name: Linter (unused imports, undefined names)
+        run: pip install ruff && ruff check --select F --ignore F403,F405 pixel_kit pixsci.py tools
+      - name: No module calls another module's private name
+        run: |
+          if grep -noE "\b[A-Za-z_][A-Za-z0-9_]*\._[A-Za-z][A-Za-z0-9_]*" pixel_kit/*.py pixsci.py tools/*.py | grep -vE ":(self|cls)\._"; then
+            echo "use a public name of the module (CONTRIBUTING.md, Work on the core)"; exit 1
+          fi

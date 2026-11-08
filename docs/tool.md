@@ -74,7 +74,7 @@ fonts/                 unifont.otf, MedeoPixel.ttf (from npm medeo-font 1.0.0, W
 pixel_kit/             the core: frame, explain, stage, model, sets, timebar, packs, sprites, verbs, ui, bg, fx, font, palette, scene, voice
 packs/biology/         pack.yaml; verbs.yaml; sprites/ (PNG sheets, sprites.json); code/ (sprites drawn in code)
 packs/earth/           shared water, weather, and soil sprites; the same pack structure
-tools/                 build_sprites.py, validate_sprites.py, make_sheet.py
+tools/                 build_sprites.py, validate_sprites.py, make_sheet.py, frame_hashes.py (frames equal before and after a change)
 skills/                agent skills: setup, storyboard, animate, add-verb (linked from .claude/skills and .agents/skills)
 .claude-plugin/        plugin.json and marketplace.json: the repo installs as a Claude plugin
 ```

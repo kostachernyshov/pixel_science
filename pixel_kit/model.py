@@ -560,7 +560,7 @@ def _crowded(st, others=()):
         return a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]
     heads = []
     for p, name, g, _, (sx, sy), _, _ in st:
-        d, u = g["d"], g["u"]
+        u = g["u"]
         (hx, hy), h = head_at(g, sx, sy), ROWS * u / 2
         heads.append((p, name, (hx - h, hy - h, hx + h, hy + h)))
     out = []
