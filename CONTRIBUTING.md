@@ -57,7 +57,8 @@ Scene painters are the `p_<type>` functions in `pixel_kit/explain.py`; backgroun
 - **Named data.** Data that crosses modules travels in named fields (a dataclass or a NamedTuple), not by index:
   no `state[name][8]`.
 - **Public names.** A module calls only public names of another module, never `<module>._name`; CI fails on it.
-  `ruff check --select F --ignore F403,F405 pixel_kit pixsci.py tools` passes (CI runs it).
+  `ruff check --select F --ignore F403,F405 pixel_kit pixsci.py tools` passes (CI runs it; locally
+  `.venv/bin/pip install ruff` once, then `.venv/bin/ruff check ...`).
 
 ## Pull requests
 
